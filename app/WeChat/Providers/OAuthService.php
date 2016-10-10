@@ -1,7 +1,7 @@
 <?php
 namespace WeChat\Providers;
 
-use Overtrue\Socialite\SocialiteManager as Socialite;
+use WeChat\Utils\Socialite\SocialiteManager as Socialite;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 
@@ -20,17 +20,17 @@ class OAuthService implements ServiceProviderInterface
      */
     public function register(Container $pimple)
     {
-        $pimple['oauth'] = function ($pimple) {
+        $pimple['oAuth'] = function ($pimple) {
             $callback = $this->prepareCallbackUrl($pimple);
-            $scopes = $pimple['config']->get('oauth.scopes', []);
+            $scopes = $pimple['config']['wechat']['oauth.scopes'];
             $socialite = (new Socialite(
                 [
                     'wechat' => [
-                        'client_id' => $pimple['config']['app_id'],
-                        'client_secret' => $pimple['config']['secret'],
+                        'client_id' => $pimple['config']['wechat']['app_id'],
+                        'client_secret' => $pimple['config']['wechat']['secret'],
                         'redirect' => $callback,
                     ],
-                ]
+                ], $pimple['request']
             ))->driver('wechat');
 
             if (!empty($scopes)) {
@@ -50,12 +50,12 @@ class OAuthService implements ServiceProviderInterface
      */
     private function prepareCallbackUrl($pimple)
     {
-        $callback = $pimple['config']->get('oauth.callback');
+        $callback = $pimple['config']['wechat']['oauth.callback'];
         if (0 === stripos($callback, 'http')) {
             return $callback;
         }
-        $baseUrl = $pimple['request']->getSchemeAndHttpHost();
-
-        return $baseUrl.'/'.ltrim($callback, '/');
+        $baseUrl = $pimple['request']->getUri()->getScheme() . '://' . $pimple['request']->getUri()->getHost();
+        echo $baseUrl;
+        return $baseUrl . '/' . ltrim($callback, '/');
     }
 }

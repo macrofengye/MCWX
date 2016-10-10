@@ -13,7 +13,7 @@ use Slim\Http\Response;
 class Home extends Controller
 {
     public function index(Request $request, Response $response, $args){
-        $accessToken = CoreUtils::getContainer('server');
+        $accessToken = CoreUtils::getContainer('oAuth');
        // print_r($accessToken);
     }
     public function index3(Request $request, Response $response, $args){

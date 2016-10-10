@@ -84,7 +84,9 @@ $common_config = [
         'encrypt_key' => 'xxxxx',
         'app_id' => 'xxxxxxxx',
         'secret' => 'xxxxx',
-        'token' => 'xxxxx'
+        'token' => 'xxxxx',
+        'oauth.scopes'=>['snsapi_userinfo'],
+        'oauth.callback'=>'XXX'
     ],
 
     //定义数据缓存的Cache
