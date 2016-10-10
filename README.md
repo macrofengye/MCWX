@@ -1,0 +1,2 @@
+# MacroWechat
+MacroWechat是基于MacroPHP实现的微信API框架,用于快速开发基于微信的业务
