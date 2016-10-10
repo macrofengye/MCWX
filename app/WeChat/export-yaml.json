@@ -1,0 +1,30 @@
+{
+  "export": "doctrine2-yaml",
+  "zip": false,
+  "dir": "./app/Blog/data/Yaml/",
+  "params": {
+    "logToConsole": false,
+    "logFile": "",
+    "filename": "Entity.%entity%.dcm.%extension%",
+    "indentation": 4,
+    "useTabs": false,
+    "eolDelimeter": "win",
+    "backupExistingFile": false,
+    "addGeneratorInfoAsComment": false,
+    "skipPluralNameChecking": false,
+    "useLoggedStorage": false,
+    "sortTablesAndViews": true,
+    "exportOnlyTableCategorized": "",
+    "enhanceManyToManyDetection": true,
+    "skipManyToManyTables": true,
+    "bundleNamespace": "Blog",
+    "entityNamespace": "Entity",
+    "repositoryNamespace": "Blog",
+    "useAutomaticRepository": true,
+    "skipColumnWithRelation": false,
+    "relatedVarNameFormat": "%name%%related%",
+    "nullableAttribute": "auto",
+    "generatedValueStrategy": "auto",
+    "extendTableNameWithSchemaName": false
+  }
+}

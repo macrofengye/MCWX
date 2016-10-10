@@ -1,0 +1,21 @@
+{% extends "/base.twig" %}
+
+
+{% block title %}
+	{{title}}
+{% endblock %}
+
+{% block navbar %}
+	{% include 'nav.twig' %}
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="span12">
+        <h1>Hello World!</h1>
+    </div>
+</div>
+
+Hello , {{name}}
+{% endblock %}
+
