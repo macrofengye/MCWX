@@ -46,7 +46,7 @@ class Notice extends AbstractAPI
     /**
      * Notice constructor.
      *
-     * @param \EasyWeChat\Core\AccessToken $accessToken
+     * @param \WeChat\Utils\WeChat\Core\AccessToken $accessToken
      */
     public function __construct(AccessToken $accessToken)
     {
@@ -61,7 +61,7 @@ class Notice extends AbstractAPI
      * @param int $industryOne
      * @param int $industryTwo
      *
-     * @return \EasyWeChat\Support\Collection
+     * @return \WeChat\Utils\WeChat\Support\Collection
      */
     public function setIndustry($industryOne, $industryTwo)
     {
@@ -76,7 +76,7 @@ class Notice extends AbstractAPI
     /**
      * Get industry.
      *
-     * @return \EasyWeChat\Support\Collection
+     * @return \WeChat\Utils\WeChat\Support\Collection
      */
     public function getIndustry()
     {
@@ -88,7 +88,7 @@ class Notice extends AbstractAPI
      *
      * @param string $shortId
      *
-     * @return \EasyWeChat\Support\Collection
+     * @return \WeChat\Utils\WeChat\Support\Collection
      */
     public function addTemplate($shortId)
     {
@@ -100,7 +100,7 @@ class Notice extends AbstractAPI
     /**
      * Get private templates.
      *
-     * @return \EasyWeChat\Support\Collection
+     * @return \WeChat\Utils\WeChat\Support\Collection
      */
     public function getPrivateTemplates()
     {
@@ -112,7 +112,7 @@ class Notice extends AbstractAPI
      *
      * @param string $templateId
      *
-     * @return \EasyWeChat\Support\Collection
+     * @return \WeChat\Utils\WeChat\Support\Collection
      */
     public function deletePrivateTemplate($templateId)
     {
@@ -126,9 +126,9 @@ class Notice extends AbstractAPI
      *
      * @param $data
      *
-     * @return \EasyWeChat\Support\Collection
+     * @return \WeChat\Utils\WeChat\Support\Collection
      *
-     * @throws \EasyWeChat\Core\Exceptions\InvalidArgumentException
+     * @throws \WeChat\Utils\WeChat\Core\Exceptions\InvalidArgumentException
      */
     public function send($data = [])
     {

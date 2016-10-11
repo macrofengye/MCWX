@@ -69,7 +69,7 @@ class FacebookService extends AbstractService implements ProviderInterface
      *
      * @param string $code
      *
-     * @return \Overtrue\Socialite\AccessToken
+     * @return \WeChat\Utils\Socialite\AccessToken
      */
     public function getAccessToken($code)
     {

@@ -1,10 +1,9 @@
 <?php
-namespace Overtrue\Socialite\Providers;
+namespace WeChat\Utils\Socialite\Providers;
 
 use Exception;
 use WeChat\Utils\Socialite\AccessTokenInterface;
 use WeChat\Utils\Socialite\ProviderInterface;
-use WeChat\Utils\Socialite\Providers\AbstractService;
 use WeChat\Utils\Socialite\User;
 
 /**

@@ -74,7 +74,7 @@ class User implements ArrayAccess, UserInterface, JsonSerializable
     /**
      * Set the token on the user.
      *
-     * @param \Overtrue\Socialite\AccessTokenInterface $token
+     * @param \WeChat\Utils\Socialite\AccessTokenInterface $token
      *
      * @return $this
      */
@@ -88,7 +88,7 @@ class User implements ArrayAccess, UserInterface, JsonSerializable
     /**
      * Get the authorized token.
      *
-     * @return \Overtrue\Socialite\AccessToken
+     * @return \WeChat\Utils\Socialite\AccessToken
      */
     public function getToken()
     {
@@ -98,7 +98,7 @@ class User implements ArrayAccess, UserInterface, JsonSerializable
     /**
      * Alias of getToken().
      *
-     * @return \Overtrue\Socialite\AccessToken
+     * @return \WeChat\Utils\Socialite\AccessToken
      */
     public function getAccessToken()
     {

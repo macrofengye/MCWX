@@ -81,7 +81,7 @@ class Log
      */
     private static function createDefaultLogger()
     {
-        $log = new Logger('EasyWeChat');
+        $log = new Logger('MacroWeChat');
 
         if (defined('PHPUNIT_RUNNING')) {
             $log->pushHandler(new NullHandler());

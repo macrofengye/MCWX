@@ -103,7 +103,7 @@ class API extends AbstractAPI
     {
         $params = array_filter($params);
         $params['nonce_str'] = uniqid();
-        $params['sign'] = \EasyWeChat\Payment\generate_sign($params, $this->merchant->key, 'md5');
+        $params['sign'] = \WeChat\Utils\WeChat\Payment\generate_sign($params, $this->merchant->key, 'md5');
 
         $options = [
             'body' => XML::build($params),

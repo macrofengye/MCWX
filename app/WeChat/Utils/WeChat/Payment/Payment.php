@@ -4,7 +4,7 @@ namespace WeChat\Utils\WeChat\Payment;
 use WeChat\Utils\WeChat\Core\Exceptions\FaultException;
 use WeChat\Utils\WeChat\Support\Url as UrlHelper;
 use WeChat\Utils\WeChat\Support\XML;
-use Overtrue\Socialite\AccessTokenInterface;
+use WeChat\Utils\Socialite\AccessTokenInterface;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -27,7 +27,7 @@ class Payment
     /**
      * Merchant instance.
      *
-     * @var \EasyWeChat\Payment\Merchant
+     * @var \WeChat\Utils\WeChat\Payment\Merchant
      */
     protected $merchant;
 

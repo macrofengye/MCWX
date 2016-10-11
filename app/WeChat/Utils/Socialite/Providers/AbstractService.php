@@ -214,7 +214,7 @@ abstract class AbstractService implements ProviderInterface
      *
      * @param string $code
      *
-     * @return \Overtrue\Socialite\AccessToken
+     * @return \WeChat\Utils\Socialite\AccessToken
      */
     public function getAccessToken($code)
     {
@@ -380,7 +380,7 @@ abstract class AbstractService implements ProviderInterface
      *
      * @param \Psr\Http\Message\StreamInterface $body
      *
-     * @return \Overtrue\Socialite\AccessToken
+     * @return \WeChat\Utils\Socialite\AccessToken
      */
     protected function parseAccessToken($body)
     {

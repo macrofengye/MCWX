@@ -19,7 +19,7 @@ class Menu extends AbstractAPI
     /**
      * Get all menus.
      *
-     * @return \EasyWeChat\Support\Collection
+     * @return \WeChat\Utils\WeChat\Support\Collection
      */
     public function all()
     {

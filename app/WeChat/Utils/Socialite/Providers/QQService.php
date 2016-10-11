@@ -87,7 +87,7 @@ class QQService extends AbstractService implements ProviderInterface
      *
      * @param string $code
      *
-     * @return \Overtrue\Socialite\AccessToken
+     * @return \WeChat\Utils\Socialite\AccessToken
      */
     public function getAccessToken($code)
     {
@@ -103,7 +103,7 @@ class QQService extends AbstractService implements ProviderInterface
      *
      * @param string $body
      *
-     * @return \Overtrue\Socialite\AccessToken
+     * @return \WeChat\Utils\Socialite\AccessToken
      */
     public function parseAccessToken($body)
     {
@@ -115,7 +115,7 @@ class QQService extends AbstractService implements ProviderInterface
     /**
      * Get the raw user for the given access token.
      *
-     * @param \Overtrue\Socialite\AccessTokenInterface $token
+     * @param \WeChat\Utils\Socialite\AccessTokenInterface $token
      *
      * @return array
      */
@@ -143,7 +143,7 @@ class QQService extends AbstractService implements ProviderInterface
      *
      * @param array $user
      *
-     * @return \Overtrue\Socialite\User
+     * @return \WeChat\Utils\Socialite\User
      */
     protected function mapUserToObject(array $user)
     {

@@ -77,7 +77,7 @@ class WeiboService extends AbstractService implements ProviderInterface
     /**
      * Get the raw user for the given access token.
      *
-     * @param \Overtrue\Socialite\AccessTokenInterface $token
+     * @param \WeChat\Utils\Socialite\AccessTokenInterface $token
      *
      * @return array
      */
@@ -101,7 +101,7 @@ class WeiboService extends AbstractService implements ProviderInterface
      *
      * @param array $user
      *
-     * @return \Overtrue\Socialite\User
+     * @return \WeChat\Utils\Socialite\User
      */
     protected function mapUserToObject(array $user)
     {
