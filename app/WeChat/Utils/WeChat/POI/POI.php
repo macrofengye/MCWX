@@ -19,7 +19,7 @@ class POI extends AbstractAPI
      *
      * @param int $poiId
      *
-     * @return \EasyWeChat\Support\Collection
+     * @return \WeChat\Utils\WeChat\Support\Collection
      */
     public function get($poiId)
     {
@@ -32,14 +32,14 @@ class POI extends AbstractAPI
      * @param int $offset
      * @param int $limit
      *
-     * @return \EasyWeChat\Support\Collection
+     * @return \WeChat\Utils\WeChat\Support\Collection
      */
     public function lists($offset = 0, $limit = 10)
     {
         $params = [
-                   'begin' => $offset,
-                   'limit' => $limit,
-                  ];
+            'begin' => $offset,
+            'limit' => $limit,
+        ];
 
         return $this->parseJSON('json', [self::API_LIST, $params]);
     }
@@ -54,8 +54,8 @@ class POI extends AbstractAPI
     public function create(array $data)
     {
         $params = [
-                   'business' => ['base_info' => $data],
-                  ];
+            'business' => ['base_info' => $data],
+        ];
 
         return $this->parseJSON('json', [self::API_CREATE, $params]);
     }
@@ -63,7 +63,7 @@ class POI extends AbstractAPI
     /**
      * Update a POI.
      *
-     * @param int   $poiId
+     * @param int $poiId
      * @param array $data
      *
      * @return bool
@@ -73,8 +73,8 @@ class POI extends AbstractAPI
         $data = array_merge($data, ['poi_id' => $poiId]);
 
         $params = [
-                   'business' => ['base_info' => $data],
-                  ];
+            'business' => ['base_info' => $data],
+        ];
 
         return $this->parseJSON('json', [self::API_UPDATE, $params]);
     }

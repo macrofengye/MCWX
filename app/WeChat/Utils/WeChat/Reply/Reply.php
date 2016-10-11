@@ -13,7 +13,7 @@ class Reply extends AbstractAPI
     /**
      * Get current auto reply settings.
      *
-     * @return \EasyWeChat\Support\Collection
+     * @return \WeChat\Utils\WeChat\Support\Collection
      */
     public function current()
     {

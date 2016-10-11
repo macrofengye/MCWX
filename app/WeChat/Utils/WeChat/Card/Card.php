@@ -19,7 +19,7 @@ class Card extends AbstractAPI
     /**
      * Ticket cache prefix.
      */
-    const TICKET_CACHE_PREFIX = 'overtrue.wechat.card_api_ticket.';
+    const TICKET_CACHE_PREFIX = 'MacroWechat.wechat.card_api_ticket.';
 
     const API_GET_COLORS = 'https://api.weixin.qq.com/card/getcolors';
     const API_CREATE_CARD = 'https://api.weixin.qq.com/card/create';
@@ -68,9 +68,9 @@ class Card extends AbstractAPI
      * 创建卡券.
      *
      * @param string $cardType
-     * @param array  $baseInfo
-     * @param array  $especial
-     * @param array  $advancedInfo
+     * @param array $baseInfo
+     * @param array $especial
+     * @param array $advancedInfo
      *
      * @return \EasyWeChat\Support\Collection
      */
@@ -121,7 +121,7 @@ class Card extends AbstractAPI
             'reason' => $response->getReasonPhrase(),
             'headers' => $response->getHeaders(),
             'body' => strval($response->getBody()),
-            'url' => self::API_SHOW_QRCODE.'?'.http_build_query($params),
+            'url' => self::API_SHOW_QRCODE . '?' . http_build_query($params),
         ];
     }
 
@@ -134,7 +134,7 @@ class Card extends AbstractAPI
      */
     public function getQRCodeUrl($ticket)
     {
-        return self::API_SHOW_QRCODE.'?ticket='.$ticket;
+        return self::API_SHOW_QRCODE . '?ticket=' . $ticket;
     }
 
     /**
@@ -146,7 +146,7 @@ class Card extends AbstractAPI
      */
     public function getAPITicket($refresh = false)
     {
-        $key = self::TICKET_CACHE_PREFIX.$this->getAccessToken()->getAppId();
+        $key = self::TICKET_CACHE_PREFIX . $this->getAccessToken()->getAppId();
 
         $ticket = $this->getCache()->fetch($key);
 
@@ -179,7 +179,7 @@ class Card extends AbstractAPI
      * 生成 js添加到卡包 需要的 card_list 项.
      *
      * @param string $cardId
-     * @param array  $extension
+     * @param array $extension
      *
      * @return string
      */
@@ -226,10 +226,10 @@ class Card extends AbstractAPI
      *
      * @param string $banner
      * @param string $pageTitle
-     * @param bool   $canShare
-     * @param string $scene     [SCENE_NEAR_BY 附近,SCENE_MENU 自定义菜单,SCENE_QRCODE 二维码,SCENE_ARTICLE 公众号文章,
+     * @param bool $canShare
+     * @param string $scene [SCENE_NEAR_BY 附近,SCENE_MENU 自定义菜单,SCENE_QRCODE 二维码,SCENE_ARTICLE 公众号文章,
      *                          SCENE_H5 h5页面,SCENE_IVR 自动回复,SCENE_CARD_CUSTOM_CELL 卡券自定义cell]
-     * @param array  $cardList
+     * @param array $cardList
      *
      * @return \EasyWeChat\Support\Collection
      */
@@ -250,7 +250,7 @@ class Card extends AbstractAPI
      * 导入code接口.
      *
      * @param string $cardId
-     * @param array  $code
+     * @param array $code
      *
      * @return \EasyWeChat\Support\Collection
      */
@@ -284,7 +284,7 @@ class Card extends AbstractAPI
      * 核查code接口.
      *
      * @param string $cardId
-     * @param array  $code
+     * @param array $code
      *
      * @return \EasyWeChat\Support\Collection
      */
@@ -302,7 +302,7 @@ class Card extends AbstractAPI
      * 查询Code接口.
      *
      * @param string $code
-     * @param bool   $checkConsume
+     * @param bool $checkConsume
      * @param string $cardId
      *
      * @return \EasyWeChat\Support\Collection
@@ -437,8 +437,8 @@ class Card extends AbstractAPI
     /**
      * 批量查询卡列表.
      *
-     * @param int    $offset
-     * @param int    $count
+     * @param int $offset
+     * @param int $count
      * @param string $statusList
      *
      * @return \EasyWeChat\Support\Collection
@@ -459,8 +459,8 @@ class Card extends AbstractAPI
      *
      * @param string $cardId
      * @param string $type
-     * @param array  $baseInfo
-     * @param array  $especial
+     * @param array $baseInfo
+     * @param array $especial
      *
      * @return \EasyWeChat\Support\Collection
      */
@@ -483,7 +483,7 @@ class Card extends AbstractAPI
      * 设置买单的 card_id 必须已经配置了门店，否则会报错.
      *
      * @param string $cardId
-     * @param bool   $isOpen
+     * @param bool $isOpen
      *
      * @return \EasyWeChat\Support\Collection
      */
@@ -501,7 +501,7 @@ class Card extends AbstractAPI
      * 增加库存.
      *
      * @param string $cardId
-     * @param int    $amount
+     * @param int $amount
      *
      * @return \EasyWeChat\Support\Collection
      */
@@ -514,7 +514,7 @@ class Card extends AbstractAPI
      * 减少库存.
      *
      * @param string $cardId
-     * @param int    $amount
+     * @param int $amount
      *
      * @return \EasyWeChat\Support\Collection
      */
@@ -527,7 +527,7 @@ class Card extends AbstractAPI
      * 修改库存接口.
      *
      * @param string $cardId
-     * @param int    $amount
+     * @param int $amount
      * @param string $action
      *
      * @return \EasyWeChat\Support\Collection
@@ -548,7 +548,7 @@ class Card extends AbstractAPI
      *
      * @param string $code
      * @param string $newCode
-     * @param array  $cardId
+     * @param array $cardId
      *
      * @return \EasyWeChat\Support\Collection
      */
@@ -613,8 +613,8 @@ class Card extends AbstractAPI
      * 设置开卡字段接口.
      *
      * @param string $cardId
-     * @param array  $requiredForm
-     * @param array  $optionalForm
+     * @param array $requiredForm
+     * @param array $optionalForm
      *
      * @return \EasyWeChat\Support\Collection
      */
@@ -684,7 +684,7 @@ class Card extends AbstractAPI
     /**
      * 更新子商户.
      *
-     * @param int   $merchantId
+     * @param int $merchantId
      * @param array $info
      *
      * @return \EasyWeChat\Support\Collection
@@ -724,8 +724,8 @@ class Card extends AbstractAPI
     /**
      * 批量获取子商户信息.
      *
-     * @param int    $beginId
-     * @param int    $limit
+     * @param int $beginId
+     * @param int $limit
      * @param string $status
      *
      * @return \EasyWeChat\Support\Collection

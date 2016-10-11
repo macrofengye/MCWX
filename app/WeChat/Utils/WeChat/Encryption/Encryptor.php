@@ -65,7 +65,7 @@ class Encryptor
      *
      * @param string $xml
      * @param string $nonce
-     * @param int    $timestamp
+     * @param int $timestamp
      *
      * @return string
      */
@@ -161,7 +161,7 @@ class Encryptor
             $tmp .= $padChr;
         }
 
-        return $text.$tmp;
+        return $text . $tmp;
     }
 
     /**
@@ -195,7 +195,7 @@ class Encryptor
             throw new InvalidConfigException("Configuration mission, 'aes_key' is required.");
         }
 
-        return base64_decode($this->AESKey.'=', true);
+        return base64_decode($this->AESKey . '=', true);
     }
 
     /**
@@ -213,7 +213,7 @@ class Encryptor
         try {
             $key = $this->getAESKey();
             $random = $this->getRandomStr();
-            $text = $this->encode($random.pack('N', strlen($text)).$text.$appId);
+            $text = $this->encode($random . pack('N', strlen($text)) . $text . $appId);
 
             $iv = substr($key, 0, 16);
 

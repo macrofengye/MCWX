@@ -46,7 +46,7 @@ class API extends AbstractAPI
     /**
      * API constructor.
      *
-     * @param \EasyWeChat\Payment\Merchant $merchant
+     * @param \WeChat\Utils\WeChat\Payment\Merchant $merchant
      */
     public function __construct(Merchant $merchant)
     {
@@ -58,7 +58,7 @@ class API extends AbstractAPI
      *
      * @param Order $order
      *
-     * @return \EasyWeChat\Support\Collection
+     * @return \WeChat\Utils\WeChat\Support\Collection
      */
     public function pay(Order $order)
     {
@@ -70,7 +70,7 @@ class API extends AbstractAPI
      *
      * @param Order $order
      *
-     * @return \EasyWeChat\Support\Collection
+     * @return \WeChat\Utils\WeChat\Support\Collection
      */
     public function prepare(Order $order)
     {
@@ -86,7 +86,7 @@ class API extends AbstractAPI
      * @param string $orderNo
      * @param string $type
      *
-     * @return \EasyWeChat\Support\Collection
+     * @return \WeChat\Utils\WeChat\Support\Collection
      */
     public function query($orderNo, $type = self::OUT_TRADE_NO)
     {
@@ -102,7 +102,7 @@ class API extends AbstractAPI
      *
      * @param string $transactionId
      *
-     * @return \EasyWeChat\Support\Collection
+     * @return \WeChat\Utils\WeChat\Support\Collection
      */
     public function queryByTransactionId($transactionId)
     {
@@ -114,7 +114,7 @@ class API extends AbstractAPI
      *
      * @param $tradeNo
      *
-     * @return \EasyWeChat\Support\Collection
+     * @return \WeChat\Utils\WeChat\Support\Collection
      */
     public function close($tradeNo)
     {
@@ -131,7 +131,7 @@ class API extends AbstractAPI
      * @param string $orderNo
      * @param string $type
      *
-     * @return \EasyWeChat\Support\Collection
+     * @return \WeChat\Utils\WeChat\Support\Collection
      */
     public function reverse($orderNo, $type = self::OUT_TRADE_NO)
     {
@@ -147,7 +147,7 @@ class API extends AbstractAPI
      *
      * @param int $transactionId
      *
-     * @return \EasyWeChat\Support\Collection
+     * @return \WeChat\Utils\WeChat\Support\Collection
      */
     public function reverseByTransactionId($transactionId)
     {
@@ -158,12 +158,12 @@ class API extends AbstractAPI
      * Make a refund request.
      *
      * @param string $orderNo
-     * @param float  $totalFee
-     * @param float  $refundFee
+     * @param float $totalFee
+     * @param float $refundFee
      * @param string $opUserId
      * @param string $type
      *
-     * @return \EasyWeChat\Support\Collection
+     * @return \WeChat\Utils\WeChat\Support\Collection
      */
     public function refund(
         $orderNo,
@@ -172,7 +172,8 @@ class API extends AbstractAPI
         $refundFee = null,
         $opUserId = null,
         $type = self::OUT_TRADE_NO
-        ) {
+    )
+    {
         $params = [
             $type => $orderNo,
             'out_refund_no' => $refundNo,
@@ -189,11 +190,11 @@ class API extends AbstractAPI
      * Refund by transaction id.
      *
      * @param string $orderNo
-     * @param float  $totalFee
-     * @param float  $refundFee
+     * @param float $totalFee
+     * @param float $refundFee
      * @param string $opUserId
      *
-     * @return \EasyWeChat\Support\Collection
+     * @return \WeChat\Utils\WeChat\Support\Collection
      */
     public function refundByTransactionId(
         $orderNo,
@@ -201,7 +202,8 @@ class API extends AbstractAPI
         $totalFee,
         $refundFee = null,
         $opUserId = null
-        ) {
+    )
+    {
         return $this->refund($orderNo, $refundNo, $totalFee, $refundFee, $opUserId, self::TRANSACTION_ID);
     }
 
@@ -211,7 +213,7 @@ class API extends AbstractAPI
      * @param string $orderNo
      * @param string $type
      *
-     * @return \EasyWeChat\Support\Collection
+     * @return \WeChat\Utils\WeChat\Support\Collection
      */
     public function queryRefund($orderNo, $type = self::OUT_TRADE_NO)
     {
@@ -227,7 +229,7 @@ class API extends AbstractAPI
      *
      * @param string $refundNo
      *
-     * @return \EasyWeChat\Support\Collection
+     * @return \WeChat\Utils\WeChat\Support\Collection
      */
     public function queryRefundByRefundNo($refundNo)
     {
@@ -239,7 +241,7 @@ class API extends AbstractAPI
      *
      * @param string $transactionId
      *
-     * @return \EasyWeChat\Support\Collection
+     * @return \WeChat\Utils\WeChat\Support\Collection
      */
     public function queryRefundByTransactionId($transactionId)
     {
@@ -251,7 +253,7 @@ class API extends AbstractAPI
      *
      * @param string $refundId
      *
-     * @return \EasyWeChat\Support\Collection
+     * @return \WeChat\Utils\WeChat\Support\Collection
      */
     public function queryRefundByRefundId($refundId)
     {
@@ -281,7 +283,7 @@ class API extends AbstractAPI
      *
      * @param string $url
      *
-     * @return \EasyWeChat\Support\Collection
+     * @return \WeChat\Utils\WeChat\Support\Collection
      */
     public function urlShorten($url)
     {
@@ -292,12 +294,12 @@ class API extends AbstractAPI
      * Report API status to WeChat.
      *
      * @param string $api
-     * @param int    $timeConsuming
+     * @param int $timeConsuming
      * @param string $resultCode
      * @param string $returnCode
-     * @param array  $other         ex: err_code,err_code_des,out_trade_no,user_ip...
+     * @param array $other ex: err_code,err_code_des,out_trade_no,user_ip...
      *
-     * @return \EasyWeChat\Support\Collection
+     * @return \WeChat\Utils\WeChat\Support\Collection
      */
     public function report($api, $timeConsuming, $resultCode, $returnCode, array $other = [])
     {
@@ -319,7 +321,7 @@ class API extends AbstractAPI
      *
      * @param string $authCode
      *
-     * @return \EasyWeChat\Support\Collection
+     * @return \WeChat\Utils\WeChat\Support\Collection
      */
     public function authCodeToOpenId($authCode)
     {
@@ -352,12 +354,12 @@ class API extends AbstractAPI
      * Make a API request.
      *
      * @param string $api
-     * @param array  $params
+     * @param array $params
      * @param string $method
-     * @param array  $options
-     * @param bool   $returnResponse
+     * @param array $options
+     * @param bool $returnResponse
      *
-     * @return \EasyWeChat\Support\Collection|\Psr\Http\Message\ResponseInterface
+     * @return \WeChat\Utils\WeChat\Support\Collection|\Psr\Http\Message\ResponseInterface
      */
     protected function request($api, array $params, $method = 'post', array $options = [], $returnResponse = false)
     {
@@ -383,10 +385,10 @@ class API extends AbstractAPI
      * Request with SSL.
      *
      * @param string $api
-     * @param array  $params
+     * @param array $params
      * @param string $method
      *
-     * @return \EasyWeChat\Support\Collection
+     * @return \WeChat\Utils\WeChat\Support\Collection
      */
     protected function safeRequest($api, array $params, $method = 'post')
     {
@@ -403,7 +405,7 @@ class API extends AbstractAPI
      *
      * @param ResponseInterface $response
      *
-     * @return \EasyWeChat\Support\Collection
+     * @return \WeChat\Utils\WeChat\Support\Collection
      */
     protected function parseResponse($response)
     {
@@ -411,6 +413,6 @@ class API extends AbstractAPI
             $response = $response->getBody();
         }
 
-        return new Collection((array) XML::parse($response));
+        return new Collection((array)XML::parse($response));
     }
 }

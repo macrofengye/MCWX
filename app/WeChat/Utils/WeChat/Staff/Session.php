@@ -19,7 +19,7 @@ class Session extends AbstractAPI
      *
      * @param string $account
      *
-     * @return \EasyWeChat\Support\Collection
+     * @return \WeChat\Utils\WeChat\Support\Collection
      */
     public function lists($account)
     {
@@ -29,7 +29,7 @@ class Session extends AbstractAPI
     /**
      * List all waiters of $account.
      *
-     * @return \EasyWeChat\Support\Collection
+     * @return \WeChat\Utils\WeChat\Support\Collection
      */
     public function waiters()
     {
@@ -42,14 +42,14 @@ class Session extends AbstractAPI
      * @param string $account
      * @param string $openId
      *
-     * @return \EasyWeChat\Support\Collection
+     * @return \WeChat\Utils\WeChat\Support\Collection
      */
     public function create($account, $openId)
     {
         $params = [
-                   'kf_account' => $account,
-                   'openid' => $openId,
-                  ];
+            'kf_account' => $account,
+            'openid' => $openId,
+        ];
 
         return $this->parseJSON('json', [self::API_CREATE, $params]);
     }
@@ -60,14 +60,14 @@ class Session extends AbstractAPI
      * @param string $account
      * @param string $openId
      *
-     * @return \EasyWeChat\Support\Collection
+     * @return \WeChat\Utils\WeChat\Support\Collection
      */
     public function close($account, $openId)
     {
         $params = [
-                   'kf_account' => $account,
-                   'openid' => $openId,
-                  ];
+            'kf_account' => $account,
+            'openid' => $openId,
+        ];
 
         return $this->parseJSON('json', [self::API_CLOSE, $params]);
     }
@@ -77,7 +77,7 @@ class Session extends AbstractAPI
      *
      * @param string $openId
      *
-     * @return \EasyWeChat\Support\Collection
+     * @return \WeChat\Utils\WeChat\Support\Collection
      */
     public function get($openId)
     {

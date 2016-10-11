@@ -222,7 +222,7 @@ class Http
      *
      * @return mixed
      *
-     * @throws \EasyWeChat\Core\Exceptions\HttpException
+     * @throws \WeChat\Utils\WeChat\Core\Exceptions\HttpException
      */
     public function parseJSON($body)
     {

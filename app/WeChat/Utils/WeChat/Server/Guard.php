@@ -243,7 +243,6 @@ class Guard
     }
 
 
-
     /**
      * Set Encryptor.
      *

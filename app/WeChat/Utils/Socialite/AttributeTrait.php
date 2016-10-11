@@ -38,7 +38,7 @@ trait AttributeTrait
      * Set extra attributes.
      *
      * @param string $name
-     * @param mixed  $value
+     * @param mixed $value
      *
      * @return $this
      */

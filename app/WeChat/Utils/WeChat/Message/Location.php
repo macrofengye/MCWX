@@ -19,10 +19,10 @@ class Location extends AbstractMessage
      * @var array
      */
     protected $properties = [
-                             'latitude',
-                             'longitude',
-                             'scale',
-                             'label',
-                             'precision',
-                            ];
+        'latitude',
+        'longitude',
+        'scale',
+        'label',
+        'precision',
+    ];
 }

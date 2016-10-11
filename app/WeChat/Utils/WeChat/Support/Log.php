@@ -52,7 +52,7 @@ class Log
      * Forward call.
      *
      * @param string $method
-     * @param array  $args
+     * @param array $args
      *
      * @return mixed
      */
@@ -65,7 +65,7 @@ class Log
      * Forward call.
      *
      * @param string $method
-     * @param array  $args
+     * @param array $args
      *
      * @return mixed
      */

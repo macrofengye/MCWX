@@ -102,7 +102,7 @@ class Material extends AbstractAPI
                 return $article->only([
                     'title', 'thumb_media_id', 'author', 'digest',
                     'show_cover_pic', 'content', 'content_source_url',
-                    ]);
+                ]);
             }
 
             return $article;
@@ -115,8 +115,8 @@ class Material extends AbstractAPI
      * Update article.
      *
      * @param string $mediaId
-     * @param array  $article
-     * @param int    $index
+     * @param array $article
+     * @param int $index
      *
      * @return bool
      */
@@ -202,8 +202,8 @@ class Material extends AbstractAPI
      * }
      *
      * @param string $type
-     * @param int    $offset
-     * @param int    $count
+     * @param int $offset
+     * @param int $count
      *
      * @return array
      */
@@ -233,7 +233,7 @@ class Material extends AbstractAPI
      *
      * @param string $type
      * @param string $path
-     * @param array  $form
+     * @param array $form
      *
      * @return string
      *

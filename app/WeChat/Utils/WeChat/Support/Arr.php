@@ -11,9 +11,9 @@ class Arr
     /**
      * Add an element to an array using "dot" notation if it doesn't exist.
      *
-     * @param array  $array
+     * @param array $array
      * @param string $key
-     * @param mixed  $value
+     * @param mixed $value
      *
      * @return array
      */
@@ -29,7 +29,7 @@ class Arr
     /**
      * Build a new array using a callback.
      *
-     * @param array    $array
+     * @param array $array
      * @param \Closure $callback
      *
      * @return array
@@ -56,15 +56,15 @@ class Arr
     public static function divide($array)
     {
         return [
-                array_keys($array),
-                array_values($array),
-               ];
+            array_keys($array),
+            array_values($array),
+        ];
     }
 
     /**
      * Flatten a multi-dimensional associative array with dots.
      *
-     * @param array  $array
+     * @param array $array
      * @param string $prepend
      *
      * @return array
@@ -75,9 +75,9 @@ class Arr
 
         foreach ($array as $key => $value) {
             if (is_array($value)) {
-                $results = array_merge($results, static::dot($value, $prepend.$key.'.'));
+                $results = array_merge($results, static::dot($value, $prepend . $key . '.'));
             } else {
-                $results[$prepend.$key] = $value;
+                $results[$prepend . $key] = $value;
             }
         }
 
@@ -87,20 +87,20 @@ class Arr
     /**
      * Get all of the given array except for a specified array of items.
      *
-     * @param array        $array
+     * @param array $array
      * @param array|string $keys
      *
      * @return array
      */
     public static function except($array, $keys)
     {
-        return array_diff_key($array, array_flip((array) $keys));
+        return array_diff_key($array, array_flip((array)$keys));
     }
 
     /**
      * Fetch a flattened array of a nested array element.
      *
-     * @param array  $array
+     * @param array $array
      * @param string $key
      *
      * @return array
@@ -112,7 +112,7 @@ class Arr
         foreach (explode('.', $key) as $segment) {
             $results = [];
             foreach ($array as $value) {
-                $value = (array) $value;
+                $value = (array)$value;
                 $results[] = $value[$segment];
             }
             $array = array_values($results);
@@ -124,9 +124,9 @@ class Arr
     /**
      * Return the first element in an array passing a given truth test.
      *
-     * @param array    $array
+     * @param array $array
      * @param \Closure $callback
-     * @param mixed    $default
+     * @param mixed $default
      *
      * @return mixed
      */
@@ -144,9 +144,9 @@ class Arr
     /**
      * Return the last element in an array passing a given truth test.
      *
-     * @param array    $array
+     * @param array $array
      * @param \Closure $callback
-     * @param mixed    $default
+     * @param mixed $default
      *
      * @return mixed
      */
@@ -178,14 +178,14 @@ class Arr
     /**
      * Remove one or many array items from a given array using "dot" notation.
      *
-     * @param array        $array
+     * @param array $array
      * @param array|string $keys
      */
     public static function forget(&$array, $keys)
     {
         $original = &$array;
 
-        foreach ((array) $keys as $key) {
+        foreach ((array)$keys as $key) {
             $parts = explode('.', $key);
             while (count($parts) > 1) {
                 $part = array_shift($parts);
@@ -202,9 +202,9 @@ class Arr
     /**
      * Get an item from an array using "dot" notation.
      *
-     * @param array  $array
+     * @param array $array
      * @param string $key
-     * @param mixed  $default
+     * @param mixed $default
      *
      * @return mixed
      */
@@ -231,20 +231,20 @@ class Arr
     /**
      * Get a subset of the items from the given array.
      *
-     * @param array        $array
+     * @param array $array
      * @param array|string $keys
      *
      * @return array
      */
     public static function only($array, $keys)
     {
-        return array_intersect_key($array, array_flip((array) $keys));
+        return array_intersect_key($array, array_flip((array)$keys));
     }
 
     /**
      * Pluck an array of values from an array.
      *
-     * @param array  $array
+     * @param array $array
      * @param string $value
      * @param string $key
      *
@@ -273,9 +273,9 @@ class Arr
     /**
      * Get a value from the array, and remove it.
      *
-     * @param array  $array
+     * @param array $array
      * @param string $key
-     * @param mixed  $default
+     * @param mixed $default
      *
      * @return mixed
      */
@@ -292,9 +292,9 @@ class Arr
      *
      * If no key is given to the method, the entire array will be replaced.
      *
-     * @param array  $array
+     * @param array $array
      * @param string $key
-     * @param mixed  $value
+     * @param mixed $value
      *
      * @return array
      */
@@ -324,7 +324,7 @@ class Arr
     /**
      * Sort the array using the given Closure.
      *
-     * @param array    $array
+     * @param array $array
      * @param \Closure $callback
      *
      * @return array
@@ -343,7 +343,7 @@ class Arr
     /**
      * Filter the array using the given Closure.
      *
-     * @param array    $array
+     * @param array $array
      * @param \Closure $callback
      *
      * @return array

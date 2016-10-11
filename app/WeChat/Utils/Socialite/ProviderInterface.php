@@ -1,21 +1,23 @@
 <?php
 namespace WeChat\Utils\Socialite;
 
+use Slim\Http\Response;
+
 interface ProviderInterface
 {
     /**
      * Redirect the user to the authentication page for the provider.
      *
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     * @return Response
      */
     public function redirect();
 
     /**
      * Get the User instance for the authenticated user.
      *
-     * @param \Overtrue\Socialite\AccessTokenInterface $token
+     * @param \WeChat\Utils\Socialite\AccessTokenInterface $token
      *
-     * @return \Overtrue\Socialite\User
+     * @return \WeChat\Utils\Socialite\User
      */
     public function user(AccessTokenInterface $token = null);
 }

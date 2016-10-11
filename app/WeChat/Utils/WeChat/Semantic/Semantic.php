@@ -13,19 +13,19 @@ class Semantic extends AbstractAPI
     /**
      * Get the semantic content of giving string.
      *
-     * @param string       $keyword
+     * @param string $keyword
      * @param array|string $categories
-     * @param array        $other
+     * @param array $other
      *
      * @return array
      */
     public function query($keyword, $categories, array $other = [])
     {
         $params = [
-                   'query' => $keyword,
-                   'category' => implode(',', (array) $categories),
-                   'appid' => $this->getAccessToken()->getAppId(),
-                  ];
+            'query' => $keyword,
+            'category' => implode(',', (array)$categories),
+            'appid' => $this->getAccessToken()->getAppId(),
+        ];
 
         return $this->parseJSON('json', [self::API_SEARCH, array_merge($params, $other)]);
     }

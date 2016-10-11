@@ -38,7 +38,7 @@ class API extends AbstractAPI
     /**
      * API constructor.
      *
-     * @param \EasyWeChat\Payment\Merchant $merchant
+     * @param \WeChat\Utils\WeChat\Payment\Merchant $merchant
      */
     public function __construct(Merchant $merchant)
     {
@@ -50,7 +50,7 @@ class API extends AbstractAPI
      *
      * @param array $params
      *
-     * @return \EasyWeChat\Support\Collection
+     * @return \WeChat\Utils\WeChat\Support\Collection
      */
     public function prepare(array $params)
     {
@@ -70,7 +70,7 @@ class API extends AbstractAPI
      *
      * @param string $mchBillNo
      *
-     * @return \EasyWeChat\Support\Collection
+     * @return \WeChat\Utils\WeChat\Support\Collection
      */
     public function query($mchBillNo)
     {
@@ -86,10 +86,10 @@ class API extends AbstractAPI
     /**
      * Send LuckyMoney.
      *
-     * @param array  $params
+     * @param array $params
      * @param string $type
      *
-     * @return \EasyWeChat\Support\Collection
+     * @return \WeChat\Utils\WeChat\Support\Collection
      */
     public function send(array $params, $type = self::TYPE_NORMAL)
     {
@@ -109,7 +109,7 @@ class API extends AbstractAPI
      *
      * @param array $params
      *
-     * @return \EasyWeChat\Support\Collection
+     * @return \WeChat\Utils\WeChat\Support\Collection
      */
     public function sendNormal($params)
     {
@@ -124,7 +124,7 @@ class API extends AbstractAPI
      *
      * @param array $params
      *
-     * @return \EasyWeChat\Support\Collection
+     * @return \WeChat\Utils\WeChat\Support\Collection
      */
     public function sendGroup($params)
     {
@@ -159,10 +159,10 @@ class API extends AbstractAPI
      * Make a API request.
      *
      * @param string $api
-     * @param array  $params
+     * @param array $params
      * @param string $method
      *
-     * @return \EasyWeChat\Support\Collection
+     * @return \WeChat\Utils\WeChat\Support\Collection
      */
     protected function request($api, array $params, $method = 'post')
     {
@@ -185,7 +185,7 @@ class API extends AbstractAPI
      *
      * @param \Psr\Http\Message\ResponseInterface|string $response
      *
-     * @return \EasyWeChat\Support\Collection
+     * @return \WeChat\Utils\WeChat\Support\Collection
      */
     protected function parseResponse($response)
     {
@@ -193,6 +193,6 @@ class API extends AbstractAPI
             $response = $response->getBody();
         }
 
-        return new Collection((array) XML::parse($response));
+        return new Collection((array)XML::parse($response));
     }
 }

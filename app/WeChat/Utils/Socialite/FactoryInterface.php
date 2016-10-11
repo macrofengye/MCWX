@@ -11,7 +11,7 @@ interface FactoryInterface
      *
      * @param string $driver
      *
-     * @return \Overtrue\Socialite
+     * @return \WeChat\Utils\Socialite\
      */
     public function driver($driver = null);
 }

@@ -29,7 +29,7 @@ class Js extends AbstractAPI
     /**
      * Ticket cache prefix.
      */
-    const TICKET_CACHE_PREFIX = 'overtrue.wechat.jsapi_ticket.';
+    const TICKET_CACHE_PREFIX = 'MacroWeChat.wechat.jsapi_ticket.';
 
     /**
      * Api of ticket.
@@ -40,9 +40,9 @@ class Js extends AbstractAPI
      * Get config json for jsapi.
      *
      * @param array $APIs
-     * @param bool  $debug
-     * @param bool  $beta
-     * @param bool  $json
+     * @param bool $debug
+     * @param bool $beta
+     * @param bool $json
      *
      * @return array|string
      */
@@ -51,9 +51,9 @@ class Js extends AbstractAPI
         $signPackage = $this->signature();
 
         $base = [
-                 'debug' => $debug,
-                 'beta' => $beta,
-                ];
+            'debug' => $debug,
+            'beta' => $beta,
+        ];
         $config = array_merge($base, $signPackage, ['jsApiList' => $APIs]);
 
         return $json ? json_encode($config) : $config;
@@ -63,8 +63,8 @@ class Js extends AbstractAPI
      * Return jsapi config as a PHP array.
      *
      * @param array $APIs
-     * @param bool  $debug
-     * @param bool  $beta
+     * @param bool $debug
+     * @param bool $beta
      *
      * @return array
      */
@@ -80,7 +80,7 @@ class Js extends AbstractAPI
      */
     public function ticket()
     {
-        $key = self::TICKET_CACHE_PREFIX.$this->getAccessToken()->getAppId();
+        $key = self::TICKET_CACHE_PREFIX . $this->getAccessToken()->getAppId();
 
         if ($ticket = $this->getCache()->fetch($key)) {
             return $ticket;
@@ -98,7 +98,7 @@ class Js extends AbstractAPI
      *
      * @param string $url
      * @param string $nonce
-     * @param int    $timestamp
+     * @param int $timestamp
      *
      * @return array
      */
@@ -110,12 +110,12 @@ class Js extends AbstractAPI
         $ticket = $this->ticket();
 
         $sign = [
-                 'appId' => $this->getAccessToken()->getAppId(),
-                 'nonceStr' => $nonce,
-                 'timestamp' => $timestamp,
-                 'url' => $url,
-                 'signature' => $this->getSignature($ticket, $nonce, $timestamp, $url),
-                ];
+            'appId' => $this->getAccessToken()->getAppId(),
+            'nonceStr' => $nonce,
+            'timestamp' => $timestamp,
+            'url' => $url,
+            'signature' => $this->getSignature($ticket, $nonce, $timestamp, $url),
+        ];
 
         return $sign;
     }
@@ -125,7 +125,7 @@ class Js extends AbstractAPI
      *
      * @param string $ticket
      * @param string $nonce
-     * @param int    $timestamp
+     * @param int $timestamp
      * @param string $url
      *
      * @return string

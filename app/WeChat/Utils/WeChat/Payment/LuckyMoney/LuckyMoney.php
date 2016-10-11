@@ -16,7 +16,7 @@ class LuckyMoney
     /**
      * Merchant instance.
      *
-     * @var \EasyWeChat\Payment\Merchant
+     * @var \WeChat\Utils\WeChat\Payment\Merchant
      */
     protected $merchant;
 
@@ -74,7 +74,7 @@ class LuckyMoney
      * Magic call.
      *
      * @param string $method
-     * @param array  $args
+     * @param array $args
      *
      * @return mixed
      *

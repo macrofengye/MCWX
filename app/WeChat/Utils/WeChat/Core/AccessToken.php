@@ -1,23 +1,4 @@
 <?php
-
-/*
- * This file is part of the overtrue/wechat.
- *
- * (c) overtrue <i@overtrue.me>
- *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
- */
-
-/**
- * AccessToken.php.
- *
- * @author    overtrue <i@overtrue.me>
- * @copyright 2015 overtrue <i@overtrue.me>
- *
- * @link      https://github.com/overtrue
- * @link      http://overtrue.me
- */
 namespace WeChat\Utils\WeChat\Core;
 
 use Doctrine\Common\Cache\Cache;
@@ -76,7 +57,7 @@ class AccessToken
      *
      * @var string
      */
-    protected $prefix = 'wechat.utils.wechat.common.access_token.';
+    protected $prefix = 'MacroWeChat.utils.wechat.common.access_token.';
 
     // API
     const API_TOKEN_GET = 'https://api.weixin.qq.com/cgi-bin/token';
@@ -84,8 +65,8 @@ class AccessToken
     /**
      * Constructor.
      *
-     * @param string                       $appId
-     * @param string                       $secret
+     * @param string $appId
+     * @param string $secret
      * @param \Doctrine\Common\Cache\Cache $cache
      */
     public function __construct($appId, $secret, Cache $cache = null)
@@ -200,7 +181,7 @@ class AccessToken
     /**
      * Get the access token from WeChat server.
      *
-     * @throws \EasyWeChat\Core\Exceptions\HttpException
+     * @throws \WeChat\Utils\WeChat\Core\Exceptions\HttpException
      *
      * @return string
      */
@@ -217,7 +198,7 @@ class AccessToken
         $token = $http->parseJSON($http->get(self::API_TOKEN_GET, $params));
 
         if (empty($token['access_token'])) {
-            throw new HttpException('Request AccessToken fail. response: '.json_encode($token, JSON_UNESCAPED_UNICODE));
+            throw new HttpException('Request AccessToken fail. response: ' . json_encode($token, JSON_UNESCAPED_UNICODE));
         }
 
         return $token;
@@ -226,7 +207,7 @@ class AccessToken
     /**
      * Return the http instance.
      *
-     * @return \EasyWeChat\Core\Http
+     * @return \WeChat\Utils\WeChat\Core\Http
      */
     public function getHttp()
     {
@@ -236,7 +217,7 @@ class AccessToken
     /**
      * Set the http instance.
      *
-     * @param \EasyWeChat\Core\Http $http
+     * @param \WeChat\Utils\WeChat\Core\Http $http
      *
      * @return $this
      */
@@ -283,7 +264,7 @@ class AccessToken
     public function getCacheKey()
     {
         if (is_null($this->cacheKey)) {
-            return $this->prefix.$this->appId;
+            return $this->prefix . $this->appId;
         }
 
         return $this->cacheKey;

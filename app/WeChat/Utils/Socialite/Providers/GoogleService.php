@@ -7,7 +7,7 @@ use WeChat\Utils\Socialite\ProviderInterface;
 use WeChat\Utils\Socialite\User;
 
 /**
- * Class GoogleProvider.
+ * Class GoogleService.
  *
  * @link https://developers.google.com/identity/protocols/OpenIDConnect [OpenID Connect]
  */
@@ -87,8 +87,8 @@ class GoogleService extends AbstractService implements ProviderInterface
                 'prettyPrint' => 'false',
             ],
             'headers' => [
-                'Accept'        => 'application/json',
-                'Authorization' => 'Bearer '.$token->getToken(),
+                'Accept' => 'application/json',
+                'Authorization' => 'Bearer ' . $token->getToken(),
             ],
         ]);
 
@@ -101,11 +101,11 @@ class GoogleService extends AbstractService implements ProviderInterface
     protected function mapUserToObject(array $user)
     {
         return new User([
-            'id'       => $this->arrayItem($user, 'id'),
+            'id' => $this->arrayItem($user, 'id'),
             'nickname' => $this->arrayItem($user, 'nickname'),
-            'name'     => $this->arrayItem($user, 'displayName'),
-            'email'    => $this->arrayItem($user, 'emails.0.value'),
-            'avatar'   => $this->arrayItem($user, 'image.url'),
+            'name' => $this->arrayItem($user, 'displayName'),
+            'email' => $this->arrayItem($user, 'emails.0.value'),
+            'avatar' => $this->arrayItem($user, 'image.url'),
         ]);
     }
 }

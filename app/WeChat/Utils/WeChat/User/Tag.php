@@ -27,8 +27,8 @@ class Tag extends AbstractAPI
     public function create($name)
     {
         $params = [
-                   'tag' => ['name' => $name],
-                  ];
+            'tag' => ['name' => $name],
+        ];
 
         return $this->parseJSON('json', [self::API_CREATE, $params]);
     }
@@ -46,7 +46,7 @@ class Tag extends AbstractAPI
     /**
      * Update a tag name.
      *
-     * @param int    $tagId
+     * @param int $tagId
      * @param string $name
      *
      * @return bool
@@ -54,11 +54,11 @@ class Tag extends AbstractAPI
     public function update($tagId, $name)
     {
         $params = [
-                   'tag' => [
-                               'id' => $tagId,
-                               'name' => $name,
-                              ],
-                  ];
+            'tag' => [
+                'id' => $tagId,
+                'name' => $name,
+            ],
+        ];
 
         return $this->parseJSON('json', [self::API_UPDATE, $params]);
     }
@@ -73,8 +73,8 @@ class Tag extends AbstractAPI
     public function delete($tagId)
     {
         $params = [
-                   'tag' => ['id' => $tagId],
-                  ];
+            'tag' => ['id' => $tagId],
+        ];
 
         return $this->parseJSON('json', [self::API_DELETE, $params]);
     }
@@ -112,16 +112,16 @@ class Tag extends AbstractAPI
      * Batch tag users.
      *
      * @param array $openIds
-     * @param int   $tagId
+     * @param int $tagId
      *
      * @return bool
      */
     public function batchTagUsers(array $openIds, $tagId)
     {
         $params = [
-                   'openid_list' => $openIds,
-                   'tagid' => $tagId,
-                  ];
+            'openid_list' => $openIds,
+            'tagid' => $tagId,
+        ];
 
         return $this->parseJSON('json', [self::API_MEMBER_BATCH_TAG, $params]);
     }
@@ -130,16 +130,16 @@ class Tag extends AbstractAPI
      * Untag users from a tag.
      *
      * @param array $openIds
-     * @param int   $tagId
+     * @param int $tagId
      *
      * @return bool
      */
     public function batchUntagUsers(array $openIds, $tagId)
     {
         $params = [
-                   'openid_list' => $openIds,
-                   'tagid' => $tagId,
-                  ];
+            'openid_list' => $openIds,
+            'tagid' => $tagId,
+        ];
 
         return $this->parseJSON('json', [self::API_MEMBER_BATCH_UNTAG, $params]);
     }

@@ -7,7 +7,7 @@ use WeChat\Utils\Socialite\ProviderInterface;
 use WeChat\Utils\Socialite\User;
 
 /**
- * Class QQProvider.
+ * Class QQService.
  *
  * @link http://wiki.connect.qq.com/oauth2-0%E7%AE%80%E4%BB%8B [QQ - OAuth 2.0 登录QQ]
  */
@@ -57,7 +57,7 @@ class QQService extends AbstractService implements ProviderInterface
      */
     protected function getAuthUrl($state)
     {
-        return $this->buildAuthUrlFromBase($this->baseUrl.'/oauth2.0/authorize', $state);
+        return $this->buildAuthUrlFromBase($this->baseUrl . '/oauth2.0/authorize', $state);
     }
 
     /**
@@ -67,7 +67,7 @@ class QQService extends AbstractService implements ProviderInterface
      */
     protected function getTokenUrl()
     {
-        return $this->baseUrl.'/oauth2.0/token';
+        return $this->baseUrl . '/oauth2.0/token';
     }
 
     /**
@@ -121,19 +121,19 @@ class QQService extends AbstractService implements ProviderInterface
      */
     protected function getUserByToken(AccessTokenInterface $token)
     {
-        $response = $this->getHttpClient()->get($this->baseUrl.'/oauth2.0/me?access_token='.$token->getToken().'&unionid=1');
+        $response = $this->getHttpClient()->get($this->baseUrl . '/oauth2.0/me?access_token=' . $token->getToken() . '&unionid=1');
 
         $me = json_decode($this->removeCallback($response->getBody()->getContents()), true);
         $this->openId = $me['openid'];
         $this->unionId = isset($me['unionid']) ? $me['unionid'] : '';
 
         $queries = [
-            'access_token'       => $token->getToken(),
-            'openid'             => $this->openId,
+            'access_token' => $token->getToken(),
+            'openid' => $this->openId,
             'oauth_consumer_key' => $this->clientId,
         ];
 
-        $response = $this->getHttpClient()->get($this->baseUrl.'/user/get_user_info?'.http_build_query($queries));
+        $response = $this->getHttpClient()->get($this->baseUrl . '/user/get_user_info?' . http_build_query($queries));
 
         return json_decode($this->removeCallback($response->getBody()->getContents()), true);
     }
@@ -148,12 +148,12 @@ class QQService extends AbstractService implements ProviderInterface
     protected function mapUserToObject(array $user)
     {
         return new User([
-            'id'       => $this->openId,
-            'unionid'  => $this->unionId,
+            'id' => $this->openId,
+            'unionid' => $this->unionId,
             'nickname' => $this->arrayItem($user, 'nickname'),
-            'name'     => $this->arrayItem($user, 'nickname'),
-            'email'    => $this->arrayItem($user, 'email'),
-            'avatar'   => $this->arrayItem($user, 'figureurl_qq_2'),
+            'name' => $this->arrayItem($user, 'nickname'),
+            'email' => $this->arrayItem($user, 'email'),
+            'avatar' => $this->arrayItem($user, 'figureurl_qq_2'),
         ]);
     }
 

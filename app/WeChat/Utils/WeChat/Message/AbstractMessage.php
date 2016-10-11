@@ -73,7 +73,7 @@ abstract class AbstractMessage extends Attribute
      * Magic setter.
      *
      * @param string $property
-     * @param mixed  $value
+     * @param mixed $value
      *
      * @return AbstractMessage
      */

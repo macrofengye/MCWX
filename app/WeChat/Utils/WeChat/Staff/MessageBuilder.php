@@ -15,7 +15,7 @@ class MessageBuilder
     /**
      * Message to send.
      *
-     * @var \EasyWeChat\Message\AbstractMessage;
+     * @var \WeChat\Utils\WeChat\Message\AbstractMessage;
      */
     protected $message;
 
@@ -36,14 +36,14 @@ class MessageBuilder
     /**
      * Staff instance.
      *
-     * @var \EasyWeChat\Staff\Staff
+     * @var \WeChat\Utils\WeChat\Staff\Staff
      */
     protected $staff;
 
     /**
      * MessageBuilder constructor.
      *
-     * @param \EasyWeChat\Staff\Staff $staff
+     * @param \WeChat\Utils\WeChat\Staff\Staff $staff
      */
     public function __construct(Staff $staff)
     {

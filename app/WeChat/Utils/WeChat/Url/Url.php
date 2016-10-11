@@ -20,9 +20,9 @@ class Url extends AbstractAPI
     public function shorten($url)
     {
         $params = [
-                   'action' => 'long2short',
-                   'long_url' => $url,
-                  ];
+            'action' => 'long2short',
+            'long_url' => $url,
+        ];
 
         return $this->parseJSON('json', [self::API_SHORTEN_URL, $params]);
     }

@@ -60,7 +60,7 @@ class Payment
 
         $params['sign'] = generate_sign($params, $this->merchant->key, 'md5');
 
-        return self::SCHEME_PATH.'?'.http_build_query($params);
+        return self::SCHEME_PATH . '?' . http_build_query($params);
     }
 
     /**
@@ -109,7 +109,7 @@ class Payment
      * </pre>
      *
      * @param string $prepayId
-     * @param bool   $json
+     * @param bool $json
      *
      * @return string|array
      */
@@ -175,8 +175,8 @@ class Payment
     /**
      * Generate js config for share user address.
      *
-     * @param string|\Overtrue\Socialite\AccessTokenInterface $accessToken
-     * @param bool                                            $json
+     * @param string|\WeChat\Utils\Socialite\AccessTokenInterface $accessToken
+     * @param bool $json
      *
      * @return string|array
      */
@@ -232,7 +232,7 @@ class Payment
     /**
      * Return Notify instance.
      *
-     * @return \EasyWeChat\Payment\Notify
+     * @return \WeChat\Utils\WeChat\Payment\Notify
      */
     public function getNotify()
     {
@@ -263,7 +263,7 @@ class Payment
      * Magic call.
      *
      * @param string $method
-     * @param array  $args
+     * @param array $args
      *
      * @return mixed
      *

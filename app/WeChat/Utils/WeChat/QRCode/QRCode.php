@@ -23,7 +23,7 @@ class QRCode extends AbstractAPI
      *
      * @param int $sceneValue
      *
-     * @return \EasyWeChat\Support\Collection
+     * @return \WeChat\Utils\WeChat\Support\Collection
      */
     public function forever($sceneValue)
     {
@@ -44,9 +44,9 @@ class QRCode extends AbstractAPI
      * Create temporary.
      *
      * @param string $sceneId
-     * @param null   $expireSeconds
+     * @param null $expireSeconds
      *
-     * @return \EasyWeChat\Support\Collection
+     * @return \WeChat\Utils\WeChat\Support\Collection
      */
     public function temporary($sceneId, $expireSeconds = null)
     {
@@ -68,7 +68,7 @@ class QRCode extends AbstractAPI
      *    "is_unique_code": false , "outer_id" : 1
      *  }
      *
-     * @return \EasyWeChat\Support\Collection
+     * @return \WeChat\Utils\WeChat\Support\Collection
      */
     public function card($card)
     {
@@ -84,27 +84,27 @@ class QRCode extends AbstractAPI
      */
     public function url($ticket)
     {
-        return self::API_SHOW."?ticket={$ticket}";
+        return self::API_SHOW . "?ticket={$ticket}";
     }
 
     /**
      * Create a QRCode.
      *
      * @param string $actionName
-     * @param array  $actionInfo
-     * @param bool   $temporary
-     * @param int    $expireSeconds
+     * @param array $actionInfo
+     * @param bool $temporary
+     * @param int $expireSeconds
      *
-     * @return \EasyWeChat\Support\Collection
+     * @return \WeChat\Utils\WeChat\Support\Collection
      */
     protected function create($actionName, $actionInfo, $temporary = true, $expireSeconds = null)
     {
         $expireSeconds !== null || $expireSeconds = 7 * self::DAY;
 
         $params = [
-                   'action_name' => $actionName,
-                   'action_info' => ['scene' => $actionInfo],
-                  ];
+            'action_name' => $actionName,
+            'action_info' => ['scene' => $actionInfo],
+        ];
 
         if ($temporary) {
             $params['expire_seconds'] = min($expireSeconds, 30 * self::DAY);

@@ -25,11 +25,11 @@ class Video extends AbstractMessage
      * @var array
      */
     protected $properties = [
-                             'title',
-                             'description',
-                             'media_id',
-                             'thumb_media_id',
-                            ];
+        'title',
+        'description',
+        'media_id',
+        'thumb_media_id',
+    ];
 
     /**
      * 设置视频消息.

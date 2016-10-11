@@ -4,7 +4,7 @@ namespace WeChat\Utils\WeChat\Payment;
 /**
  * Generate a signature.
  *
- * @param array  $attributes
+ * @param array $attributes
  * @param string $key
  * @param string $encryptMethod
  *

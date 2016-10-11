@@ -26,7 +26,7 @@ class API extends AbstractAPI
     /**
      * API constructor.
      *
-     * @param \EasyWeChat\Payment\Merchant $merchant
+     * @param \WeChat\Utils\WeChat\Payment\Merchant $merchant
      */
     public function __construct(Merchant $merchant)
     {
@@ -38,7 +38,7 @@ class API extends AbstractAPI
      *
      * @param string $mchBillNo
      *
-     * @return \EasyWeChat\Support\Collection
+     * @return \WeChat\Utils\WeChat\Support\Collection
      *
      * @notice mch_id when query, but mchid when send
      */
@@ -58,7 +58,7 @@ class API extends AbstractAPI
      *
      * @param array $params
      *
-     * @return \EasyWeChat\Support\Collection
+     * @return \WeChat\Utils\WeChat\Support\Collection
      */
     public function send(array $params)
     {
@@ -94,10 +94,10 @@ class API extends AbstractAPI
      * Make a API request.
      *
      * @param string $api
-     * @param array  $params
+     * @param array $params
      * @param string $method
      *
-     * @return \EasyWeChat\Support\Collection
+     * @return \WeChat\Utils\WeChat\Support\Collection
      */
     protected function request($api, array $params, $method = 'post')
     {
@@ -119,7 +119,7 @@ class API extends AbstractAPI
      *
      * @param ResponseInterface $response
      *
-     * @return \EasyWeChat\Support\Collection
+     * @return \WeChat\Utils\WeChat\Support\Collection
      */
     protected function parseResponse($response)
     {
@@ -127,6 +127,6 @@ class API extends AbstractAPI
             $response = $response->getBody();
         }
 
-        return new Collection((array) XML::parse($response));
+        return new Collection((array)XML::parse($response));
     }
 }

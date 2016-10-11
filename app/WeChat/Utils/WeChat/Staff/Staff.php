@@ -23,7 +23,7 @@ class Staff extends AbstractAPI
     /**
      * List all staffs.
      *
-     * @return \EasyWeChat\Support\Collection
+     * @return \WeChat\Utils\WeChat\Support\Collection
      */
     public function lists()
     {
@@ -33,7 +33,7 @@ class Staff extends AbstractAPI
     /**
      * List all online staffs.
      *
-     * @return \EasyWeChat\Support\Collection
+     * @return \WeChat\Utils\WeChat\Support\Collection
      */
     public function onlines()
     {
@@ -46,14 +46,14 @@ class Staff extends AbstractAPI
      * @param string $account
      * @param string $nickname
      *
-     * @return \EasyWeChat\Support\Collection
+     * @return \WeChat\Utils\WeChat\Support\Collection
      */
     public function create($account, $nickname)
     {
         $params = [
-                   'kf_account' => $account,
-                   'nickname' => $nickname,
-                  ];
+            'kf_account' => $account,
+            'nickname' => $nickname,
+        ];
 
         return $this->parseJSON('json', [self::API_CREATE, $params]);
     }
@@ -64,14 +64,14 @@ class Staff extends AbstractAPI
      * @param string $account
      * @param string $nickname
      *
-     * @return \EasyWeChat\Support\Collection
+     * @return \WeChat\Utils\WeChat\Support\Collection
      */
     public function update($account, $nickname)
     {
         $params = [
-                   'kf_account' => $account,
-                   'nickname' => $nickname,
-                  ];
+            'kf_account' => $account,
+            'nickname' => $nickname,
+        ];
 
         return $this->parseJSON('json', [self::API_UPDATE, $params]);
     }
@@ -81,7 +81,7 @@ class Staff extends AbstractAPI
      *
      * @param string $account
      *
-     * @return \EasyWeChat\Support\Collection
+     * @return \WeChat\Utils\WeChat\Support\Collection
      */
     public function delete($account)
     {
@@ -91,7 +91,7 @@ class Staff extends AbstractAPI
         // #222
         // PS: 如果你是微信做接口的，奉劝你们，尊重技术，不会别乱搞，笨不是你们的错，你们出来坑人就是大错特错。
         $accessTokenField = sprintf('%s=%s', $this->accessToken->getQueryName(), $this->accessToken->getToken());
-        $url = sprintf(self::API_DELETE.'?%s&kf_account=%s', $accessTokenField, $account);
+        $url = sprintf(self::API_DELETE . '?%s&kf_account=%s', $accessTokenField, $account);
 
         $contents = $this->getHttp()->parseJSON(file_get_contents($url));
 
@@ -106,14 +106,14 @@ class Staff extends AbstractAPI
      * @param string $account
      * @param string $wechatId
      *
-     * @return \EasyWeChat\Support\Collection
+     * @return \WeChat\Utils\WeChat\Support\Collection
      */
     public function invite($account, $wechatId)
     {
         $params = [
-                   'kf_account' => $account,
-                   'invite_wx' => $wechatId,
-                  ];
+            'kf_account' => $account,
+            'invite_wx' => $wechatId,
+        ];
 
         return $this->parseJSON('json', [self::API_INVITE_BIND, $params]);
     }
@@ -124,7 +124,7 @@ class Staff extends AbstractAPI
      * @param string $account
      * @param string $path
      *
-     * @return \EasyWeChat\Support\Collection
+     * @return \WeChat\Utils\WeChat\Support\Collection
      */
     public function avatar($account, $path)
     {
@@ -134,11 +134,11 @@ class Staff extends AbstractAPI
     /**
      * Get message builder.
      *
-     * @param \EasyWeChat\Message\AbstractMessage|string $message
+     * @param \WeChat\Utils\WeChat\Message\AbstractMessage|string $message
      *
-     * @return \EasyWeChat\Staff\MessageBuilder
+     * @return \WeChat\Utils\WeChat\Staff\MessageBuilder
      *
-     * @throws \EasyWeChat\Core\Exceptions\InvalidArgumentException
+     * @throws \WeChat\Utils\WeChat\Core\Exceptions\InvalidArgumentException
      */
     public function message($message)
     {
@@ -152,7 +152,7 @@ class Staff extends AbstractAPI
      *
      * @param string|array $message
      *
-     * @return \EasyWeChat\Support\Collection
+     * @return \WeChat\Utils\WeChat\Support\Collection
      */
     public function send($message)
     {
@@ -167,16 +167,16 @@ class Staff extends AbstractAPI
      * @param int $page
      * @param int $pageSize
      *
-     * @return \EasyWeChat\Support\Collection
+     * @return \WeChat\Utils\WeChat\Support\Collection
      */
     public function records($startTime, $endTime, $page = 1, $pageSize = 10)
     {
         $params = [
-                   'starttime' => is_numeric($startTime) ? $startTime : strtotime($startTime),
-                   'endtime' => is_numeric($endTime) ? $endTime : strtotime($endTime),
-                   'pageindex' => $page,
-                   'pagesize' => $pageSize,
-                  ];
+            'starttime' => is_numeric($startTime) ? $startTime : strtotime($startTime),
+            'endtime' => is_numeric($endTime) ? $endTime : strtotime($endTime),
+            'pageindex' => $page,
+            'pagesize' => $pageSize,
+        ];
 
         return $this->parseJSON('json', [self::API_RECORDS, $params]);
     }

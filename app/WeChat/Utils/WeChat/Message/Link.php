@@ -19,8 +19,8 @@ class Link extends AbstractMessage
      * @var array
      */
     protected $properties = [
-                             'title',
-                             'description',
-                             'url',
-                            ];
+        'title',
+        'description',
+        'url',
+    ];
 }

@@ -43,7 +43,7 @@ class Temporary extends AbstractAPI
 
         $filename .= File::getStreamExt($stream);
 
-        file_put_contents($directory.'/'.$filename, $stream);
+        file_put_contents($directory . '/' . $filename, $stream);
 
         return $filename;
     }

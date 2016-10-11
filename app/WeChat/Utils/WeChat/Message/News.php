@@ -19,11 +19,11 @@ class News extends AbstractMessage
      * @var array
      */
     protected $properties = [
-                                'title',
-                                'description',
-                                'url',
-                                'image',
-                            ];
+        'title',
+        'description',
+        'url',
+        'image',
+    ];
     /**
      * Aliases of attribute.
      *

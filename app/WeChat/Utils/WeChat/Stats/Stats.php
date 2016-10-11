@@ -275,7 +275,7 @@ class Stats extends AbstractAPI
      *
      * @param string $from
      * @param string $to
-     * @param int    $condSource
+     * @param int $condSource
      *
      * @return array
      */
@@ -293,7 +293,7 @@ class Stats extends AbstractAPI
      *
      * @param string $from
      * @param string $to
-     * @param int    $condSource
+     * @param int $condSource
      * @param string $cardId
      *
      * @return array
@@ -313,7 +313,7 @@ class Stats extends AbstractAPI
      *
      * @param string $from
      * @param string $to
-     * @param int    $condSource
+     * @param int $condSource
      *
      * @return array
      */

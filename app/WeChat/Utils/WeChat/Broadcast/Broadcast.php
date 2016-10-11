@@ -29,8 +29,8 @@ class Broadcast extends AbstractAPI
      * Send a message.
      *
      * @param string $msgType message type
-     * @param mixed  $message message
-     * @param mixed  $to
+     * @param mixed $message message
+     * @param mixed $to
      *
      * @return mixed
      */
@@ -125,7 +125,7 @@ class Broadcast extends AbstractAPI
      * Preview a message.
      *
      * @param string $msgType message type
-     * @param mixed  $message message
+     * @param mixed $message message
      * @param string $to
      * @param string $by
      *
@@ -141,7 +141,7 @@ class Broadcast extends AbstractAPI
     /**
      * Preview a text message.
      *
-     * @param mixed  $message message
+     * @param mixed $message message
      * @param string $to
      * @param string $by
      *
@@ -155,7 +155,7 @@ class Broadcast extends AbstractAPI
     /**
      * Preview a news message.
      *
-     * @param mixed  $message message
+     * @param mixed $message message
      * @param string $to
      * @param string $by
      *
@@ -169,7 +169,7 @@ class Broadcast extends AbstractAPI
     /**
      * Preview a voice message.
      *
-     * @param mixed  $message message
+     * @param mixed $message message
      * @param string $to
      * @param string $by
      *
@@ -183,7 +183,7 @@ class Broadcast extends AbstractAPI
     /**
      * Preview a image message.
      *
-     * @param mixed  $message message
+     * @param mixed $message message
      * @param string $to
      * @param string $by
      *
@@ -197,7 +197,7 @@ class Broadcast extends AbstractAPI
     /**
      * Preview a video message.
      *
-     * @param mixed  $message message
+     * @param mixed $message message
      * @param string $to
      * @param string $by
      *
@@ -211,7 +211,7 @@ class Broadcast extends AbstractAPI
     /**
      * Preview a card message.
      *
-     * @param mixed  $message message
+     * @param mixed $message message
      * @param string $to
      * @param string $by
      *
@@ -226,7 +226,7 @@ class Broadcast extends AbstractAPI
      * Preview a message by name.
      *
      * @param string $msgType message type
-     * @param mixed  $message message
+     * @param mixed $message message
      * @param $to
      *
      * @return mixed
@@ -349,7 +349,7 @@ class Broadcast extends AbstractAPI
     /**
      * post request.
      *
-     * @param string       $url
+     * @param string $url
      * @param array|string $options
      *
      * @return array|bool

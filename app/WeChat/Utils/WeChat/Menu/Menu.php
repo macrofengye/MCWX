@@ -29,7 +29,7 @@ class Menu extends AbstractAPI
     /**
      * Get current menus.
      *
-     * @return \EasyWeChat\Support\Collection
+     * @return \WeChat\Utils\WeChat\Support\Collection
      */
     public function current()
     {
@@ -69,7 +69,7 @@ class Menu extends AbstractAPI
             return $this->parseJSON('json', [self::API_CONDITIONAL_DELETE, ['menuid' => $menuId]]);
         }
 
-        return  $this->parseJSON('get', [self::API_DELETE]);
+        return $this->parseJSON('get', [self::API_DELETE]);
     }
 
     /**

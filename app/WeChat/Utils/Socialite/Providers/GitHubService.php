@@ -8,7 +8,7 @@ use WeChat\Utils\Socialite\Providers\AbstractService;
 use WeChat\Utils\Socialite\User;
 
 /**
- * Class GitHubProvider.
+ * Class GitHubService.
  */
 class GitHubService extends AbstractService implements ProviderInterface
 {
@@ -40,7 +40,7 @@ class GitHubService extends AbstractService implements ProviderInterface
      */
     protected function getUserByToken(AccessTokenInterface $token)
     {
-        $userUrl = 'https://api.github.com/user?access_token='.$token->getToken();
+        $userUrl = 'https://api.github.com/user?access_token=' . $token->getToken();
 
         $response = $this->getHttpClient()->get(
             $userUrl, $this->getRequestOptions()
@@ -64,7 +64,7 @@ class GitHubService extends AbstractService implements ProviderInterface
      */
     protected function getEmailByToken($token)
     {
-        $emailsUrl = 'https://api.github.com/user/emails?access_token='.$token->getToken();
+        $emailsUrl = 'https://api.github.com/user/emails?access_token=' . $token->getToken();
 
         try {
             $response = $this->getHttpClient()->get(
@@ -87,11 +87,11 @@ class GitHubService extends AbstractService implements ProviderInterface
     protected function mapUserToObject(array $user)
     {
         return new User([
-            'id'       => $this->arrayItem($user, 'id'),
+            'id' => $this->arrayItem($user, 'id'),
             'nickname' => $this->arrayItem($user, 'login'),
-            'name'     => $this->arrayItem($user, 'name'),
-            'email'    => $this->arrayItem($user, 'email'),
-            'avatar'   => $this->arrayItem($user, 'avatar_url'),
+            'name' => $this->arrayItem($user, 'name'),
+            'email' => $this->arrayItem($user, 'email'),
+            'avatar' => $this->arrayItem($user, 'avatar_url'),
         ]);
     }
 

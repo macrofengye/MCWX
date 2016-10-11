@@ -26,8 +26,8 @@ class Group extends AbstractAPI
     public function create($name)
     {
         $params = [
-                   'group' => ['name' => $name],
-                  ];
+            'group' => ['name' => $name],
+        ];
 
         return $this->parseJSON('json', [self::API_CREATE, $params]);
     }
@@ -45,7 +45,7 @@ class Group extends AbstractAPI
     /**
      * Update a group name.
      *
-     * @param int    $groupId
+     * @param int $groupId
      * @param string $name
      *
      * @return bool
@@ -53,11 +53,11 @@ class Group extends AbstractAPI
     public function update($groupId, $name)
     {
         $params = [
-                   'group' => [
-                               'id' => $groupId,
-                               'name' => $name,
-                              ],
-                  ];
+            'group' => [
+                'id' => $groupId,
+                'name' => $name,
+            ],
+        ];
 
         return $this->parseJSON('json', [self::API_UPDATE, $params]);
     }
@@ -72,8 +72,8 @@ class Group extends AbstractAPI
     public function delete($groupId)
     {
         $params = [
-                   'group' => ['id' => $groupId],
-                  ];
+            'group' => ['id' => $groupId],
+        ];
 
         return $this->parseJSON('json', [self::API_DELETE, $params]);
     }
@@ -96,16 +96,16 @@ class Group extends AbstractAPI
      * Move user to a group.
      *
      * @param string $openId
-     * @param int    $groupId
+     * @param int $groupId
      *
      * @return bool
      */
     public function moveUser($openId, $groupId)
     {
         $params = [
-                   'openid' => $openId,
-                   'to_groupid' => $groupId,
-                  ];
+            'openid' => $openId,
+            'to_groupid' => $groupId,
+        ];
 
         return $this->parseJSON('json', [self::API_MEMBER_UPDATE, $params]);
     }
@@ -114,16 +114,16 @@ class Group extends AbstractAPI
      * Batch move users to a group.
      *
      * @param array $openIds
-     * @param int   $groupId
+     * @param int $groupId
      *
      * @return bool
      */
     public function moveUsers(array $openIds, $groupId)
     {
         $params = [
-                   'openid_list' => $openIds,
-                   'to_groupid' => $groupId,
-                  ];
+            'openid_list' => $openIds,
+            'to_groupid' => $groupId,
+        ];
 
         return $this->parseJSON('json', [self::API_MEMBER_BATCH_UPDATE, $params]);
     }

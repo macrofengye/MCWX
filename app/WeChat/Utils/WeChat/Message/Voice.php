@@ -21,9 +21,9 @@ class Voice extends AbstractMessage
      * @var array
      */
     protected $properties = [
-                                'media_id',
-                                'recognition',
-                            ];
+        'media_id',
+        'recognition',
+    ];
 
     /**
      * Set media id.

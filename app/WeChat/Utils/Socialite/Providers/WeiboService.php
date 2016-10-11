@@ -6,7 +6,7 @@ use WeChat\Utils\Socialite\ProviderInterface;
 use WeChat\Utils\Socialite\User;
 
 /**
- * Class WeiboProvider.
+ * Class WeiboService.
  *
  * @link http://open.weibo.com/wiki/%E6%8E%88%E6%9D%83%E6%9C%BA%E5%88%B6%E8%AF%B4%E6%98%8E [OAuth 2.0 授权机制说明]
  */
@@ -49,7 +49,7 @@ class WeiboService extends AbstractService implements ProviderInterface
      */
     protected function getAuthUrl($state)
     {
-        return $this->buildAuthUrlFromBase($this->baseUrl.'/oauth2/authorize', $state);
+        return $this->buildAuthUrlFromBase($this->baseUrl . '/oauth2/authorize', $state);
     }
 
     /**
@@ -59,7 +59,7 @@ class WeiboService extends AbstractService implements ProviderInterface
      */
     protected function getTokenUrl()
     {
-        return $this->baseUrl.'/'.$this->version.'/oauth2/access_token';
+        return $this->baseUrl . '/' . $this->version . '/oauth2/access_token';
     }
 
     /**
@@ -83,9 +83,9 @@ class WeiboService extends AbstractService implements ProviderInterface
      */
     protected function getUserByToken(AccessTokenInterface $token)
     {
-        $response = $this->getHttpClient()->get($this->baseUrl.'/'.$this->version.'/users/show.json', [
+        $response = $this->getHttpClient()->get($this->baseUrl . '/' . $this->version . '/users/show.json', [
             'query' => [
-                'uid'          => $token['uid'],
+                'uid' => $token['uid'],
                 'access_token' => $token->getToken(),
             ],
             'headers' => [
@@ -106,11 +106,11 @@ class WeiboService extends AbstractService implements ProviderInterface
     protected function mapUserToObject(array $user)
     {
         return new User([
-            'id'       => $this->arrayItem($user, 'id'),
+            'id' => $this->arrayItem($user, 'id'),
             'nickname' => $this->arrayItem($user, 'screen_name'),
-            'name'     => $this->arrayItem($user, 'name'),
-            'email'    => $this->arrayItem($user, 'email'),
-            'avatar'   => $this->arrayItem($user, 'avatar_large'),
+            'name' => $this->arrayItem($user, 'name'),
+            'email' => $this->arrayItem($user, 'email'),
+            'avatar' => $this->arrayItem($user, 'avatar_large'),
         ]);
     }
 }

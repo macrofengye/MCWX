@@ -58,7 +58,7 @@ abstract class Attribute extends Collection
      * Get attribute.
      *
      * @param string $attribute
-     * @param mixed  $default
+     * @param mixed $default
      *
      * @return mixed
      */
@@ -71,7 +71,7 @@ abstract class Attribute extends Collection
      * Set attribute.
      *
      * @param string $attribute
-     * @param mixed  $value
+     * @param mixed $value
      *
      * @return Attribute
      *
@@ -94,7 +94,7 @@ abstract class Attribute extends Collection
      * Attribute validation.
      *
      * @param string $attribute
-     * @param mixed  $value
+     * @param mixed $value
      *
      * @return bool
      */
@@ -107,7 +107,7 @@ abstract class Attribute extends Collection
      * Override parent set() method.
      *
      * @param string $attribute
-     * @param mixed  $value
+     * @param mixed $value
      */
     public function set($attribute, $value = null)
     {
@@ -118,7 +118,7 @@ abstract class Attribute extends Collection
      * Override parent get() method.
      *
      * @param string $attribute
-     * @param mixed  $default
+     * @param mixed $default
      *
      * @return mixed
      */
@@ -131,7 +131,7 @@ abstract class Attribute extends Collection
      * Magic call.
      *
      * @param string $method
-     * @param array  $args
+     * @param array $args
      *
      * @return Attribute
      */
@@ -148,7 +148,7 @@ abstract class Attribute extends Collection
      * Magic set.
      *
      * @param string $property
-     * @param mixed  $value
+     * @param mixed $value
      *
      * @return Attribute
      */

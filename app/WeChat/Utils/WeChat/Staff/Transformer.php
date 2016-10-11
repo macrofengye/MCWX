@@ -29,7 +29,7 @@ class Transformer
             $class = get_class($message);
         }
 
-        $handle = 'transform'.substr($class, strlen('EasyWeChat\Message\\'));
+        $handle = 'transform' . substr($class, strlen('EasyWeChat\Message\\'));
 
         return method_exists($this, $handle) ? $this->$handle($message) : [];
     }
@@ -42,11 +42,11 @@ class Transformer
     public function transformText(AbstractMessage $message)
     {
         return [
-                'msgtype' => 'text',
-                'text' => [
-                           'content' => $message->get('content'),
-                          ],
-               ];
+            'msgtype' => 'text',
+            'text' => [
+                'content' => $message->get('content'),
+            ],
+        ];
     }
 
     /**
@@ -57,11 +57,11 @@ class Transformer
     public function transformImage(AbstractMessage $message)
     {
         return [
-                'msgtype' => 'image',
-                'image' => [
-                            'media_id' => $message->get('media_id'),
-                           ],
-               ];
+            'msgtype' => 'image',
+            'image' => [
+                'media_id' => $message->get('media_id'),
+            ],
+        ];
     }
 
     /**
@@ -72,14 +72,14 @@ class Transformer
     public function transformVideo(AbstractMessage $message)
     {
         return [
-                'msgtype' => 'video',
-                'video' => [
-                            'title' => $message->get('title'),
-                            'media_id' => $message->get('media_id'),
-                            'description' => $message->get('description'),
-                            'thumb_media_id' => $message->get('thumb_media_id'),
-                           ],
-               ];
+            'msgtype' => 'video',
+            'video' => [
+                'title' => $message->get('title'),
+                'media_id' => $message->get('media_id'),
+                'description' => $message->get('description'),
+                'thumb_media_id' => $message->get('thumb_media_id'),
+            ],
+        ];
     }
 
     /**
@@ -90,11 +90,11 @@ class Transformer
     public function transformVoice(AbstractMessage $message)
     {
         return [
-                'msgtype' => 'voice',
-                'voice' => [
-                            'media_id' => $message->get('media_id'),
-                           ],
-               ];
+            'msgtype' => 'voice',
+            'voice' => [
+                'media_id' => $message->get('media_id'),
+            ],
+        ];
     }
 
     /**
@@ -112,11 +112,11 @@ class Transformer
 
         foreach ($news as $item) {
             $articles[] = [
-                           'title' => $item->get('title'),
-                           'description' => $item->get('description'),
-                           'url' => $item->get('url'),
-                           'picurl' => $item->get('pic_url'),
-                          ];
+                'title' => $item->get('title'),
+                'description' => $item->get('description'),
+                'url' => $item->get('url'),
+                'picurl' => $item->get('pic_url'),
+            ];
         }
 
         return ['msgtype' => 'news', 'news' => ['articles' => $articles]];
@@ -132,10 +132,10 @@ class Transformer
         $type = $message->getType();
 
         return [
-                'msgtype' => $type,
-                $type => [
-                            'media_id' => $message->get('media_id'),
-                           ],
-               ];
+            'msgtype' => $type,
+            $type => [
+                'media_id' => $message->get('media_id'),
+            ],
+        ];
     }
 }

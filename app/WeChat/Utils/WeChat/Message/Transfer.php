@@ -22,6 +22,6 @@ class Transfer extends AbstractMessage
      * @var array
      */
     protected $properties = [
-                             'account',
-                            ];
+        'account',
+    ];
 }

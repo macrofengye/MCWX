@@ -23,12 +23,12 @@ class Notice extends AbstractAPI
      * @var array
      */
     protected $message = [
-                          'touser' => '',
-                          'template_id' => '',
-                          'url' => '',
-                          'topcolor' => '#FF0000',
-                          'data' => [],
-                         ];
+        'touser' => '',
+        'template_id' => '',
+        'url' => '',
+        'topcolor' => '#FF0000',
+        'data' => [],
+    ];
     /**
      * Message backup.
      *
@@ -66,9 +66,9 @@ class Notice extends AbstractAPI
     public function setIndustry($industryOne, $industryTwo)
     {
         $params = [
-                   'industry_id1' => $industryOne,
-                   'industry_id2' => $industryTwo,
-                  ];
+            'industry_id1' => $industryOne,
+            'industry_id2' => $industryTwo,
+        ];
 
         return $this->parseJSON('json', [self::API_SET_INDUSTRY, $params]);
     }
@@ -133,12 +133,12 @@ class Notice extends AbstractAPI
     public function send($data = [])
     {
         $params = array_merge([
-                   'touser' => '',
-                   'template_id' => '',
-                   'url' => '',
-                   'topcolor' => '',
-                   'data' => [],
-                  ], $data);
+            'touser' => '',
+            'template_id' => '',
+            'url' => '',
+            'topcolor' => '',
+            'data' => [],
+        ], $data);
 
         $required = ['touser', 'template_id'];
 
@@ -161,25 +161,25 @@ class Notice extends AbstractAPI
      * Magic access..
      *
      * @param string $method
-     * @param array  $args
+     * @param array $args
      *
      * @return Notice
      */
     public function __call($method, $args)
     {
         $map = [
-                'template' => 'template_id',
-                'templateId' => 'template_id',
-                'uses' => 'template_id',
-                'to' => 'touser',
-                'receiver' => 'touser',
-                'color' => 'topcolor',
-                'topColor' => 'topcolor',
-                'url' => 'url',
-                'link' => 'url',
-                'data' => 'data',
-                'with' => 'data',
-               ];
+            'template' => 'template_id',
+            'templateId' => 'template_id',
+            'uses' => 'template_id',
+            'to' => 'touser',
+            'receiver' => 'touser',
+            'color' => 'topcolor',
+            'topColor' => 'topcolor',
+            'url' => 'url',
+            'link' => 'url',
+            'data' => 'data',
+            'with' => 'data',
+        ];
 
         if (0 === stripos($method, 'with')) {
             $method = lcfirst(substr($method, 4));

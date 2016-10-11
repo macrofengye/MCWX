@@ -17,14 +17,14 @@ abstract class AbstractAPI
     /**
      * Http instance.
      *
-     * @var \EasyWeChat\Core\Http
+     * @var \WeChat\Utils\WeChat\Core\Http
      */
     protected $http;
 
     /**
      * The request token.
      *
-     * @var \EasyWeChat\Core\AccessToken
+     * @var \WeChat\Utils\WeChat\Core\AccessToken
      */
     protected $accessToken;
 
@@ -35,7 +35,7 @@ abstract class AbstractAPI
     /**
      * Constructor.
      *
-     * @param \EasyWeChat\Core\AccessToken $accessToken
+     * @param \WeChat\Utils\WeChat\Core\AccessToken $accessToken
      */
     public function __construct(AccessToken $accessToken)
     {
@@ -45,7 +45,7 @@ abstract class AbstractAPI
     /**
      * Return the http instance.
      *
-     * @return \EasyWeChat\Core\Http
+     * @return \WeChat\Utils\WeChat\Core\Http
      */
     public function getHttp()
     {
@@ -63,7 +63,7 @@ abstract class AbstractAPI
     /**
      * Set the http instance.
      *
-     * @param \EasyWeChat\Core\Http $http
+     * @param \WeChat\Utils\WeChat\Core\Http $http
      *
      * @return $this
      */
@@ -77,7 +77,7 @@ abstract class AbstractAPI
     /**
      * Return the current accessToken.
      *
-     * @return \EasyWeChat\Core\AccessToken
+     * @return \WeChat\Utils\WeChat\Core\AccessToken
      */
     public function getAccessToken()
     {
@@ -87,7 +87,7 @@ abstract class AbstractAPI
     /**
      * Set the request token.
      *
-     * @param \EasyWeChat\Core\AccessToken $accessToken
+     * @param \WeChat\Utils\WeChat\Core\AccessToken $accessToken
      *
      * @return $this
      */
@@ -102,9 +102,9 @@ abstract class AbstractAPI
      * Parse JSON from response and check error.
      *
      * @param string $method
-     * @param array  $args
+     * @param array $args
      *
-     * @return \EasyWeChat\Support\Collection
+     * @return \WeChat\Utils\WeChat\Support\Collection
      */
     public function parseJSON($method, array $args)
     {
@@ -161,8 +161,8 @@ abstract class AbstractAPI
     protected function logMiddleware()
     {
         return Middleware::tap(function (RequestInterface $request, $options) {
-            Log::debug("Request: {$request->getMethod()} {$request->getUri()} ".json_encode($options));
-            Log::debug('Request headers:'.json_encode($request->getHeaders()));
+            Log::debug("Request: {$request->getMethod()} {$request->getUri()} " . json_encode($options));
+            Log::debug('Request headers:' . json_encode($request->getHeaders()));
         });
     }
 
@@ -174,10 +174,10 @@ abstract class AbstractAPI
     protected function retryMiddleware()
     {
         return Middleware::retry(function (
-                                          $retries,
-                                          RequestInterface $request,
-                                          ResponseInterface $response = null
-                                       ) {
+            $retries,
+            RequestInterface $request,
+            ResponseInterface $response = null
+        ) {
             // Limit the number of retries to 2
             if ($retries <= 2 && $response && $body = $response->getBody()) {
                 // Retry on server errors
@@ -203,7 +203,7 @@ abstract class AbstractAPI
      *
      * @param array $contents
      *
-     * @throws \EasyWeChat\Core\Exceptions\HttpException
+     * @throws \WeChat\Utils\WeChat\Core\Exceptions\HttpException
      */
     protected function checkAndThrow(array $contents)
     {

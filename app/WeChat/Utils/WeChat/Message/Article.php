@@ -12,14 +12,14 @@ class Article extends AbstractMessage
      * @var array
      */
     protected $properties = [
-                                'thumb_media_id',
-                                'author',
-                                'title',
-                                'content',
-                                'digest',
-                                'source_url',
-                                'show_cover',
-                            ];
+        'thumb_media_id',
+        'author',
+        'title',
+        'content',
+        'digest',
+        'source_url',
+        'show_cover',
+    ];
 
     /**
      * Aliases of attribute.
