@@ -1,6 +1,7 @@
 <?php
 namespace WeChat\Utils\WeChat\Payment;
 
+use Core\Utils\CoreUtils;
 use WeChat\Utils\WeChat\Core\Exceptions\FaultException;
 use WeChat\Utils\WeChat\Support\Url as UrlHelper;
 use WeChat\Utils\WeChat\Support\XML;
@@ -95,7 +96,8 @@ class Payment
             ];
         }
 
-        return new Response(XML::build($response));
+        return CoreUtils::getContainer('response')->getBody()->write(XML::build($response));
+        //return new Response(XML::build($response));
     }
 
     /**
