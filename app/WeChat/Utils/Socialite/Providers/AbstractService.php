@@ -355,7 +355,7 @@ abstract class AbstractService implements ProviderInterface
         //$state = $this->request->getSession()->get('state');
         $state = CoreUtils::getContainer('session')->get('state');
 
-        return !(strlen($state) > 0 && $this->request->get('state') === $state);
+        return !(strlen($state) > 0 && $this->request->getParam('state') === $state);
     }
 
     /**
@@ -394,7 +394,7 @@ abstract class AbstractService implements ProviderInterface
      */
     protected function getCode()
     {
-        return $this->request->get('code');
+        return $this->request->getParam('code');
     }
 
     /**

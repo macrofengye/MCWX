@@ -4,7 +4,6 @@ namespace WeChat\Utils\Socialite;
 use Closure;
 use InvalidArgumentException;
 use Slim\Http\Request;
-use Symfony\Component\HttpFoundation\Session\Session;
 
 /**
  * Class SocialiteManager.

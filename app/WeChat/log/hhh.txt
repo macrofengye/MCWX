@@ -1,4 +1,0 @@
-[2016-10-10 13:59:05] LOG.WARNING: aaaa ["Core\\Providers\\RouterFileService"] {"uid":"4c94138"}
-[2016-10-10 13:59:05] LOG.WARNING: aaaa ["WeChat\\Providers\\ConfigService"] {"uid":"7df734f"}
-[2016-10-10 13:59:05] LOG.WARNING: aaaa ["Core\\Providers\\SessionMiddlewareService"] {"uid":"967bb04"}
-[2016-10-10 13:59:05] LOG.WARNING: aaaa ["WeChat\\Providers\\AccessTokenService"] {"uid":"c6f4476"}

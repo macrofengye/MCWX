@@ -160,7 +160,7 @@ class Guard
             $this->request->getParam('timestamp'),
             $this->request->getParam('nonce'),
         ];
-writeLog(__FUNCTION__ , [$this->request->getParam('signature') , $this->signature($params)] , APP_PATH.'/log/ttt.log');
+
         if (!$this->debug && $this->request->getParam('signature') !== $this->signature($params)) {
             throw new FaultException('Invalid request signature.', 400);
         }

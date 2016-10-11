@@ -9,7 +9,7 @@ use Pimple\ServiceProviderInterface;
 /**
  * Class QRCodeService.
  */
-class QRCodeServiceProvider implements ServiceProviderInterface
+class QRCodeService implements ServiceProviderInterface
 {
     /**
      * Registers services on the given container.

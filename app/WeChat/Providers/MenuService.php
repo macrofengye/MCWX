@@ -8,7 +8,7 @@ use Pimple\ServiceProviderInterface;
 /**
  * Class MenuService.
  */
-class MenuServiceProvider implements ServiceProviderInterface
+class MenuService implements ServiceProviderInterface
 {
     /**
      * Registers services on the given container.
