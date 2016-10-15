@@ -264,7 +264,7 @@ final class Application
             } else if (class_exists('Core\\Providers\\' . $className . "Service")) {
                 $className = 'Core\\Providers\\' . $className . "Service";
             }
-            if ($className) {
+            if (class_exists($className)) {
                 $this->container->register(new $className(), $param);
             } else {
                 return null;
