@@ -11,7 +11,7 @@ use WeChat\Utils\Socialite\User;
  *
  * @link http://wiki.connect.qq.com/oauth2-0%E7%AE%80%E4%BB%8B [QQ - OAuth 2.0 登录QQ]
  */
-class QQService extends AbstractService implements ProviderInterface
+class QQService extends AbstractProvider implements ProviderInterface
 {
     /**
      * The base url of QQ API.
@@ -26,6 +26,13 @@ class QQService extends AbstractService implements ProviderInterface
      * @var string
      */
     protected $openId;
+
+    /**
+     * get token(openid) with unionid.
+     *
+     * @var bool
+     */
+    protected $withUnionId = false;
 
     /**
      * User unionid.
@@ -113,6 +120,16 @@ class QQService extends AbstractService implements ProviderInterface
     }
 
     /**
+     * @return self
+     */
+    public function withUnionId()
+    {
+        $this->withUnionId = true;
+
+        return $this;
+    }
+
+    /**
      * Get the raw user for the given access token.
      *
      * @param \WeChat\Utils\Socialite\AccessTokenInterface $token
@@ -121,7 +138,10 @@ class QQService extends AbstractService implements ProviderInterface
      */
     protected function getUserByToken(AccessTokenInterface $token)
     {
-        $response = $this->getHttpClient()->get($this->baseUrl . '/oauth2.0/me?access_token=' . $token->getToken() . '&unionid=1');
+        $url = $this->baseUrl . '/oauth2.0/me?access_token=' . $token->getToken();
+        $this->withUnionId && $url .= '&unionid=1';
+
+        $response = $this->getHttpClient()->get($url);
 
         $me = json_decode($this->removeCallback($response->getBody()->getContents()), true);
         $this->openId = $me['openid'];
