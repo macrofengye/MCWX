@@ -162,6 +162,7 @@ class API extends AbstractAPI
      * @param float $refundFee
      * @param string $opUserId
      * @param string $type
+     * @param string $refundAccount
      *
      * @return \WeChat\Utils\WeChat\Support\Collection
      */
@@ -171,7 +172,8 @@ class API extends AbstractAPI
         $totalFee,
         $refundFee = null,
         $opUserId = null,
-        $type = self::OUT_TRADE_NO
+        $type = self::OUT_TRADE_NO,
+        $refundAccount = 'REFUND_SOURCE_UNSETTLED_FUNDS'
     )
     {
         $params = [
@@ -180,6 +182,7 @@ class API extends AbstractAPI
             'total_fee' => $totalFee,
             'refund_fee' => $refundFee ?: $totalFee,
             'refund_fee_type' => $this->merchant->fee_type,
+            'refund_account' => $refundAccount,
             'op_user_id' => $opUserId ?: $this->merchant->merchant_id,
         ];
 
@@ -193,6 +196,7 @@ class API extends AbstractAPI
      * @param float $totalFee
      * @param float $refundFee
      * @param string $opUserId
+     * @param string $refundAccount
      *
      * @return \WeChat\Utils\WeChat\Support\Collection
      */
@@ -201,10 +205,11 @@ class API extends AbstractAPI
         $refundNo,
         $totalFee,
         $refundFee = null,
-        $opUserId = null
+        $opUserId = null,
+        $refundAccount = 'REFUND_SOURCE_UNSETTLED_FUNDS'
     )
     {
-        return $this->refund($orderNo, $refundNo, $totalFee, $refundFee, $opUserId, self::TRANSACTION_ID);
+        return $this->refund($orderNo, $refundNo, $totalFee, $refundFee, $opUserId, self::TRANSACTION_ID, $refundAccount);
     }
 
     /**

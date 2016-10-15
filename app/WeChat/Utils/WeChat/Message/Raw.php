@@ -21,7 +21,7 @@ class Raw extends AbstractMessage
     /**
      * Constructor.
      *
-     * @param array $content
+     * @param string $content
      */
     public function __construct($content)
     {
