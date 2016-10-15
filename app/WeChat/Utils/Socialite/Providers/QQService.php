@@ -11,7 +11,7 @@ use WeChat\Utils\Socialite\User;
  *
  * @link http://wiki.connect.qq.com/oauth2-0%E7%AE%80%E4%BB%8B [QQ - OAuth 2.0 登录QQ]
  */
-class QQService extends AbstractProvider implements ProviderInterface
+class QQService extends AbstractService implements ProviderInterface
 {
     /**
      * The base url of QQ API.
