@@ -132,6 +132,7 @@ final class Application
                 ], APPLICATION_ENV == 'development', ROOT_PATH . '/entity/Proxies/', $cache, $useSimpleAnnotationReader);
                 $entityManager = EntityManager::create($connConfig, $configuration, $this->getContainer("eventManager"));
             }
+            $this->container['database_name'] = $dbName;
             $this->container["entityManager-" . $dbName] = $entityManager;
         }
         return $this->container["entityManager-" . $dbName];

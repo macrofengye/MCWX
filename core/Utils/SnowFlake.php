@@ -1,0 +1,94 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: Administrator
+ * Date: 2016/10/16
+ * Time: 18:40
+ */
+
+namespace Core\Utils;
+
+
+class SnowFlake
+{
+    /**
+     * Generate the 64bit unique ID.
+     * @return number BIGINT
+     */
+    public static function generateID()
+    {
+        /**
+         * Current Timestamp - 41 bits
+         */
+        $curr_timestamp = floor(microtime(true) * 1000);
+        /**
+         * Subtract custom epoch from current time
+         */
+        $curr_timestamp -= CoreUtils::getConfig('customer')['initial_epoch'];
+        /**
+         * Create a initial base for ID
+         */
+        $base = decbin(pow(2, 40) - 1 + $curr_timestamp);
+        /**
+         * Get ID of database server (10 bits)
+         * Up to 512 machines
+         */
+        $shard_id = decbin(pow(2, 9) - 1 + self::getServerShardId());
+        /**
+         * Generate a random number (12 bits)
+         * Up to 2048 random numbers per db server
+         */
+        $random_part = mt_rand(1, pow(2, 11) - 1);
+        $random_part = decbin(pow(2, 11) - 1 + $random_part);
+        /**
+         * Concatenate the final ID
+         */
+        $final_id = bindec($base) . bindec($shard_id) . bindec($random_part);
+        /**
+         * Return unique 64bit ID
+         */
+        return $final_id;
+    }
+
+    /**
+     * Identify the database and get the ID.
+     * Only MySQL.
+     * @return \Exception|int|\PDOException
+     */
+    private static function getServerShardId()
+    {
+        $em = CoreUtils::getDbInstance(CoreUtils::getContainer('database_name'));
+        try {
+            $database_name = $em->getConnection()->getDatabasePlatform()->getName();
+        } catch (\PDOException $e) {
+            return $e;
+        }
+        switch ($database_name) {
+            case 'mysql':
+                return (int)self::getMySqlServerId();
+            default:
+                return (int)1;
+        }
+    }
+
+    /**
+     * Get server-id from mysql cluster or replication server.
+     * @return mixed
+     */
+    private static function getMySqlServerId()
+    {
+        $em = CoreUtils::getDbInstance(CoreUtils::getContainer('database_name'));
+        $result = $em->getConnection()->query('SELECT @@server_id as server_id LIMIT 1')->fetch();
+        return $result['server_id'];
+    }
+
+    /**
+     * Return time from 64bit ID.
+     * @param $id
+     * @return number
+     */
+    public static function getTimeFromID($id)
+    {
+        return bindec(substr(decbin($id), 0, 41)) - pow(2, 40) + 1 + CoreUtils::getConfig('customer')['initial_epoch'];
+    }
+}
