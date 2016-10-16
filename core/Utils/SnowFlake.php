@@ -78,8 +78,9 @@ class SnowFlake
     private static function getMySqlServerId()
     {
         $em = CoreUtils::getDbInstance(CoreUtils::getContainer('database_name'));
-        $result = $em->getConnection()->query('SELECT @@server_id as server_id LIMIT 1')->fetch();
-        return $result['server_id'];
+        /*$result = $em->getConnection()->query('SELECT @@server_id as server_id LIMIT 1')->fetch();
+        return $result['server_id'];*/
+        return $em->getConnection()->getActiveShardId();
     }
 
     /**
