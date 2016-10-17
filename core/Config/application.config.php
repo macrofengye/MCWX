@@ -82,12 +82,13 @@ $common_config = [
 
     //微信配置
     'wechat' => [
-        'encrypt_key' => 'xxxxx',
+        'debug' => 0, //是否开启调试模式
         'app_id' => 'xxxxxxxx',
         'secret' => 'xxxxx',
         'token' => 'xxxxx',
         'oauth.scopes' => ['snsapi_userinfo'],
-        'oauth.callback' => 'XXX'
+        'oauth.callback' => 'XXX',
+        'aes_key' => '0cd418ec0aa66fa1218f8b70296e261dprteytcrews'  //微信后台配置的EncodingAESKey
     ],
 
     //定义数据缓存的Cache
