@@ -77,6 +77,7 @@ $common_config = [
         'is_rest' => true, //接口形式提供服务
         'is_api_rate_limit' => false,  // API速率限制
         'show_use_memory' => false,
+        'initial_epoch' => '1476663203000' //生成分布式数据库ID的开始时间戳
     ],
 
     //微信配置
@@ -85,8 +86,8 @@ $common_config = [
         'app_id' => 'xxxxxxxx',
         'secret' => 'xxxxx',
         'token' => 'xxxxx',
-        'oauth.scopes'=>['snsapi_userinfo'],
-        'oauth.callback'=>'XXX'
+        'oauth.scopes' => ['snsapi_userinfo'],
+        'oauth.callback' => 'XXX'
     ],
 
     //定义数据缓存的Cache
