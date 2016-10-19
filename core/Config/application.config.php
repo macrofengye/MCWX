@@ -77,18 +77,7 @@ $common_config = [
         'is_rest' => true, //接口形式提供服务
         'is_api_rate_limit' => false,  // API速率限制
         'show_use_memory' => false,
-        'initial_epoch' => '1476663203000' //生成分布式数据库ID的开始时间戳
-    ],
-
-    //微信配置
-    'wechat' => [
-        'debug' => 0, //是否开启调试模式
-        'app_id' => 'xxxxxxxx',
-        'secret' => 'xxxxx',
-        'token' => 'xxxxx',
-        'oauth.scopes' => ['snsapi_userinfo'],
-        'oauth.callback' => 'XXX',
-        'aes_key' => '0cd418ec0aa66fa1218f8b70296e261dprteytcrews'  //微信后台配置的EncodingAESKey
+        'initial_epoch' => 1476614506000, //用于SnowFlake产生ID
     ],
 
     //定义数据缓存的Cache

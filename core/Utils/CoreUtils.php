@@ -21,7 +21,7 @@ class CoreUtils
      */
     public static function getDbInstance($dbName)
     {
-        return self::getApplication()->getDbInstance($dbName);
+        return self::getApplication()->db($dbName);
     }
 
     /**
@@ -33,7 +33,7 @@ class CoreUtils
      */
     public static function getConfig($key)
     {
-        return self::getApplication()->getConfig($key);
+        return self::getApplication()->config($key);
     }
 
     /**
@@ -85,7 +85,7 @@ class CoreUtils
      */
     public static function getContainer($componentName, $param = [])
     {
-        return self::getApplication()->getContainer($componentName, $param);
+        return self::getApplication()->component($componentName, $param);
     }
 
     /**

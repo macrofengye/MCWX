@@ -280,7 +280,7 @@ final class Application
 
     /**
      * Set the globally available instance of the container.
-     * 
+     *
      * @return static
      */
     public static function getInstance()

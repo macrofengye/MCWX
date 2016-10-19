@@ -23,13 +23,13 @@ class RouterFileService implements ServiceProviderInterface
      */
     public function register(Container $pimple)
     {
-        $pimple['routerFile'] = function ($container) {
+        $pimple['routerFile'] = function (Container $container) {
             if (!file_exists(APP_PATH . '/Routers/router.lock') || APPLICATION_ENV == "development") {
-                if (file_exists($container['application']->getConfig('customer')['router_cache_file'])) @unlink($container['application']->getConfig('customer')['router_cache_file']);
-                $router_file_contents = '<?php ' . "\n" . '$app = $container[\'application\']->getContainer(\'app\')';
-                if ($container['application']->getConfig('middleware')) {
-                    foreach ($container['application']->getConfig('middleware') as $key => $middleware) {
-                        $router_file_contents .= '->add($container[\'application\']->getContainer("' . $key . '"))';
+                if (file_exists($container['application']->config('customer')['router_cache_file'])) @unlink($container['application']->config('customer')['router_cache_file']);
+                $router_file_contents = '<?php ' . "\n" . '$app = $container[\'application\']->component(\'app\')';
+                if ($container['application']->config('middleware')) {
+                    foreach ($container['application']->config('middleware') as $key => $middleware) {
+                        $router_file_contents .= '->add($container[\'application\']->component("' . $key . '"))';
                     }
                 }
                 $router_file_contents .= ';' . "\n";
@@ -41,7 +41,7 @@ class RouterFileService implements ServiceProviderInterface
                     }
                 }
                 file_put_contents(APP_PATH . 'Routers/router.php', $router_file_contents);
-                $container['router']->setCacheFile($container['application']->getConfig('customer')['router_cache_file']);
+                $container['router']->setCacheFile($container['application']->config('customer')['router_cache_file']);
                 touch(APP_PATH . '/Routers/router.lock');
             }
             require_once APP_PATH . 'Routers/router.php';

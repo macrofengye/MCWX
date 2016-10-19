@@ -1,15 +1,16 @@
 <?php
 /**
- * 所有控制器必须集成该类
- *
- * @author macro chen <macro_fengye@163.com>
+ * Created by PhpStorm.
+ * User: Administrator
+ * Date: 2016/10/18
+ * Time: 21:36
  */
-namespace Core\Controller;
 
-use Core\Utils\CoreUtils;
-use Interop\Container\ContainerInterface;
+namespace Task\Boot;
 
-class Controller
+use Core\Boot\Application;
+
+class BootTask
 {
     /**
      * 日志记录相关
@@ -31,34 +32,15 @@ class Controller
     const MEMCACHED = 'memcached';
 
     /**
-     * Slim框架自动注册的Container
-     * @var ContainerInterface
-     */
-
-    protected $ci;
-
-    /**
      * 整个框架的应用
      * @var \Core\Boot\Application
      */
-
     protected $app;
 
-    public function __construct(ContainerInterface $ci)
+    public function __construct()
     {
-        $this->app = $ci->application;
-    }
-
-    /**
-     * 模板渲染
-     * @author macro chen <macro_fengye@163.com>
-     * @param $response 响应的对象
-     * @param $template 模板文件
-     * @param $data 传递到模板的数据
-     */
-    protected function render($response, $template, $data)
-    {
-        return $this->app->component('view')->render($response, $template, $data);
+        $this->app = new Application();
+        $this->app->startConsole();
     }
 
     /**
@@ -85,5 +67,3 @@ class Controller
         }
     }
 }
-
-?>
