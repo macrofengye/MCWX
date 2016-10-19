@@ -25,7 +25,7 @@ class ViewService implements ServiceProviderInterface
     public function register(Container $pimple)
     {
         $pimple['view'] = function (Container $container) {
-            $twig_config = $container['application']->getConfig('twig') ? $container['application']->getConfig('twig') : [];
+            $twig_config = $container['application']->config('twig') ? $container['application']->config('twig') : [];
             $view = new Twig(TEMPLATE_PATH, $twig_config);
             $view->addExtension(new TwigExtension($container['router'], $container['request']->getUri()));
             return $view;

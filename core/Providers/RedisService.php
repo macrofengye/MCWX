@@ -24,7 +24,7 @@ class RedisService implements ServiceProviderInterface
     public function register(Container $pimple)
     {
         $pimple['redis'] = function (Container $container) {
-            $cacheConfig = $container['application']->getConfig('cache');
+            $cacheConfig = $container['application']->config('cache');
             $server_name = $container->has('server_name') ? $container->get('server_name') : 'server1';
             $type = 'redis';
             $redis = new \Redis();

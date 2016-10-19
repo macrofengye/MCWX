@@ -26,7 +26,7 @@ class LoggerService implements ServiceProviderInterface
     public function register(Container $pimple)
     {
         $pimple['logger'] = function (Container $container) {
-            $settings = $container['application']->getConfig('slim')['settings'];
+            $settings = $container['application']->config('slim')['settings'];
             $logger = new Logger($settings['logger']['name']);
             $logger->pushProcessor(new UidProcessor());
             $logger->pushHandler(new StreamHandler($settings['logger']['path'], $settings['logger']['level']));

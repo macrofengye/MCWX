@@ -37,7 +37,7 @@ class InitAppService implements ServiceProviderInterface
         };
         $pimple['notFoundHandler'] = function ($container) {
             return function ($request, $response) use ($container) {
-                if ($container['application']->getConfig('customer')['is_rest']) {
+                if ($container['application']->config('customer')['is_rest']) {
                     return $container['response']
                         ->withStatus(404)
                         ->withHeader('Content-Type', 'application/json')
@@ -58,7 +58,7 @@ class InitAppService implements ServiceProviderInterface
             return function ($request, $response, $exception) use ($container) {
                 $container->register(new LoggerService());
                 $container['logger']->error($exception->__toString());
-                if ($container['application']->getConfig('customer')['is_rest']) {
+                if ($container['application']->config('customer')['is_rest']) {
                     return $container['response']
                         ->withStatus(500)
                         ->withHeader('Content-Type', 'application/json')

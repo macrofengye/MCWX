@@ -24,7 +24,7 @@ class MemcachedService implements ServiceProviderInterface
     public function register(Container $pimple)
     {
         $pimple['memcached'] = function (Container $container) {
-            $cacheConfig = $container['application']->getConfig('cache');
+            $cacheConfig = $container['application']->config('cache');
             $server_name = 'server1';
             $type = 'memcached';
             if ($container['application']->getContainer('server_name')) {
