@@ -14,7 +14,7 @@ class Home extends Controller
 {
     public function index(Request $request, Response $response, $args){
         $accessToken = $this->app->component('server');
-        print_r($accessToken);
+        print_r(get_class_methods($accessToken));
     }
     public function index3(Request $request, Response $response, $args){
         $server = CoreUtils::getContainer('server');
