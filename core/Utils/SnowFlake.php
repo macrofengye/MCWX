@@ -24,7 +24,7 @@ class SnowFlake
         /**
          * Subtract custom epoch from current time
          */
-        $curr_timestamp -= CoreUtils::getConfig('customer')['initial_epoch'];
+        $curr_timestamp -= app()->config('customer')['initial_epoch'];
         /**
          * Create a initial base for ID
          */
@@ -57,7 +57,7 @@ class SnowFlake
      */
     private static function getServerShardId()
     {
-        $em = CoreUtils::getDbInstance(CoreUtils::getContainer('database_name'));
+        $em = app()->db(app()->component('database_name'));
         try {
             $database_name = $em->getConnection()->getDatabasePlatform()->getName();
         } catch (\PDOException $e) {
@@ -77,7 +77,7 @@ class SnowFlake
      */
     private static function getMySqlServerId()
     {
-        $em = CoreUtils::getDbInstance(CoreUtils::getContainer('database_name'));
+        $em = app()->db(app()->component('database_name'));
         /*$result = $em->getConnection()->query('SELECT @@server_id as server_id LIMIT 1')->fetch();
         return $result['server_id'];*/
         return $em->getConnection()->getActiveShardId();
@@ -90,6 +90,6 @@ class SnowFlake
      */
     public static function getTimeFromID($id)
     {
-        return bindec(substr(decbin($id), 0, 41)) - pow(2, 40) + 1 + CoreUtils::getConfig('customer')['initial_epoch'];
+        return bindec(substr(decbin($id), 0, 41)) - pow(2, 40) + 1 + app()->config('customer')['initial_epoch'];
     }
 }

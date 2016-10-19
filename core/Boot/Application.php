@@ -8,6 +8,7 @@
 
 namespace Core\Boot;
 
+use Core\Utils\Constants;
 use Doctrine\Common\Cache\ArrayCache;
 use Slim\Container;
 use Core\Providers\InitAppService;
@@ -19,10 +20,6 @@ use Doctrine\ORM\Tools\Setup;
 
 final class Application
 {
-    const REDIS = "redis";
-    const MEMCACHE = "memcache";
-    const MEMCACHED = 'memcached';
-
     /**
      * 整个应用的实例
      *
@@ -272,7 +269,7 @@ final class Application
             }
         }
         $cacheObj = $this->container->get($componentName);
-        if ($componentName === self::REDIS && isset($param['database']) && $param['database']) {
+        if ($componentName === Constants::REDIS && isset($param['database']) && $param['database']) {
             $cacheObj->select($param['database']);
         }
         return $cacheObj;
