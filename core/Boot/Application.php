@@ -46,13 +46,13 @@ final class Application
     {
         try {
             $this->initEnvironment();
-            $this->getContainer('routerFile');
-            $this->getContainer('app')->run();
+            $this->component('routerFile');
+            $this->component('app')->run();
         } catch (\Exception $e) {
             echo \GuzzleHttp\json_encode(['code' => 1000, 'msg' => $e->getMessage(), 'data' => []]);
             return false;
         }
-        if ($this->getConfig('customer')['show_use_memory']) {
+        if ($this->config('customer')['show_use_memory']) {
             echo "分配内存量 : " . convert(memory_get_usage(true));
             echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
             echo "内存的峰值 : " . convert(memory_get_peak_usage(true));
@@ -72,7 +72,7 @@ final class Application
             echo \GuzzleHttp\json_encode(['code' => 1000, 'msg' => $e->getMessage(), 'data' => []]);
             return false;
         }
-        if ($this->getConfig('customer')['show_use_memory']) {
+        if ($this->config('customer')['show_use_memory']) {
             echo "分配内存量 : " . convert(memory_get_usage(true));
             echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
             echo "内存的峰值 : " . convert(memory_get_peak_usage(true));
@@ -112,25 +112,25 @@ final class Application
      * @throws \Doctrine\ORM\ORMException
      * @return EntityManager
      */
-    public function getDbInstance($dbName)
+    public function db($dbName)
     {
-        if (!$this->getContainer('entityManager-' . $dbName)) {
-            $dbConfig = $this->getConfig('db')[APPLICATION_ENV];
+        if (!$this->component('entityManager-' . $dbName)) {
+            $dbConfig = $this->config('db')[APPLICATION_ENV];
             $entityManager = NULL;
             if (isset($dbConfig[$dbName]) && $dbConfig[$dbName]) {
-                $doctrineConfig = $this->getConfig('doctrine');
+                $doctrineConfig = $this->config('doctrine');
                 $connConfig = $dbConfig[$dbName] ? $dbConfig[$dbName] : [];
                 $useSimpleAnnotationReader = $connConfig['useSimpleAnnotationReader'];
                 unset($connConfig['useSimpleAnnotationReader']);
                 if (APPLICATION_ENV == "development") {
                     $cache = new ArrayCache();
                 } else {
-                    $cache = $this->getContainer($doctrineConfig['metadata_cache']['cache_name'], ['database' => $doctrineConfig['metadata_cache']['database']]);
+                    $cache = $this->component($doctrineConfig['metadata_cache']['cache_name'], ['database' => $doctrineConfig['metadata_cache']['database']]);
                 }
                 $configuration = Setup::createAnnotationMetadataConfiguration([
                     ROOT_PATH . '/entity/Models',
                 ], APPLICATION_ENV == 'development', ROOT_PATH . '/entity/Proxies/', $cache, $useSimpleAnnotationReader);
-                $entityManager = EntityManager::create($connConfig, $configuration, $this->getContainer("eventManager"));
+                $entityManager = EntityManager::create($connConfig, $configuration, $this->component("eventManager"));
             }
             $this->container['database_name'] = $dbName;
             $this->container["entityManager-" . $dbName] = $entityManager;
@@ -145,13 +145,13 @@ final class Application
      * @param string $key
      * @return mixed
      */
-    public function getConfig($key)
+    public function config($key)
     {
-        if (!$this->getContainer('config')->get($key)) {
+        if (!$this->component('config')->get($key)) {
             writeLog('获取', [$key . '--不存在!', debug_backtrace()], APP_PATH . '/log/config.log', Logger::ERROR);
             return NULL;
         }
-        return $this->getContainer('config')->get($key);
+        return $this->component('config')->get($key);
     }
 
     /**
@@ -164,7 +164,7 @@ final class Application
      */
     public function addEvent(array $params = [])
     {
-        $eventManager = $this->getContainer('doctrineEventManager');
+        $eventManager = $this->component('doctrineEventManager');
         $reflect = null;
         foreach ($params as $key => $value) {
             if (!isset($value['class_name'])) {
@@ -182,7 +182,7 @@ final class Application
                 if (!isset($value['dbName'])) {
                     throw new \Exception("dbName必须设置");
                 }
-                $db_eventManager = $this->getDbInstance($value['dbName'])->getEventManager();
+                $db_eventManager = $this->db($value['dbName'])->getEventManager();
                 $db_eventManager->addEventListener($key, new $class_name($data));
                 continue;
             }
@@ -201,7 +201,7 @@ final class Application
      */
     public function addSubscriber(array $params = [])
     {
-        $eventManager = $this->getContainer('doctrineEventManager');
+        $eventManager = $this->component('doctrineEventManager');
         $reflect = null;
         foreach ($params as $key => $value) {
             if (!isset($value['class_name'])) {
@@ -219,7 +219,7 @@ final class Application
                 if (!isset($value['dbName'])) {
                     throw new \Exception("dbName必须设置");
                 }
-                $dbEventManager = $this->getDbInstance($value['dbName'])->getEventManager();
+                $dbEventManager = $this->db($value['dbName'])->getEventManager();
                 $dbEventManager->addEventSubscriber(new $className($data));
                 continue;
             }
@@ -244,7 +244,7 @@ final class Application
         }
         $resourceId = $params['resource_id'];
         unset($params['resource_id']);
-        $cache = $this->getContainer($cacheType . 'Cache', $params)->getOptions()->getResourceManager()->getResource($resourceId);
+        $cache = $this->component($cacheType . 'Cache', $params)->getOptions()->getResourceManager()->getResource($resourceId);
         return $cache;
     }
 
@@ -255,7 +255,7 @@ final class Application
      * @param array $param
      * @return mixed|null
      */
-    public function getContainer($componentName, $param = [])
+    public function component($componentName, $param = [])
     {
         if (!$this->container->has($componentName)) {
             if (!defined('SERVICE_NAMESPACE')) define('SERVICE_NAMESPACE', APP_NAME);
@@ -280,7 +280,7 @@ final class Application
 
     /**
      * Set the globally available instance of the container.
-     *
+     * 
      * @return static
      */
     public static function getInstance()
