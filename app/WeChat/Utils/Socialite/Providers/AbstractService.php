@@ -147,7 +147,7 @@ abstract class AbstractService implements ProviderInterface
         if ($this->usesState()) {
             $state = sha1(uniqid(mt_rand(1, 1000000), true));
             //$this->request->getSession()->set('state', $state);
-            CoreUtils::getContainer('session')->set('state', $state);
+            app()->component('session')->set('state', $state);
         }
 
         return new RedirectResponse($this->getAuthUrl($state));
@@ -353,7 +353,7 @@ abstract class AbstractService implements ProviderInterface
         }
 
         //$state = $this->request->getSession()->get('state');
-        $state = CoreUtils::getContainer('session')->get('state');
+        $state = app()->component('session')->get('state');
 
         return !(strlen($state) > 0 && $this->request->getParam('state') === $state);
     }

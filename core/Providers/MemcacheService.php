@@ -27,8 +27,8 @@ class MemcacheService implements ServiceProviderInterface
             $cacheConfig = $container['application']->config('cache');
             $server_name = 'server1';
             $type = 'memcache';
-            if ($container['application']->getContainer('server_name')) {
-                $server_name = $container['application']->getContainer('server_name');
+            if ($container['application']->component('server_name')) {
+                $server_name = $container['application']->component('server_name');
             }
             $memcache = new \Memcache();
             foreach ($cacheConfig[$type][$server_name]['servers'] as $key => $server) {

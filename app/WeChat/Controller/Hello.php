@@ -10,7 +10,7 @@ class Hello extends Controller
     public function show($request, $response, $args)
     {
         echo "aaa";
-        print_r(CoreUtils::getContainer('session')->get('user_info'));
+        print_r(app()->component('session')->get('user_info'));
     }
 
     public function show1($request, $response, $args)

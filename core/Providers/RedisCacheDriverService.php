@@ -30,7 +30,7 @@ class RedisCacheDriverService implements ServiceProviderInterface
             //设置缓存的命名空间
             $type = 'redis';
             $redisCacheDriver->setNamespace($namespace);
-            $redisCacheDriver->setRedis($container['application']->getContainer($type, ['database' => $database]));
+            $redisCacheDriver->setRedis($container['application']->component($type, ['database' => $database]));
             return $redisCacheDriver;
         };
     }
