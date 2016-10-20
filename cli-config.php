@@ -8,4 +8,4 @@ define('CONFIG_PATH', ROOT_PATH . '/' . APP_NAME . '/');
 require ROOT_PATH . '/vendor/autoload.php';
 $app = new \Core\Boot\Application();
 $app->startConsole();
-return \Doctrine\ORM\Tools\Console\ConsoleRunner::createHelperSet(\Core\Utils\CoreUtils::getDbInstance('db1'));
+return \Doctrine\ORM\Tools\Console\ConsoleRunner::createHelperSet(app()->component('db1'));

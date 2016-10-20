@@ -30,7 +30,6 @@
     "ext-exif": "*"
   },
   "require-dev": {
-    "zendframework/zend-dom": "2.*",
     "symfony/yaml": "2.5.*@dev",
     "satooshi/php-coveralls": "dev-master",
     "phpunit/phpunit": "~4.0",
@@ -49,6 +48,8 @@
     "psr-4": {
       "Core\\": "core\\",
       "Entity\\": "entity\\",
+      "Task\\": "task\\",
+      "Wap\\": "app\\Wap\\",
       "WeChat\\": "app\\WeChat\\"
     },
     "files": [

@@ -336,8 +336,8 @@ class Guard
     /**
      * Get request message.
      *
-     * @return mixed
-     * @throws mixed
+     * @return array
+     * @throws BadRequestException
      */
     public function getMessage()
     {
