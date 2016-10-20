@@ -66,9 +66,9 @@ function fatal_handler()
 {
     $error = error_get_last();
     if ($error["type"] == E_ERROR) {
-        if (\Core\Utils\CoreUtils::getContainer('logger')) {
+        if (app()->component('logger')) {
             $msg = 'Type : ' . $error["type"] . '\nMessage : ' . $error["message"] . '\nFile : ' . $error["file"] . '\nLine : ' . $error["line"];
-            \Core\Utils\CoreUtils::getContainer('logger')->error($msg);
+            app()->component('logger')->error($msg);
         } else {
             $msg = 'Type : ' . $error["type"] . ' , Message : ' . $error["message"] . ' , File : ' . $error["file"] . ' , Line : ' . $error["line"];
             writeLog('Fatal Error : ', [$msg], APP_PATH . '/log/fatal_error.log', Monolog\Logger::ERROR);

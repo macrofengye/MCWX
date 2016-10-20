@@ -96,7 +96,7 @@ class Payment
             ];
         }
 
-        return CoreUtils::getContainer('response')->getBody()->write(XML::build($response));
+        return app()->component('response')->getBody()->write(XML::build($response));
         //return new Response(XML::build($response));
     }
 
