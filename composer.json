@@ -49,6 +49,7 @@
       "Core\\": "core\\",
       "Entity\\": "entity\\",
       "Task\\": "task\\",
+      "Wap\\": "app\\Wap\\",
       "WeChat\\": "app\\WeChat\\"
     },
     "files": [

@@ -1,16 +1,75 @@
 <?php
-namespace Blog\Controller;
+namespace WeChat\Controller;
 
 
 use Core\Controller\Controller;
 use Core\Utils\CoreUtils;
+use Slim\Http\Request;
+use Slim\Http\Response;
 
 class Hello extends Controller
 {
+    public function account(Request $request, Response $response, $args)
+    {
+        $url = 'http://wechat.niydiy.com/hello/dealAccount';
+        $response = CoreUtils::getContainer('oAuth')->scopes(['snsapi_userinfo'])->redirect($url);
+        return $response;
+    }
+
+    public function daikuan(Request $request, Response $response, $args)
+    {
+        $url = 'http://wechat.niydiy.com/hello/dealDaikuan';
+        writeLog(__CLASS__ . '::' . __FUNCTION__, [$url], APP_PATH . '/log/debug.log');
+        $response = CoreUtils::getContainer('oAuth')->scopes(['snsapi_userinfo'])->redirect($url);
+        return $response;
+    }
+
+    public function bangbangdai(Request $request, Response $response, $args)
+    {
+        $url = 'http://wechat.niydiy.com/hello/dealBangbangdai';
+        writeLog(__CLASS__ . '::' . __FUNCTION__, [$url], APP_PATH . '/log/debug.log');
+        $response = CoreUtils::getContainer('oAuth')->scopes(['snsapi_userinfo'])->redirect($url);
+        return $response;
+    }
+
+
+    public function dealBangbangdai(Request $request, Response $response, $args)
+    {
+        $user = CoreUtils::getContainer('oAuth')->user();
+        writeLog(__FUNCTION__, [$user->getId(), $user->getNickName(), $user->getName()], APP_PATH . '/log/callback01.txt');
+        return $response->withRedirect('http://wechat.edai.com/#/?openid=' . $user->getId() . '&name=' . $user->getName());
+    }
+
+    public function dealDaikuan(Request $request, Response $response, $args)
+    {
+        $user = CoreUtils::getContainer('oAuth')->user();
+        writeLog(__FUNCTION__, ['http://m.niydiy.com/#/?openid=' . $user->getId() . '&name=' . $user->getName(), $user->getId(), $user->getNickName(), $user->getName()], APP_PATH . '/log/callback01.txt');
+        return $response->withRedirect('http://m.niydiy.com/#/?openid=' . $user->getId() . '&name=' . $user->getName());
+    }
+
+    public function dealAccount(Request $request, Response $response, $args)
+    {
+        $user = CoreUtils::getContainer('oAuth')->user();
+        writeLog(__FUNCTION__, ['http://m.niydiy.com/#/?openid=' . $user->getId() . '&name=' . $user->getName(), $user->getId(), $user->getNickName(), $user->getName()], APP_PATH . '/log/callback01.txt');
+        return $response->withRedirect('http://wechat.edai.com/#/ucenter?openid=' . $user->getId() . '&name=' . $user->getName());
+    }
+
     public function show($request, $response, $args)
     {
-        echo "aaa";
-        print_r(CoreUtils::getContainer('session')->get('user_info'));
+        $server = CoreUtils::getContainer('server');
+        $js = CoreUtils::getContainer('js');
+        print_r($js->config(array('onMenuShareQQ', 'onMenuShareWeibo'), true));
+        return $response;
+    }
+
+    public function show11($request, $response, $args)
+    {
+        $appid = 'wx7cba84e8e7343a5c';
+        $redirect_uri = urlencode('http://wechat.niydiy.com/home/hello');
+        $url = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=$appid&redirect_uri=$redirect_uri&response_type=code&scope=snsapi_base&state=1#wechat_redirect";
+        return $response->withRedirect($url);
+        /*$response = CoreUtils::getContainer('oAuth')->scopes(['snsapi_userinfo'])->redirect();
+        return $response;*/
     }
 
     public function show1($request, $response, $args)
@@ -23,40 +82,24 @@ class Hello extends Controller
         echo "aaaa";
     }
 
-    public function getItems($request, $response, $args)
+    public function test(Request $request, Response $response, $args)
     {
-        $em = $this->getDbInstance(self::ENTITY, "db1");
-        print_r($em);
-        $query = $em->createQuery('SELECT u FROM Blog\Entity\Actor u WHERE u.actor_id = ?1');
-        $query->setParameter(1, 1);
-        $query->setResultCacheDriver($this->getPimple("redisCacheDriver"));
-        $query->useResultCache(true)
-            ->setResultCacheLifeTime($seconds = 3600);
-        //$result = $query->getResult(); // cache miss
-        //$query->expireResultCache(true);
-        //$result = $query->getResult(); // forced expire, cache miss
-        //$query->setResultCacheId('aaaaaaa');
-        $result = $query->getResult(); // saved in given result cache id.
-        $redis = $this->getPimple("redisCache");
-        foreach ($result as $value) {
-            print_r($value->getLastName());
-        }
-        $redis->setItem("key1", "Key Key...");
-        $redis->setItem("key2", "sdadadasd");
-        echo $redis->getItem("key1");
-
-        $this->getPimple("serviceManager");
-        return;
-// or call useResultCache() with all parameters:
-        $query->useResultCache(true, $seconds = 3600, 'my_query_result');
-        $result = $query->getResult(); // cache hit!
-
-// Introspection
-        $queryCacheProfile = $query->getQueryCacheProfile();
-        $cacheDriver = $query->getResultCacheDriver();
-        $lifetime = $query->getLifetime();
-
-
+        return $response->withRedirect('http://127.0.0.1/test/index.html');
     }
 
+    public function test1(Request $request, Response $response, $args)
+    {
+        return $response->withJson(['aaa' => CoreUtils::getContainer('session')->get('name'), $request->getCookieParams()]);
+    }
+
+
+    public function getWxConfig(Request $request, Response $response, $args)
+    {
+        $server = CoreUtils::getContainer('server');
+        $js = CoreUtils::getContainer('js');
+        $js->setUrl('http://wechat.edai.com/');
+        $config = $js->config(['onMenuShareTimeline', 'onMenuShareAppMessage'], false, false, false);
+        unset($config['beta']);
+        return $response->withJson(['code' => 0, 'msg' => '成功', 'data' => $config]);
+    }
 }

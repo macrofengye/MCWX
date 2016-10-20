@@ -80,6 +80,17 @@ $common_config = [
         'initial_epoch' => 1476614506000, //用于SnowFlake产生ID
     ],
 
+    //微信配置
+    'wechat' => [
+        'debug' => 0,//是否开启调试模式
+        'app_id' => 'wx7cba84e8e7343a5c',
+        'secret' => '67242b76b760ca40442375817304bb29',
+        'token' => 'testmcwx',
+        'oauth.scopes' => ['snsapi_userinfo'],
+        'oauth.callback' => '/home/hello',
+        'aes_key' => 'aaapp00' //微信后台设置的EncodingAESKey
+    ],
+
     //定义数据缓存的Cache
     'data_cache' => [
         'redis_cache' => [
