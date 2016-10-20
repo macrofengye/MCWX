@@ -16,7 +16,6 @@ class Home extends Controller
 {
     public function index(Request $request, Response $response, $args)
     {
-        $this->app->component('access_token');
         $server = $this->app->component('server');
         $user = $this->app->component('user');
         $user_tag = $this->app->component('user_tag');
@@ -46,51 +45,52 @@ class Home extends Controller
                         file_put_contents(APP_PATH . '/log/code.jpg', $content); // 写入文件*/
                         return $url;
                     default:
-                        return '<a href="http://music.baidu.com/">百度音乐</a>';
+                        return '欢迎关注我们!';
                         break;
                 }
             } elseif
-                ($message->MsgType == 'text'){
+            ($message->MsgType == 'text'
+            ) {
                 return $message->Content;
             }
         });
-            /*$menu = CoreUtils::getContainer('menu');
-            //$menu->destroy();
-            $server->setMessageHandler(function ($message) use ($menu) {
-                $buttons = [
-                    [
-                        "name" => "帮帮贷",
-                        "sub_button" => [
-                            [
-                                "type" => "view",
-                                "name" => "二维码跳转",
-                                "url" => "http://wechat.niydiy.com/hello/qrcode"
-                            ],
-                             [
-                                "type" => "click",
-                                "name" => "获取二维码",
-                                "key" => "qrcode"
-                            ],
-                            [
-                                "type" => "view",
-                                "name" => "我的账户",
-                                "url" => "http://wechat.niydiy.com/hello/account"
-                            ],
-                            [
-                                "type" => "view",
-                                "name" => "加入帮帮贷",
-                                "url" => "http://wechat.niydiy.com/hello/bangbangdai"
-                            ],
+        /*$menu = $this->app->component('menu');
+        //$menu->destroy();
+        $server->setMessageHandler(function ($message) use ($menu) {
+            $buttons = [
+                [
+                    "name" => "帮帮贷",
+                    "sub_button" => [
+                        [
+                            "type" => "view",
+                            "name" => "二维码跳转",
+                            "url" => "http://wechat.niydiy.com/hello/qrcode"
+                        ],
+                         [
+                            "type" => "click",
+                            "name" => "获取二维码",
+                            "key" => "qrcode"
+                        ],
+                        [
+                            "type" => "view",
+                            "name" => "我的账户",
+                            "url" => "http://wechat.niydiy.com/hello/account"
+                        ],
+                        [
+                            "type" => "view",
+                            "name" => "加入帮帮贷",
+                            "url" => "http://wechat.niydiy.com/hello/bangbangdai"
                         ],
                     ],
-                ];
-                $menu->add($buttons);
-            });
+                ],
+            ];
+            $menu->add($buttons);
+        });
 
-            return $server->serve();*/
-            // print_r($accessToken);
-            return $server->serve();
-        }
+        return $server->serve();*/
+        // print_r($accessToken);
+        return $server->serve();
+    }
 
     public function callback(Request $request, Response $response, $args)
     {

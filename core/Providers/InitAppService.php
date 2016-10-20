@@ -9,10 +9,12 @@
 namespace Core\Providers;
 
 
+use Doctrine\Common\Cache\FilesystemCache;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 use Slim\App;
 use Slim\Http\Body;
+use WeChat\Utils\WeChat\Core\AccessToken;
 
 class InitAppService implements ServiceProviderInterface
 {
@@ -74,6 +76,16 @@ class InitAppService implements ServiceProviderInterface
         };
         $pimple['app'] = function (Container $container) {
             return new App($container);
+        };
+
+        $pimple['access_token'] = function (Container $container) {
+            $cache = new FilesystemCache(APP_PATH . '/log/cache');
+            $container['cache'] = $cache;
+            return new AccessToken(
+                $container['config']['wechat']['app_id'],
+                $container['config']['wechat']['secret'],
+                $cache
+            );
         };
     }
 }
