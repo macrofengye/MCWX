@@ -7,7 +7,6 @@
 namespace Core\Controller;
 
 use Core\Utils\Constants;
-use Core\Utils\CoreUtils;
 use Interop\Container\ContainerInterface;
 
 class Controller
