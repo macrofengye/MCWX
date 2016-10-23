@@ -36,13 +36,13 @@ class Home extends Controller
                     case 'CLICK':
                         $tt = ['name' => 'macrochen', 'age' => 23, 'user_id' => 12];
                         $qrcode = $this->app->component('qRCode');
-                        $result = $qrcode->temporary('er_09_po', 6 * 24 * 3600);
-                        $ticket = $result->ticket;// 或者 $result['ticket']
+                        $result = $qrcode->temporary('123', 6 * 24 * 3600);
+                        $ticket = $result['ticket'];// 或者 $result['ticket']
                         $expireSeconds = $result->expire_seconds; // 有效秒数
                         $url = $result->url; // 二维码图片解析后的地址，开发者可根据该地址自行生成需要的二维码图片
-                        /*$url = $qrcode->url($ticket);
+                        $url = $qrcode->url($ticket);
                         $content = file_get_contents($url); // 得到二进制图片内容
-                        file_put_contents(APP_PATH . '/log/code.jpg', $content); // 写入文件*/
+                        file_put_contents(APP_PATH . '/log/code.jpg', $content); // 写入文件
                         return $url;
                     default:
                         return '欢迎关注我们!';
