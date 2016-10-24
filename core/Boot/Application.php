@@ -143,7 +143,7 @@ final class Application
     public function config($key)
     {
         if (!$this->component('config')->get($key)) {
-            writeLog('获取', [$key . '--不存在!', debug_backtrace()], APP_PATH . '/log/config.log', Logger::ERROR);
+            logger('获取', [$key . '--不存在!'], APP_PATH . '/log/config.log', Logger::ERROR);
             return NULL;
         }
         return $this->component('config')->get($key);
