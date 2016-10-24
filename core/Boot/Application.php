@@ -272,7 +272,7 @@ final class Application
     }
 
     /**
-     * Set the globally available instance of the container.
+     * Set the globally available instance of the Application.
      *
      * @return static
      */
@@ -285,7 +285,7 @@ final class Application
     }
 
     /**
-     * Set the shared instance of the container.
+     * Set the shared instance of the Application.
      *
      * @param Application $application
      * @return static
