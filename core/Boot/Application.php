@@ -91,7 +91,9 @@ final class Application
             ini_set('display_errors', 'on');
             error_reporting(E_ALL);
         }
-        register_shutdown_function('fatal_handler');
+        set_error_handler('handleError');
+        set_exception_handler('handleException');
+        register_shutdown_function('handleShutdown');
         $this->container = new Container();
         $this->container->register(new InitAppService());
         $this->container['application'] = $this;
