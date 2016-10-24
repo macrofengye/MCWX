@@ -299,28 +299,39 @@ final class Application
 
 
     /**
-     * 获取业务模型或者实体模型实例
-     * @param $model  模型的名字
+     * 获取业务模型实例
+     * @param $modelName  模型的名字
      * @param array $parameters 实例化时需要的参数
-     * @param int $type 模型类型
      * @param string $path 附加路径
      * @return mixed
      */
-    public function model($model, array $parameters = [], $type = Constants::BUSINESS_MODEL, $path = '')
+    public function model($modelName, array $parameters = [], $path = '')
     {
         if (!defined('BUSINESS_MODEL_NAMESPACE')) define('BUSINESS_MODEL_NAMESPACE', APP_NAME);
-        $className = BUSINESS_MODEL_NAMESPACE . '\\Models\\' . ($path ? ucfirst($path) . '\\' : '') . ucfirst($model) . 'Model';
-        if ($type == Constants::ENTITY_MODEL) {
-            if (!defined('ENTITY_NAMESPACE')) define('ENTITY_NAMESPACE', 'Entity\\Models');
-            $className = ENTITY_NAMESPACE . '\\' . ucfirst($model);
-        }
+        $className = ucfirst(str_replace(' ', '', lcfirst(ucwords(str_replace('_', ' ', $modelName)))));
+        $className = BUSINESS_MODEL_NAMESPACE . '\\Models\\' . ($path ? ucfirst($path) . '\\' : '') . ucfirst($className) . 'Model';
         if (class_exists($className)) {
             return new $className($parameters);
         }
         return null;
     }
 
-
+    /**
+     * 获取实体模型实例
+     * @param $tableName
+     * @return bool
+     */
+    public function entity($tableName)
+    {
+        if (!defined('ENTITY_NAMESPACE')) define('ENTITY_NAMESPACE', 'Entity\\Models');
+        $className = ucfirst(str_replace(' ', '', lcfirst(ucwords(str_replace('_', ' ', $tableName)))));
+        $className = ENTITY_NAMESPACE . '\\' . ucfirst($className);
+        if (class_exists($className)) {
+            return new $className;
+        }
+        return null;
+    }
+    
     /**
      *
      * 获取EntityRepository
