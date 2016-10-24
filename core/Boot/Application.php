@@ -299,7 +299,7 @@ final class Application
 
 
     /**
-     * 获取业务模型实例
+     * 获取业务模型或者实体模型实例
      * @param $model  模型的名字
      * @param array $parameters 实例化时需要的参数
      * @param int $type 模型类型
@@ -316,6 +316,25 @@ final class Application
         }
         if (class_exists($className)) {
             return new $className($parameters);
+        }
+        return null;
+    }
+
+
+    /**
+     *
+     * 获取EntityRepository
+     * @param $entityName
+     * @param $db
+     * @return \Doctrine\ORM\EntityRepository | null
+     */
+    public function repository($entityName, $db)
+    {
+        if (!defined('REPOSITORIES_NAMESPACE')) define('REPOSITORIES_NAMESPACE', 'Entity\\Repositories');
+        if (!defined('ENTITY_NAMESPACE')) define('ENTITY_NAMESPACE', 'Entity\\Models');
+        $className = REPOSITORIES_NAMESPACE . '\\' . ucfirst($entityName) . 'Repository';
+        if (class_exists($className)) {
+            return $this->db($db)->getRepository(ENTITY_NAMESPACE . '\\' . ucfirst($entityName));
         }
         return null;
     }
