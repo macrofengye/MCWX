@@ -25,8 +25,15 @@ class Constants
     /**
      * 数据存储相关
      */
-    const ENTITY = "entityManager";
-    const REDIS = "redis";
-    const MEMCACHE = "memcache";
+    const ENTITY = 'entityManager';
+    const REDIS = 'redis';
+    const MEMCACHE = 'memcache';
     const MEMCACHED = 'memcached';
+
+
+    /**
+     * 与获取模型相关
+     */
+    const ENTITY_MODEL = 1;  //实体模型
+    const BUSINESS_MODEL = 2; //业务模型
 }

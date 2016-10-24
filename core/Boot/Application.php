@@ -297,17 +297,23 @@ final class Application
         return static::$instance = $application;
     }
 
+
     /**
      * 获取业务模型实例
      * @param $model  模型的名字
      * @param array $parameters 实例化时需要的参数
+     * @param int $type 模型类型
      * @param string $path 附加路径
      * @return mixed
      */
-    public function model($model, array $parameters = [], $path = '')
+    public function model($model, array $parameters = [], $type = Constants::BUSINESS_MODEL, $path = '')
     {
-        if (!defined('MODEL_NAMESPACE')) define('MODEL_NAMESPACE', APP_NAME);
-        $className = MODEL_NAMESPACE . '\\Models\\' . ($path ? ucfirst($path) . '\\' : '') . ucfirst($model) . 'Model';
+        if (!defined('BUSINESS_MODEL_NAMESPACE')) define('BUSINESS_MODEL_NAMESPACE', APP_NAME);
+        $className = BUSINESS_MODEL_NAMESPACE . '\\Models\\' . ($path ? ucfirst($path) . '\\' : '') . ucfirst($model) . 'Model';
+        if ($type == Constants::ENTITY_MODEL) {
+            if (!defined('ENTITY_NAMESPACE')) define('ENTITY_NAMESPACE', 'Entity\\Models');
+            $className = ENTITY_NAMESPACE . '\\' . ucfirst($model);
+        }
         if (class_exists($className)) {
             return new $className($parameters);
         }
