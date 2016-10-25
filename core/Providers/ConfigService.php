@@ -9,9 +9,9 @@
 namespace Core\Providers;
 
 
+use Noodlehaus\Config;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
-use DavidePastore\Slim\Config\Config;
 
 class ConfigService implements ServiceProviderInterface
 {
