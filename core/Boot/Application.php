@@ -113,14 +113,15 @@ final class Application
             $dbConfig = $this->config('db')[APPLICATION_ENV];
             $entityManager = NULL;
             if (isset($dbConfig[$dbName]) && $dbConfig[$dbName]) {
-                $doctrineConfig = $this->config('doctrine');
                 $connConfig = $dbConfig[$dbName] ? $dbConfig[$dbName] : [];
                 $useSimpleAnnotationReader = $connConfig['useSimpleAnnotationReader'];
                 unset($connConfig['useSimpleAnnotationReader']);
                 if (APPLICATION_ENV == "development") {
                     $cache = new ArrayCache();
                 } else {
-                    $cache = $this->component($doctrineConfig['metadata_cache']['cache_name'], ['database' => $doctrineConfig['metadata_cache']['database']]);
+                    $cacheName = $this->config('doctrine.metadata_cache.cache_name');
+                    $database = $this->config('doctrine.metadata_cache.database');
+                    $cache = $this->component($cacheName, ['database' => $database]);
                 }
                 $configuration = Setup::createAnnotationMetadataConfiguration([
                     ROOT_PATH . '/entity/Models',
@@ -267,8 +268,9 @@ final class Application
             }
         }
         $cacheObj = $this->container->get($componentName);
-        if ($componentName === Constants::REDIS && isset($param['database']) && $param['database']) {
-            $cacheObj->select($param['database']);
+        if ($componentName === Constants::REDIS) {
+            $database = (isset($param['database']) && $param['database']) ? $param['database'] : 0;
+            $cacheObj->select($database);
         }
         return $cacheObj;
     }
