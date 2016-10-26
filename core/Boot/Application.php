@@ -276,7 +276,7 @@ final class Application
     }
 
     /**
-     * Set the globally available instance of the Application.
+     * 获取全局可用的应用实例
      *
      * @return static
      */
@@ -289,7 +289,7 @@ final class Application
     }
 
     /**
-     * Set the shared instance of the Application.
+     * 设置全局可用的应用实例
      *
      * @param Application $application
      * @return static
