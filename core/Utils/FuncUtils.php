@@ -2,6 +2,8 @@
 namespace Core\Utils;
 
 
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
+
 class FuncUtils
 {
     /**
@@ -21,11 +23,25 @@ class FuncUtils
         srand((float)microtime() * 1000000);
         shuffle($arr[$type]);
         for ($i = 0; $i < $len; $i++) {
-            $word .= $arr[$type][rand(0,$cnt)];
+            $word .= $arr[$type][rand(0, $cnt)];
         }
         if (strlen($word) > $len) {
             $word = substr($word, 0, $len);
         }
         return $word;
+    }
+
+    /**
+     * 用于Symfony的Callback验证器
+     *
+     * @param $object
+     * @param ExecutionContextInterface $context
+     * @param $payload
+     */
+    public static function validate($object, ExecutionContextInterface $context, $payload)
+    {
+        $context->buildViolation('This name sounds totally fake!')
+            ->atPath('firstName')
+            ->addViolation();
     }
 }

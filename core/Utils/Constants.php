@@ -36,4 +36,18 @@ class Constants
      */
     const ENTITY_MODEL = 1;  //实体模型
     const BUSINESS_MODEL = 2; //业务模型
+
+
+    /**
+     * 与IP限制相关的常量
+     */
+    const DENY = 0;
+    const ALLOW = 1;
+
+
+    /**
+     * 模型对象要验证的目标
+     */
+    const MODEL_FIELD = 1;   //验证字段
+    const MODEL_OBJECT = 2;  //验证对象
 }

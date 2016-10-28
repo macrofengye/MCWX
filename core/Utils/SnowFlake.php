@@ -9,13 +9,28 @@
 namespace Core\Utils;
 
 
-class SnowFlake
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\Id\AbstractIdGenerator;
+
+class SnowFlake extends AbstractIdGenerator
 {
+    /**
+     * Generates an identifier for an entity.
+     *
+     * @param EntityManager|EntityManager $em
+     * @param \Doctrine\ORM\Mapping\Entity $entity
+     * @return mixed
+     */
+    public function generate(EntityManager $em, $entity)
+    {
+        return $this->generateID();
+    }
+
     /**
      * Generate the 64bit unique ID.
      * @return number BIGINT
      */
-    public static function generateID()
+    public function generateID()
     {
         /**
          * Current Timestamp - 41 bits
@@ -33,7 +48,7 @@ class SnowFlake
          * Get ID of database server (10 bits)
          * Up to 512 machines
          */
-        $shard_id = decbin(pow(2, 9) - 1 + self::getServerShardId());
+        $shard_id = decbin(pow(2, 9) - 1 + $this->getServerShardId());
         /**
          * Generate a random number (12 bits)
          * Up to 2048 random numbers per db server
@@ -55,7 +70,7 @@ class SnowFlake
      * Only MySQL.
      * @return \Exception|int|\PDOException
      */
-    private static function getServerShardId()
+    private function getServerShardId()
     {
         $em = app()->db(app()->component('database_name'));
         try {
@@ -65,7 +80,7 @@ class SnowFlake
         }
         switch ($database_name) {
             case 'mysql':
-                return (int)self::getMySqlServerId();
+                return (int)$this->getMySqlServerId();
             default:
                 return (int)1;
         }
@@ -75,7 +90,7 @@ class SnowFlake
      * Get server-id from mysql cluster or replication server.
      * @return mixed
      */
-    private static function getMySqlServerId()
+    private function getMySqlServerId()
     {
         $em = app()->db(app()->component('database_name'));
         /*$result = $em->getConnection()->query('SELECT @@server_id as server_id LIMIT 1')->fetch();
@@ -88,7 +103,7 @@ class SnowFlake
      * @param $id
      * @return number
      */
-    public static function getTimeFromID($id)
+    public function getTimeFromID($id)
     {
         return bindec(substr(decbin($id), 0, 41)) - pow(2, 40) + 1 + app()->config('customer')['initial_epoch'];
     }
