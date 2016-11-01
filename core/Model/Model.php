@@ -1,7 +1,6 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: Administrator
+ * User: macro chen <macro_fengye@163.com>
  * Date: 2016/10/26
  * Time: 19:42
  */
@@ -55,13 +54,6 @@ class Model
     protected $mappingField = [];
 
     /**
-     * 表的主键
-     *
-     * @var string
-     */
-    protected $primaryKey = '';
-
-    /**
      * 验证器的分组
      *
      * @var array
@@ -99,8 +91,9 @@ class Model
     }
 
     /**
-     * @param string $cls
+     * 根据类名获取类的全名
      *
+     * @param string $cls
      * @return string
      */
     private function getConstraintClass($cls = '')
@@ -139,11 +132,8 @@ class Model
     }
 
     /**
-     * 给实体验证对象设置值
-     *
      * @param int $target
      * @param array $data
-     *
      * @throws \Exception
      * @return array
      */
@@ -161,12 +151,11 @@ class Model
             default:
                 break;
         }
-
         return $returnData;
     }
 
     /**
-     * 验证数据字段
+     * 根据自定义的规则验证数据字段
      *
      * @param array $data
      *
@@ -175,28 +164,19 @@ class Model
     private function validateFields(array $data = [])
     {
         $returnData = [];
-        foreach ($data as $key => $val) {
-            if (isset($this->rules[$key])) {
-                $constraints = [];
-                foreach ($this->rules[$key] as $cls => $params) {
-                    if (is_numeric($cls)) {
-                        $cls = $params;
-                        $params = null;
-                    }
-                    $class = $this->getConstraintClass($cls);
-                    if (!empty(trim($class))) {
-                        $constraints[] = new $class($params);
-                    }
-                }
-                $error = $this->validator->validate($val, $constraints);
-                if (count($error)) {
-                    foreach ($error as $obj) {
-                        $returnData[$key] = $obj->getMessage();
+        if (!empty($this->rules)) {
+            foreach ($data as $property => $val) {
+                if (isset($this->rules[$property])) {
+                    $constraints = $this->composeConstraints($property);
+                    $error = $this->validator->validate($val, $constraints);
+                    if (count($error)) {
+                        foreach ($error as $obj) {
+                            $returnData[$property] = $obj->getMessage();
+                        }
                     }
                 }
             }
         }
-
         return $returnData;
     }
 
@@ -218,19 +198,11 @@ class Model
         }
         $classMetadata = $this->validator->getMetadataFor($this->validateObj);
         if (!empty($this->rules)) {
-            foreach ($this->rules as $property => $constraint) {
-                $constraints = [];
-                foreach ($constraint as $cls => $params) {
-                    if (is_numeric($cls)) {
-                        $cls = $params;
-                        $params = null;
-                    }
-                    $class = $this->getConstraintClass($cls);
-                    if (!empty(trim($class))) {
-                        $constraints[] = new $class($params);
-                    }
+            foreach ($data as $property => $val) {
+                if (isset($this->rules[$property])) {
+                    $constraints = $this->composeConstraints($property);
+                    $classMetadata->addPropertyConstraints($property, $constraints);
                 }
-                $classMetadata->addPropertyConstraints($property, $constraints);
             }
         }
         $errors = $this->validator->validate($this->validateObj);
@@ -239,7 +211,28 @@ class Model
                 $returnData[$obj->getPropertyPath()] = $obj->getMessage();
             }
         }
-
         return $returnData;
+    }
+
+    /**
+     * 实例化指定属性的验证器类
+     *
+     * @param string $property
+     * @return array
+     */
+    private function composeConstraints($property)
+    {
+        $constraints = [];
+        foreach ($this->rules[$property] as $cls => $params) {
+            if (is_numeric($cls)) {
+                $cls = $params;
+                $params = null;
+            }
+            $class = $this->getConstraintClass($cls);
+            if (!empty(trim($class))) {
+                $constraints[] = new $class($params);
+            }
+        }
+        return $constraints;
     }
 }
