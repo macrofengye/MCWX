@@ -83,7 +83,7 @@ class Model
     /**
      * 生成数据库表的实体对象
      *
-     * @param int   $target
+     * @param int $target
      * @param array $data
      *
      * @throws \Exception
@@ -106,20 +106,16 @@ class Model
     private function getConstraintClass($cls = '')
     {
         $class = '';
-        if (class_exists('\\Symfony\\Component\\Validator\\Constraints\\'.$cls)) {
-            $class = '\\Symfony\\Component\\Validator\\Constraints\\'.$cls;
-
+        if (class_exists('\\Symfony\\Component\\Validator\\Constraints\\' . $cls)) {
+            $class = '\\Symfony\\Component\\Validator\\Constraints\\' . $cls;
             return $class;
-        } elseif (class_exists(APP_NAME.'\\Constraints\\'.$cls)) {
-            $class = APP_NAME.'\\Constraints\\'.$cls;
-
+        } elseif (class_exists(APP_NAME . '\\Constraints\\' . $cls)) {
+            $class = APP_NAME . '\\Constraints\\' . $cls;
             return $class;
-        } elseif (class_exists('Core\\Constraints\\'.$cls)) {
-            $class = 'Core\\Constraints\\'.$cls;
-
+        } elseif (class_exists('Core\\Constraints\\' . $cls)) {
+            $class = 'Core\\Constraints\\' . $cls;
             return $class;
         }
-
         return $class;
     }
 
@@ -133,21 +129,19 @@ class Model
     {
         $data ?: $data = $this->app->component('request')->getParams();
         if ($this->mappingField) {
-            if (count($this->mappingField) != count($data)) {
-                throw new \Exception('映射字段与请求的字段不相等！');
-            } else {
-                $data = array_combine($this->mappingField, $data);
-                return $data;
+            $combineData = [];
+            foreach ($data as $key => $value) {
+                isset($this->mappingField[$key]) ? $combineData[$this->mappingField[$key]] = $value : $combineData[$key] = $value;
             }
+            return $combineData;
         }
-
         return $data;
     }
 
     /**
      * 给实体验证对象设置值
      *
-     * @param int   $target
+     * @param int $target
      * @param array $data
      *
      * @throws \Exception
@@ -217,7 +211,7 @@ class Model
     {
         $returnData = [];
         foreach ($data as $k => $v) {
-            $setMethod = 'set'.ucfirst(str_replace(' ', '', lcfirst(ucwords(str_replace('_', ' ', $k)))));
+            $setMethod = 'set' . ucfirst(str_replace(' ', '', lcfirst(ucwords(str_replace('_', ' ', $k)))));
             if (method_exists($this->validateObj, $setMethod)) {
                 $this->validateObj->$setMethod($v);
             }
