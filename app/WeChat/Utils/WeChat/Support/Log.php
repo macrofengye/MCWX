@@ -3,6 +3,7 @@ namespace WeChat\Utils\WeChat\Support;
 
 use Monolog\Handler\ErrorLogHandler;
 use Monolog\Handler\NullHandler;
+use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 use Psr\Log\LoggerInterface;
 
@@ -86,7 +87,8 @@ class Log
         if (defined('PHPUNIT_RUNNING')) {
             $log->pushHandler(new NullHandler());
         } else {
-            $log->pushHandler(new ErrorLogHandler());
+            //$log->pushHandler(new ErrorLogHandler());
+            $log->pushHandler(new StreamHandler(APP_PATH . '/log/wechat_debug.log', Logger::DEBUG));
         }
 
         return $log;

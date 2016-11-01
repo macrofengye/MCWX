@@ -56,6 +56,7 @@ class Model
 
     /**
      * 表的主键
+     *
      * @var string
      */
     protected $primaryKey = '';
@@ -82,8 +83,9 @@ class Model
     /**
      * 生成数据库表的实体对象
      *
-     * @param int $target
+     * @param int   $target
      * @param array $data
+     *
      * @throws \Exception
      * @return array
      */
@@ -104,26 +106,32 @@ class Model
     private function getConstraintClass($cls = '')
     {
         $class = '';
-        if (class_exists('\\Symfony\\Component\\Validator\\Constraints\\' . $cls)) {
-            $class = '\\Symfony\\Component\\Validator\\Constraints\\' . $cls;
+        if (class_exists('\\Symfony\\Component\\Validator\\Constraints\\'.$cls)) {
+            $class = '\\Symfony\\Component\\Validator\\Constraints\\'.$cls;
+
             return $class;
-        } elseif (class_exists(APP_NAME . '\\Constraints\\' . $cls)) {
-            $class = APP_NAME . '\\Constraints\\' . $cls;
+        } elseif (class_exists(APP_NAME.'\\Constraints\\'.$cls)) {
+            $class = APP_NAME.'\\Constraints\\'.$cls;
+
             return $class;
-        } elseif (class_exists('Core\\Constraints\\' . $cls)) {
-            $class = 'Core\\Constraints\\' . $cls;
+        } elseif (class_exists('Core\\Constraints\\'.$cls)) {
+            $class = 'Core\\Constraints\\'.$cls;
+
             return $class;
         }
+
         return $class;
     }
 
     /**
+     * @param array $data
+     *
      * @return array
      * @throws \Exception
      */
-    private function mergeParams()
+    private function mergeParams(array $data = [])
     {
-        $data = $this->app->component('request')->getParams();
+        $data ?: $data = $this->app->component('request')->getParams();
         if ($this->mappingField) {
             if (count($this->mappingField) != count($data)) {
                 throw new \Exception('映射字段与请求的字段不相等！');
@@ -132,20 +140,22 @@ class Model
                 return $data;
             }
         }
+
         return $data;
     }
 
     /**
      * 给实体验证对象设置值
      *
-     * @param int $target
+     * @param int   $target
      * @param array $data
+     *
      * @throws \Exception
      * @return array
      */
     private function validate($target = Constants::MODEL_FIELD, array $data = [])
     {
-        $data ?: $data = $this->mergeParams();
+        $data = $this->mergeParams($data);
         $returnData = [];
         switch ($target) {
             case Constants::MODEL_FIELD:
@@ -157,6 +167,7 @@ class Model
             default:
                 break;
         }
+
         return $returnData;
     }
 
@@ -164,6 +175,7 @@ class Model
      * 验证数据字段
      *
      * @param array $data
+     *
      * @return array
      */
     private function validateFields(array $data = [])
@@ -173,8 +185,14 @@ class Model
             if (isset($this->rules[$key])) {
                 $constraints = [];
                 foreach ($this->rules[$key] as $cls => $params) {
+                    if (is_numeric($cls)) {
+                        $cls = $params;
+                        $params = null;
+                    }
                     $class = $this->getConstraintClass($cls);
-                    if (!empty(trim($class))) $constraints[] = new $class($params);
+                    if (!empty(trim($class))) {
+                        $constraints[] = new $class($params);
+                    }
                 }
                 $error = $this->validator->validate($val, $constraints);
                 if (count($error)) {
@@ -184,6 +202,7 @@ class Model
                 }
             }
         }
+
         return $returnData;
     }
 
@@ -191,13 +210,14 @@ class Model
      * 给对象赋值并且验证对象的值是否合法
      *
      * @param array $data
+     *
      * @return array
      */
     private function validateObject(array $data = [])
     {
         $returnData = [];
         foreach ($data as $k => $v) {
-            $setMethod = 'set' . ucfirst(str_replace(' ', '', lcfirst(ucwords(str_replace('_', ' ', $k)))));
+            $setMethod = 'set'.ucfirst(str_replace(' ', '', lcfirst(ucwords(str_replace('_', ' ', $k)))));
             if (method_exists($this->validateObj, $setMethod)) {
                 $this->validateObj->$setMethod($v);
             }
@@ -207,8 +227,14 @@ class Model
             foreach ($this->rules as $property => $constraint) {
                 $constraints = [];
                 foreach ($constraint as $cls => $params) {
+                    if (is_numeric($cls)) {
+                        $cls = $params;
+                        $params = null;
+                    }
                     $class = $this->getConstraintClass($cls);
-                    if (!empty(trim($class))) $constraints[] = new $class($params);
+                    if (!empty(trim($class))) {
+                        $constraints[] = new $class($params);
+                    }
                 }
                 $classMetadata->addPropertyConstraints($property, $constraints);
             }
@@ -219,6 +245,7 @@ class Model
                 $returnData[$obj->getPropertyPath()] = $obj->getMessage();
             }
         }
+
         return $returnData;
     }
 }
