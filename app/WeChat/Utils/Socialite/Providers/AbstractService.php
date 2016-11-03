@@ -1,14 +1,12 @@
 <?php
 namespace WeChat\Utils\Socialite\Providers;
 
-use Core\Utils\CoreUtils;
 use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
 use WeChat\Utils\Socialite\AccessToken;
 use WeChat\Utils\Socialite\AccessTokenInterface;
 use WeChat\Utils\Socialite\InvalidStateException;
 use WeChat\Utils\Socialite\ProviderInterface;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Slim\Http\Request;
 
 /**
