@@ -21,8 +21,7 @@ class BootTask
 
     public function __construct()
     {
-        $this->app = new Application();
-        $this->app->startConsole();
+        $this->app = Application::getInstance();
     }
 
     /**

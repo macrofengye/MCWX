@@ -28,7 +28,7 @@
     "useAnnotationPrefix": "ORM\\",
     "skipGetterAndSetter": false,
     "generateEntitySerialization": true,
-    "generateExtendableEntity": true,
+    "generateExtendableEntity": false,
     "quoteIdentifierStrategy": "auto",
     "propertyTypehint": true,
     "generateEntityPopulate": true,

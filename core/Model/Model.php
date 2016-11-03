@@ -9,7 +9,7 @@ namespace Core\Model;
 
 use Core\Utils\Constants;
 
-class Model
+abstract class Model
 {
     /**
      * 数据库表名
