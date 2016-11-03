@@ -38,23 +38,79 @@ final class Session
         }
     }
 
+    /**
+     * Get session.
+     *
+     * @param      $key
+     * @param null $default
+     *
+     * @return mixed|null
+     */
     public function get($key, $default = null)
     {
-        if (array_key_exists($key, $_SESSION)) {
-            return $_SESSION[$key];
+        $array = $_SESSION;
+
+        if (array_key_exists($key, $array)) {
+            return $array[$key];
         }
-        return $default;
+
+        foreach (explode('.', $key) as $segment) {
+            if (is_array($array) && array_key_exists($segment, $array)) {
+                $array = $array[$segment];
+            } else {
+                return $default;
+            }
+        }
+
+        return $array;
     }
 
+    /**
+     * Set session.
+     *
+     * @param $key
+     * @param $value
+     */
     public function set($key, $value)
     {
         $_SESSION[$key] = $value;
     }
 
-    public function delete($key)
+    /**
+     * Delete session.
+     *
+     * @param $keys
+     */
+    public function delete($keys)
     {
-        if (array_key_exists($key, $_SESSION)) {
-            unset($_SESSION[$key]);
+        $original = $_SESSION;
+
+        $keys = (array) $keys;
+
+        if (count($keys) === 0) {
+            return;
+        }
+
+        foreach ($keys as $key) {
+            if (array_key_exists($key, $original)) {
+                unset($original[$key]);
+                continue;
+            }
+
+            $parts = explode('.', $key);
+            $array = &$original;
+
+            while (count($parts) > 1) {
+                $part = array_shift($parts);
+
+                if (isset($array[$part]) && is_array($array[$part])) {
+                    $array = &$array[$part];
+                } else {
+                    continue 2;
+                }
+            }
+
+            unset($array[array_shift($parts)]);
         }
     }
 

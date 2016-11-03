@@ -8,14 +8,14 @@ $common_config = [
             'responseChunkSize' => 4096,
             'outputBuffering' => 'append',
             'addContentLengthHeader' => 1,
-            'routerCacheFile' => APP_PATH . 'Routers/routerCacheFile.router',
+            'routerCacheFile' => APP_PATH.'Routers/routerCacheFile.router',
             'determineRouteBeforeAppMiddleware' => false,
             'displayErrorDetails' => true,
             'logger' => [
                 'name' => 'macro_php',
                 'level' => Monolog\Logger::DEBUG,
-                'path' => APP_PATH . 'log/error.log',
-            ]
+                'path' => APP_PATH.'log/error.log',
+            ],
         ],
     ],
 
@@ -24,17 +24,17 @@ $common_config = [
         'query_cache' => [
             'is_open' => true,
             'cache_name' => 'redisCacheDriver',
-            'database' => 15
+            'database' => 15,
         ],
         'result_cache' => [
             'is_open' => true,
             'cache_name' => 'redisCacheDriver',
-            'database' => 15
+            'database' => 15,
         ],
         'metadata_cache' => [
             'is_open' => true,
             'cache_name' => 'redisCacheDriver',
-            'database' => 15
+            'database' => 15,
         ],
     ],
 
@@ -73,7 +73,7 @@ $common_config = [
     'customer' => [
         'encrypt_key' => 'xxxxx',//加密的KEY
         'cache_router' => true, //是否缓存路由文件
-        'router_cache_file' => APP_PATH . 'Routers/routerCacheFile.router', //路由缓存文件的路径
+        'router_cache_file' => APP_PATH.'Routers/routerCacheFile.router', //路由缓存文件的路径
         'is_rest' => true, //接口形式提供服务
         'is_api_rate_limit' => false,  // API速率限制
         'show_use_memory' => false,
@@ -86,8 +86,10 @@ $common_config = [
         'app_id' => 'wx7cba84e8e7343a5c',
         'secret' => '67242b76b760ca40442375817304bb29',
         'token' => 'testmcwx',
-        'oauth.scopes' => ['snsapi_userinfo'],
-        'oauth.callback' => '/home/hello',
+        'oauth' => [
+            'scopes' => ['snsapi_userinfo'],
+            'callback' => '/home/hello',
+        ],
         'aes_key' => 'aaapp00' //微信后台设置的EncodingAESKey
     ],
 
@@ -95,11 +97,11 @@ $common_config = [
     'data_cache' => [
         'redis_cache' => [
             'is_open' => true,
-            'cache_name' => 'redisCache'
+            'cache_name' => 'redisCache',
         ],
         'memcache_cache' => [
             'is_open' => true,
-            'cache_name' => 'memcacheCache'
+            'cache_name' => 'memcacheCache',
         ],
     ],
 ];
