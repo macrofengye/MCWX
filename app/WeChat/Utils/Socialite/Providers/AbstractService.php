@@ -3,6 +3,7 @@ namespace WeChat\Utils\Socialite\Providers;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
+use Slim\Http\Response;
 use WeChat\Utils\Socialite\AccessToken;
 use WeChat\Utils\Socialite\AccessTokenInterface;
 use WeChat\Utils\Socialite\InvalidStateException;
@@ -132,7 +133,7 @@ abstract class AbstractService implements ProviderInterface
      *
      * @param string $redirectUrl
      *
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     * @return Response
      */
     public function redirect($redirectUrl = null)
     {
