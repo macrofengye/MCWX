@@ -64,7 +64,7 @@ if (!function_exists('handleShutdown')) {
                 app()->config('logger')->error($msg);
             } else {
                 $msg = 'Type : ' . $error["type"] . ' , Message : ' . $error["message"] . ' , File : ' . $error["file"] . ' , Line : ' . $error["line"];
-                writeLog('Fatal Error : ', [$msg], APP_PATH . '/log/fatal_error.log', Monolog\Logger::ERROR);
+                logger('Fatal Error : ', [$msg], APP_PATH . '/log/fatal_error.log', Monolog\Logger::ERROR);
                 if (file_exists(TEMPLATE_PATH . 'error.twig')) {
                     echo @file_get_contents(TEMPLATE_PATH . 'error.twig');
                 } else {

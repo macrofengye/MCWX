@@ -27,7 +27,7 @@ class Test extends \Task\Boot\BootTask
         $redis = $redis->getOptions()->getResourceManager()->getResource('default');
         $redis->rpush('submit_order' , '201605250859498864');*/
         //echo "asasa";
-        // writeLog('test_message' , ['name'=>'jack'] , APP_PATH.'/log.log');
+        // logger('test_message' , ['name'=>'jack'] , APP_PATH.'/log.log');
         //$redis = \Core\Utils\CoreUtils::getContainer('redis' , ['server_name'=>'server1']);
         //$redis->set("key2" , "value2value2value2value2");
         $db1 = $this->app->db('db1');

@@ -33,6 +33,7 @@ class ServerService implements ServiceProviderInterface
             $server = new Guard($pimple['config']['wechat']['token'], $pimple['request'], $pimple['response']);
             $server->debug($pimple['config']['wechat']['debug']);
             $server->setEncryptor($pimple['encryptor']);
+
             return $server;
         };
     }

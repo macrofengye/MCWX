@@ -19,7 +19,7 @@ class Hello extends Controller
     public function daikuan(Request $request, Response $response, $args)
     {
         $url = 'http://wechat.niydiy.com/hello/dealDaikuan';
-        writeLog(__CLASS__ . '::' . __FUNCTION__, [$url], APP_PATH . '/log/debug.log');
+        logger(__CLASS__ . '::' . __FUNCTION__, [$url], APP_PATH . '/log/debug.log');
         $response = CoreUtils::getContainer('oAuth')->scopes(['snsapi_userinfo'])->redirect($url);
         return $response;
     }
@@ -27,7 +27,7 @@ class Hello extends Controller
     public function bangbangdai(Request $request, Response $response, $args)
     {
         $url = 'http://wechat.niydiy.com/hello/dealBangbangdai';
-        writeLog(__CLASS__ . '::' . __FUNCTION__, [$url], APP_PATH . '/log/debug.log');
+        logger(__CLASS__ . '::' . __FUNCTION__, [$url], APP_PATH . '/log/debug.log');
         $response = CoreUtils::getContainer('oAuth')->scopes(['snsapi_userinfo'])->redirect($url);
         return $response;
     }
@@ -36,21 +36,21 @@ class Hello extends Controller
     public function dealBangbangdai(Request $request, Response $response, $args)
     {
         $user = CoreUtils::getContainer('oAuth')->user();
-        writeLog(__FUNCTION__, [$user->getId(), $user->getNickName(), $user->getName()], APP_PATH . '/log/callback01.txt');
+        logger(__FUNCTION__, [$user->getId(), $user->getNickName(), $user->getName()], APP_PATH . '/log/callback01.txt');
         return $response->withRedirect('http://wechat.edai.com/#/?openid=' . $user->getId() . '&name=' . $user->getName());
     }
 
     public function dealDaikuan(Request $request, Response $response, $args)
     {
         $user = CoreUtils::getContainer('oAuth')->user();
-        writeLog(__FUNCTION__, ['http://m.niydiy.com/#/?openid=' . $user->getId() . '&name=' . $user->getName(), $user->getId(), $user->getNickName(), $user->getName()], APP_PATH . '/log/callback01.txt');
+        logger(__FUNCTION__, ['http://m.niydiy.com/#/?openid=' . $user->getId() . '&name=' . $user->getName(), $user->getId(), $user->getNickName(), $user->getName()], APP_PATH . '/log/callback01.txt');
         return $response->withRedirect('http://m.niydiy.com/#/?openid=' . $user->getId() . '&name=' . $user->getName());
     }
 
     public function dealAccount(Request $request, Response $response, $args)
     {
         $user = CoreUtils::getContainer('oAuth')->user();
-        writeLog(__FUNCTION__, ['http://m.niydiy.com/#/?openid=' . $user->getId() . '&name=' . $user->getName(), $user->getId(), $user->getNickName(), $user->getName()], APP_PATH . '/log/callback01.txt');
+        logger(__FUNCTION__, ['http://m.niydiy.com/#/?openid=' . $user->getId() . '&name=' . $user->getName(), $user->getId(), $user->getNickName(), $user->getName()], APP_PATH . '/log/callback01.txt');
         return $response->withRedirect('http://wechat.edai.com/#/ucenter?openid=' . $user->getId() . '&name=' . $user->getName());
     }
 
@@ -74,8 +74,7 @@ class Hello extends Controller
 
     public function show1($request, $response, $args)
     {
-        $app = Bootstrap::getApp();
-        $view = $app->getContainer()->get('view');
+        $view = $this->app->getContainer()->get('view');
         $view->render($response, 'profile.twig', [
             'name' => "aaaaaa"
         ]);

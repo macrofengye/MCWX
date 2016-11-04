@@ -25,7 +25,7 @@ class Home extends Controller
         //writeLog(__FUNCTION__, [$user_tag->lists()], APP_PATH . '/log/users_tag.log');
         //writeLog(__FUNCTION__, [$group->lists()], APP_PATH . '/log/groups.log');
         $server->setMessageHandler(function ($message) {
-            writeLog(__FUNCTION__, [$message], APP_PATH . '/log/debug.log');
+            logger(__FUNCTION__, [$message], APP_PATH . '/log/debug.log');
             if ($message->MsgType == 'event') {
                 switch ($message->Event) {
                     case 'subscript':
@@ -41,8 +41,8 @@ class Home extends Controller
                         $expireSeconds = $result->expire_seconds; // 有效秒数
                         $url = $result->url; // 二维码图片解析后的地址，开发者可根据该地址自行生成需要的二维码图片
                         $url = $qrcode->url($ticket);
-                        $content = file_get_contents($url); // 得到二进制图片内容
-                        file_put_contents(APP_PATH . '/log/code.jpg', $content); // 写入文件
+                        //$content = file_get_contents($url); // 得到二进制图片内容
+                        //file_put_contents(APP_PATH . '/log/code.jpg', $content); // 写入文件
                         return $url;
                     default:
                         return '欢迎关注我们!';
