@@ -102,6 +102,17 @@ $common_config = [
             'cache_name' => 'memcacheCache'
         ],
     ],
+
+    //IP地址白名单列表
+    'ip_list' => [
+        '127.0.0.1'
+    ],
+
+    //Session的处理类
+    'session_handler' => [
+        'cls'=>\Core\Session\SecureHandler::class,
+        'params'=>''
+    ]
 ];
 
 return $common_config;
