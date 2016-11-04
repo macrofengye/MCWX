@@ -20,8 +20,8 @@ class SessionService implements ServiceProviderInterface
             $sessionHandler = $container['config']->get('session_handler.cls');
             $handler = new $sessionHandler($container['config']->get('session_handler.params'));
             session_set_save_handler($handler, true);
-            session_start();
             $session = new Session();
+            $session->start();
             return $session;
         };
     }
