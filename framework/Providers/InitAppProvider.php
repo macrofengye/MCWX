@@ -59,7 +59,7 @@ class InitAppProvider implements ServiceProviderInterface
         };
         $pimple['errorHandler'] = function ($container) {
             return function ($request, $response, $exception) use ($container) {
-                $container->register(new LoggerService());
+                $container->register(new LoggerProvider());
                 $container['logger']->error($exception->__toString());
                 if ($container['application']->config('customer.is_rest')) {
                     return $container['response']
