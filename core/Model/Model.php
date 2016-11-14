@@ -120,7 +120,7 @@ abstract class Model
      */
     private function mergeParams(array $data = [])
     {
-        $data ?: $data = $this->app->component('request')->getParams();
+        $data = array_merge($this->app->component('request')->getParams(), $data);
         if ($this->mappingField) {
             $combineData = [];
             foreach ($data as $key => $value) {
