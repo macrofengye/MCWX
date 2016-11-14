@@ -28,6 +28,10 @@ class ViewService implements ServiceProviderInterface
             $twig_config = $container['application']->config('twig') ? $container['application']->config('twig') : [];
             $view = new Twig(TEMPLATE_PATH, $twig_config);
             $view->addExtension(new TwigExtension($container['router'], $container['request']->getUri()));
+            $appFunction = new \Twig_SimpleFunction('app', function () {
+                return app();
+            });
+            $view->getEnvironment()->addFunction($appFunction);
             return $view;
         };
     }

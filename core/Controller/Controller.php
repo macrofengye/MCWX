@@ -35,9 +35,9 @@ class Controller
      * @author macro chen <macro_fengye@163.com>
      * @param $response 响应的对象
      * @param $template 模板文件
-     * @param $data 传递到模板的数据
+     * @param array $data 传递到模板的数据
      */
-    protected function render($response, $template, $data)
+    protected function render($response, $template, array $data = [])
     {
         return $this->app->component('view')->render($response, $template, $data);
     }

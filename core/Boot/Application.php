@@ -345,9 +345,28 @@ final class Application
     {
         if (!defined('REPOSITORIES_NAMESPACE')) define('REPOSITORIES_NAMESPACE', 'Entity\\Repositories');
         if (!defined('ENTITY_NAMESPACE')) define('ENTITY_NAMESPACE', 'Entity\\Models');
-        $className = REPOSITORIES_NAMESPACE . '\\' . ucfirst($entityName) . 'Repository';
+        $className = ucfirst(str_replace(' ', '', lcfirst(ucwords(str_replace('_', ' ', $entityName)))));
+        $className = REPOSITORIES_NAMESPACE . '\\' . ucfirst($className) . 'Repository';
         if (class_exists($className)) {
-            return $this->db($db)->getRepository(ENTITY_NAMESPACE . '\\' . ucfirst($entityName));
+            return $this->db($db)->getRepository(ENTITY_NAMESPACE . '\\' . ucfirst($className));
+        }
+        return null;
+    }
+
+    /**
+     * 获取服务组件
+     *
+     * @param string $serviceName
+     * @param array|null $params
+     * @return null | object
+     */
+    public function service($serviceName, array $params = null)
+    {
+        if (!defined('SERVICES_NAMESPACE')) define('SERVICES_NAMESPACE', APP_NAME . '\\Services');
+        $className = ucfirst(str_replace(' ', '', lcfirst(ucwords(str_replace('_', ' ', $serviceName)))));
+        $className = SERVICES_NAMESPACE . '\\' . ucfirst($className) . 'Service';
+        if (class_exists($className)) {
+            return new $className($params);
         }
         return null;
     }
