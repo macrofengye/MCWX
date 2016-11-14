@@ -1,8 +1,8 @@
 <?php
 namespace WeChat\Controller;
 
-use Core\Controller\Controller;
-use Core\Utils\CoreUtils;
+use Polymer\Controller\Controller;
+use Polymer\Utils\CoreUtils;
 use Blog\Models\Employee;
 use Entity\Models\Eorder;
 use Entity\Models\Region;

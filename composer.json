@@ -46,14 +46,14 @@
   },
   "autoload": {
     "psr-4": {
-      "Core\\": "core\\",
+      "Polymer\\": "framework\\",
       "Entity\\": "entity\\",
       "Task\\": "task\\",
       "Wap\\": "app\\Wap\\",
       "WeChat\\": "app\\WeChat\\"
     },
     "files": [
-      "core\\Lib\\functions_include.php"
+      "framework\\Lib\\functions_include.php"
     ]
   }
 }

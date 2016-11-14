@@ -1,5 +1,5 @@
 <?php
-//$app = \Core\Utils\CoreUtils::getContainer('app');
+//$app = \Polymer\Utils\CoreUtils::getContainer('app');
 
 $app->get("/hello/show", "WeChat\Controller\Hello:show")->setName("hello.show");
 $app->get("/hello/daikuan", "WeChat\Controller\Hello:daikuan")->setName("hello.daikuan");

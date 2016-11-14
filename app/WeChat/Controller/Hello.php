@@ -2,8 +2,8 @@
 namespace WeChat\Controller;
 
 
-use Core\Controller\Controller;
-use Core\Utils\CoreUtils;
+use Polymer\Controller\Controller;
+use Polymer\Utils\CoreUtils;
 use Slim\Http\Request;
 use Slim\Http\Response;
 
