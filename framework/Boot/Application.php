@@ -8,10 +8,10 @@
 
 namespace Polymer\Boot;
 
+use Polymer\Providers\InitAppProvider;
 use Polymer\Utils\Constants;
 use Doctrine\Common\Cache\ArrayCache;
 use Slim\Container;
-use Polymer\Providers\InitAppService;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Events;
 use Monolog\Logger;
@@ -95,7 +95,7 @@ final class Application
         set_exception_handler('handleException');
         register_shutdown_function('handleShutdown');
         $this->container = new Container();
-        $this->container->register(new InitAppService());
+        $this->container->register(new InitAppProvider());
         $this->container['application'] = $this;
         static::setInstance($this);
     }
