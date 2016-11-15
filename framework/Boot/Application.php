@@ -346,8 +346,8 @@ final class Application
         if (!defined('REPOSITORIES_NAMESPACE')) define('REPOSITORIES_NAMESPACE', 'Entity\\Repositories');
         if (!defined('ENTITY_NAMESPACE')) define('ENTITY_NAMESPACE', 'Entity\\Models');
         $className = ucfirst(str_replace(' ', '', lcfirst(ucwords(str_replace('_', ' ', $entityName)))));
-        $className = REPOSITORIES_NAMESPACE . '\\' . ucfirst($className) . 'Repository';
-        if (class_exists($className)) {
+        $RepositoryClassName = REPOSITORIES_NAMESPACE . '\\' . ucfirst($className) . 'Repository';
+        if (class_exists($RepositoryClassName)) {
             return $this->db($db)->getRepository(ENTITY_NAMESPACE . '\\' . ucfirst($className));
         }
         return null;
