@@ -6,14 +6,15 @@ use GuzzleHttp\ClientInterface;
 use Slim\Http\Response;
 use WeChat\Utils\Socialite\AccessToken;
 use WeChat\Utils\Socialite\AccessTokenInterface;
+use WeChat\Utils\Socialite\AuthorizeFailedException;
 use WeChat\Utils\Socialite\InvalidStateException;
 use WeChat\Utils\Socialite\ProviderInterface;
 use Slim\Http\Request;
 
 /**
- * Class AbstractService.
+ * Class AbstractProvider.
  */
-abstract class AbstractService implements ProviderInterface
+abstract class AbstractProvider implements ProviderInterface
 {
     /**
      * The HTTP request instance.
@@ -58,6 +59,13 @@ abstract class AbstractService implements ProviderInterface
     protected $scopes = [];
 
     /**
+     * The configuration.
+     *
+     * @var WeChat\Utils\Socialite\Config
+     */
+    protected $config;
+
+    /**
      * The separating character for the requested scopes.
      *
      * @var string
@@ -82,13 +90,15 @@ abstract class AbstractService implements ProviderInterface
      * Create a new provider instance.
      *
      * @param \Slim\Http\Request $request
+     * @param \WeChat\Utils\Socialite\Config $config
      * @param string $clientId
      * @param string $clientSecret
      * @param string|null $redirectUrl
      */
-    public function __construct(Request $request, $clientId, $clientSecret, $redirectUrl = null)
+    public function __construct(Request $request, $config , $clientId, $clientSecret, $redirectUrl = null)
     {
         $this->request = $request;
+        $this->config = $config;
         $this->clientId = $clientId;
         $this->clientSecret = $clientSecret;
         $this->redirectUrl = $redirectUrl;
@@ -376,13 +386,21 @@ abstract class AbstractService implements ProviderInterface
     /**
      * Get the access token from the token response body.
      *
-     * @param \Psr\Http\Message\StreamInterface $body
+     * @param \Psr\Http\Message\StreamInterface|array $body
      *
      * @return \WeChat\Utils\Socialite\AccessToken
      */
     protected function parseAccessToken($body)
     {
-        return new AccessToken((array)json_decode($body, true));
+        if (!is_array($body)) {
+            $body = json_decode($body, true);
+        }
+
+        if (empty($body['access_token'])) {
+            throw new AuthorizeFailedException('Authorize Failed: ' . json_encode($body, JSON_UNESCAPED_UNICODE), $body);
+        }
+
+        return new AccessToken($body);
     }
 
     /**

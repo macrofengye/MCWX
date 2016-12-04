@@ -1,17 +1,16 @@
 <?php
 namespace WeChat\Utils\Socialite\Providers;
 
-use WeChat\Utils\Socialite\AccessToken;
 use WeChat\Utils\Socialite\AccessTokenInterface;
 use WeChat\Utils\Socialite\ProviderInterface;
 use WeChat\Utils\Socialite\User;
 
 /**
- * Class QQService.
+ * Class QQProvider.
  *
  * @link http://wiki.connect.qq.com/oauth2-0%E7%AE%80%E4%BB%8B [QQ - OAuth 2.0 登录QQ]
  */
-class QQService extends AbstractService implements ProviderInterface
+class QQProvider extends AbstractProvider implements ProviderInterface
 {
     /**
      * The base url of QQ API.
@@ -116,7 +115,7 @@ class QQService extends AbstractService implements ProviderInterface
     {
         parse_str($body, $token);
 
-        return new AccessToken($token);
+        return parent::parseAccessToken($token);
     }
 
     /**

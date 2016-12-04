@@ -32,7 +32,7 @@ class JwtProvider implements ServiceProviderInterface
                 "regexp" => "/(.*)/",
                 "secure" => false,
                 //"secret" => '62f47d0439a14f8bddb465dff4317fdb',
-                "secret" => app()->component('session')->get('secret'),
+                "secret" => $container['application']->component('session')->get('secret'),
                 "path" => ["/user", "/loan", "/merchant"],
                 'passthrough' => ['/user/generateCaptcha', '/user/sendSMS', '/user/login', '/user/register', '/user/retrievePassword', '/user/logout'],
                 "error" => function ($request, $response, $arguments) {

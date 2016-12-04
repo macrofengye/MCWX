@@ -65,7 +65,7 @@ if (!function_exists('handleShutdown')) {
             } else {
                 $msg = 'Type : ' . $error["type"] . ' , Message : ' . $error["message"] . ' , File : ' . $error["file"] . ' , Line : ' . $error["line"];
                 logger('Fatal Error : ', [$msg], APP_PATH . '/log/fatal_error.log', Monolog\Logger::ERROR);
-                if (file_exists(TEMPLATE_PATH . 'error.twig')) {
+                if (defined('TEMPLATE_PATH') && file_exists(TEMPLATE_PATH . 'error.twig')) {
                     echo @file_get_contents(TEMPLATE_PATH . 'error.twig');
                 } else {
                     echo \GuzzleHttp\json_encode(['code' => 2000, 'msg' => 'Error', 'data' => []]);

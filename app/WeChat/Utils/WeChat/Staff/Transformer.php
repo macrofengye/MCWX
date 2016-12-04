@@ -52,6 +52,7 @@ class Transformer
     /**
      * Transform image message.
      *
+     * @param AbstractMessage $message
      * @return array
      */
     public function transformImage(AbstractMessage $message)
@@ -65,8 +66,29 @@ class Transformer
     }
 
     /**
+     * Transform music message.
+     *
+     * @param AbstractMessage $message
+     * @return array
+     */
+    public function transformMusic(AbstractMessage $message)
+    {
+        return [
+            'msgtype' => 'music',
+            'music' => [
+                'title' => $message->get('title'),
+                'description' => $message->get('description'),
+                'musicurl' => $message->get('url'),
+                'hqmusicurl' => $message->get('hq_url'),
+                'thumb_media_id' => $message->get('thumb_media_id'),
+            ],
+        ];
+    }
+
+    /**
      * Transform video message.
      *
+     * @param AbstractMessage $message
      * @return array
      */
     public function transformVideo(AbstractMessage $message)
@@ -85,6 +107,7 @@ class Transformer
     /**
      * Transform voice message.
      *
+     * @param AbstractMessage $message
      * @return array
      */
     public function transformVoice(AbstractMessage $message)

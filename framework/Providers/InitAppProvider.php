@@ -9,12 +9,10 @@
 namespace Polymer\Providers;
 
 
-use Doctrine\Common\Cache\FilesystemCache;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 use Slim\App;
 use Slim\Http\Body;
-use WeChat\Utils\WeChat\Core\AccessToken;
 
 class InitAppProvider implements ServiceProviderInterface
 {
@@ -34,7 +32,7 @@ class InitAppProvider implements ServiceProviderInterface
                     ->withStatus(405)
                     ->withHeader('Allow', implode(', ', $methods))
                     ->withHeader('Content-type', 'text/html')
-                    ->write('Method must be one of: '.implode(', ', $methods));
+                    ->write('Method must be one of: ' . implode(', ', $methods));
             };
         };
         $pimple['notFoundHandler'] = function ($container) {
@@ -45,8 +43,7 @@ class InitAppProvider implements ServiceProviderInterface
                         ->withHeader('Content-Type', 'application/json')
                         ->withJson(['code' => 1, 'msg' => '404', 'data' => []]);
                 } else {
-                    $body = new Body(@fopen(TEMPLATE_PATH.'404.twig', 'r'));
-
+                    $body = new Body(@fopen(TEMPLATE_PATH . '404.twig', 'r'));
                     return $container['response']
                         ->withStatus(404)
                         ->withHeader('Content-Type', 'text/html')
@@ -67,8 +64,7 @@ class InitAppProvider implements ServiceProviderInterface
                         ->withHeader('Content-Type', 'application/json')
                         ->withJson(['code' => 500, 'msg' => '500 status', 'data' => []]);
                 } else {
-                    $body = new Body(@fopen(TEMPLATE_PATH.'error.twig', 'r'));
-
+                    $body = new Body(@fopen(TEMPLATE_PATH . 'error.twig', 'r'));
                     return $container['response']
                         ->withStatus(500)
                         ->withHeader('Content-Type', 'text/html')
@@ -78,16 +74,6 @@ class InitAppProvider implements ServiceProviderInterface
         };
         $pimple['app'] = function (Container $container) {
             return new App($container);
-        };
-        $pimple['access_token'] = function (Container $container) {
-            $cache = new FilesystemCache(APP_PATH.'/log/cache');
-            $container['cache'] = $cache;
-
-            return new AccessToken(
-                $container['config']['wechat']['app_id'],
-                $container['config']['wechat']['secret'],
-                $cache
-            );
         };
     }
 }

@@ -8,12 +8,12 @@ use WeChat\Utils\Socialite\ProviderInterface;
 use WeChat\Utils\Socialite\User;
 
 /**
- * Class WeChatService.
+ * Class WeChatProvider.
  *
  * @link http://mp.weixin.qq.com/wiki/9/01f711493b5a02f24b04365ac5d8fd95.html [WeChat - 公众平台OAuth文档]
  * @link https://open.weixin.qq.com/cgi-bin/showdocument?action=dir_list&t=resource/res_list&verify=1&id=open1419316505&token=&lang=zh_CN [网站应用微信登录开发指南]
  */
-class WeChatService extends AbstractService implements ProviderInterface
+class WeChatProvider extends AbstractProvider implements ProviderInterface
 {
     /**
      * The base url of WeChat API.
@@ -82,6 +82,9 @@ class WeChatService extends AbstractService implements ProviderInterface
      */
     protected function getTokenUrl()
     {
+        if ($this->isOpenPlatform()) {
+            return $this->baseUrl . '/oauth2/component/access_token';
+        }
         return $this->baseUrl . '/oauth2/access_token';
     }
 
@@ -130,12 +133,22 @@ class WeChatService extends AbstractService implements ProviderInterface
      */
     protected function getTokenFields($code)
     {
-        return [
+        $base = [
             'appid' => $this->clientId,
-            'secret' => $this->clientSecret,
             'code' => $code,
-            'grant_type' => 'authorization_code',
+            'grant_type' => 'authorization_code'
         ];
+
+        if ($this->isOpenPlatform()) {
+            return array_merge($base, [
+                'component_appid' => $this->config->get('wechat.open_platform.app_id'),
+                'component_access_token' => $this->config->get('wechat.open_platform.access_token')
+            ]);
+        }
+
+        return array_merge($base, [
+            'secret' => $this->clientSecret,
+        ]);
     }
 
     /**
@@ -151,11 +164,13 @@ class WeChatService extends AbstractService implements ProviderInterface
     }
 
     /**
-     * {@inheritdoc}.
+     * Detect WeChat open platform.
+     *
+     * @return mixed
      */
-    protected function parseAccessToken($body)
+    protected function isOpenPlatform()
     {
-        return new AccessToken(json_decode($body, true));
+        return $this->config->get('wechat.open_platform');
     }
 
     /**

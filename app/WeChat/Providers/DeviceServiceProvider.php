@@ -1,18 +1,14 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: macro
- * Date: 16-8-26
- * Time: 上午9:24
- */
+namespace WeChat\Providers;
 
-namespace Polymer\Providers;
-
+use WeChat\Utils\WeChat\Device\Device;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
-use Slim\Flash\Messages;
 
-class FlashP implements ServiceProviderInterface
+/**
+ * Class DeviceServiceProvider.
+ */
+class DeviceServiceProvider implements ServiceProviderInterface
 {
     /**
      * Registers services on the given container.
@@ -24,8 +20,8 @@ class FlashP implements ServiceProviderInterface
      */
     public function register(Container $pimple)
     {
-        $pimple['flash'] = function (Container $container) {
-            return new Messages();
+        $pimple['device'] = function ($pimple) {
+            return new Device($pimple['access_token'], $pimple['config']->get('device', []));
         };
     }
 }

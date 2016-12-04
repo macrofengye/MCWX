@@ -27,6 +27,7 @@ class OAuthProvider implements ServiceProviderInterface
             new Socialite(
                 [
                     'wechat' => [
+                        'open_platform' => $pimple['config']['wechat']['open_platform'],
                         'client_id' => $pimple['config']['wechat']['app_id'],
                         'client_secret' => $pimple['config']['wechat']['secret'],
                         'redirect' => $callback,

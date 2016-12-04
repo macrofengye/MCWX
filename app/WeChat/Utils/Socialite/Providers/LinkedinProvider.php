@@ -10,7 +10,7 @@ use WeChat\Utils\Socialite\User;
  *
  * @link https://developer.linkedin.com/docs/oauth2 [Authenticating with OAuth 2.0]
  */
-class LinkedinService extends AbstractService implements ProviderInterface
+class LinkedinProvider extends AbstractProvider implements ProviderInterface
 {
     /**
      * The scopes being requested.

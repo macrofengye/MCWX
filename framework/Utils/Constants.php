@@ -30,20 +30,11 @@ class Constants
     const MEMCACHE = 'memcache';
     const MEMCACHED = 'memcached';
 
-
-    /**
-     * 与获取模型相关
-     */
-    const ENTITY_MODEL = 1;  //实体模型
-    const BUSINESS_MODEL = 2; //业务模型
-
-
     /**
      * 与IP限制相关的常量
      */
     const DENY = 0;
     const ALLOW = 1;
-
 
     /**
      * 模型对象要验证的目标

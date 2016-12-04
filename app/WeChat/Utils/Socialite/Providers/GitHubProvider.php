@@ -7,9 +7,9 @@ use WeChat\Utils\Socialite\ProviderInterface;
 use WeChat\Utils\Socialite\User;
 
 /**
- * Class GitHubService.
+ * Class GitHubProvider.
  */
-class GitHubService extends AbstractService implements ProviderInterface
+class GitHubProvider extends AbstractProvider implements ProviderInterface
 {
     /**
      * The scopes being requested.

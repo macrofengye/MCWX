@@ -7,11 +7,11 @@ use WeChat\Utils\Socialite\ProviderInterface;
 use WeChat\Utils\Socialite\User;
 
 /**
- * Class GoogleService.
+ * Class GoogleProvider.
  *
  * @link https://developers.google.com/identity/protocols/OpenIDConnect [OpenID Connect]
  */
-class GoogleService extends AbstractService implements ProviderInterface
+class GoogleProvider extends AbstractProvider implements ProviderInterface
 {
     /**
      * The separating character for the requested scopes.

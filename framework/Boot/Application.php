@@ -49,7 +49,7 @@ final class Application
             echo \GuzzleHttp\json_encode(['code' => 1000, 'msg' => $e->getMessage(), 'data' => []]);
             return false;
         }
-        if ($this->config('customer')['show_use_memory']) {
+        if ($this->config('customer.show_use_memory')) {
             echo "分配内存量 : " . convert(memory_get_usage(true));
             echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
             echo "内存的峰值 : " . convert(memory_get_peak_usage(true));
@@ -69,7 +69,7 @@ final class Application
             echo \GuzzleHttp\json_encode(['code' => 1000, 'msg' => $e->getMessage(), 'data' => []]);
             return false;
         }
-        if ($this->config('customer')['show_use_memory']) {
+        if ($this->config('customer.show_use_memory')) {
             echo "分配内存量 : " . convert(memory_get_usage(true));
             echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
             echo "内存的峰值 : " . convert(memory_get_peak_usage(true));

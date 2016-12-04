@@ -6,11 +6,11 @@ use WeChat\Utils\Socialite\ProviderInterface;
 use WeChat\Utils\Socialite\User;
 
 /**
- * Class DoubanService.
+ * Class DoubanProvider.
  *
  * @link http://developers.douban.com/wiki/?title=oauth2 [使用 OAuth 2.0 访问豆瓣 API]
  */
-class DoubanService extends AbstractService implements ProviderInterface
+class DoubanProvider extends AbstractProvider implements ProviderInterface
 {
     /**
      * {@inheritdoc}.

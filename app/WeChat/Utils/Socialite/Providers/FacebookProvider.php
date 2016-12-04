@@ -1,7 +1,6 @@
 <?php
 namespace WeChat\Utils\Socialite\Providers;
 
-use WeChat\Utils\Socialite\AccessToken;
 use WeChat\Utils\Socialite\AccessTokenInterface;
 use WeChat\Utils\Socialite\ProviderInterface;
 use WeChat\Utils\Socialite\User;
@@ -11,7 +10,7 @@ use WeChat\Utils\Socialite\User;
  *
  * @link https://developers.facebook.com/docs/graph-api [Facebook - Graph API]
  */
-class FacebookService extends AbstractService implements ProviderInterface
+class FacebookProvider extends AbstractProvider implements ProviderInterface
 {
     /**
      * The base Facebook Graph URL.
@@ -87,7 +86,7 @@ class FacebookService extends AbstractService implements ProviderInterface
     {
         parse_str($body, $token);
 
-        return new AccessToken($token);
+        return parent::parseAccessToken($token);
     }
 
     /**
