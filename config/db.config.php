@@ -27,22 +27,22 @@ $db = [
                     array(
                         'id' => 1,
                         'driver' => 'pdo_mysql',
-                        'host' => '127.0.0.1',
+                        'host' => '10.0.25.2',
                         'user' => 'root',
-                        'password' => 'root',
-                        'dbname' => 'test',
+                        'password' => '111111',
+                        'dbname' => 'xiaofei',
                         'charset' => 'UTF8',
-                        'port' => 3306
+                        'port' => 3308
                     ),
                     array(
                         'id' => 2,
                         'driver' => 'pdo_mysql',
-                        'host' => '127.0.0.1',
+                        'host' => '10.0.25.2',
                         'user' => 'root',
-                        'password' => 'root',
+                        'password' => '111111',
                         'dbname' => 'test',
                         'charset' => 'UTF8',
-                        'port' => 3306
+                        'port' => 3308
                     )
                 ),
                 "useSimpleAnnotationReader" => false,

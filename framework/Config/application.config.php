@@ -91,7 +91,7 @@ $common_config = [
             'callback' => '/home/hello',
         ],
         'aes_key' => 'aaapp00', //微信后台设置的EncodingAESKey
-        'open_platform' => 'linux'
+        'open_platform' => true
     ],
 
     //定义数据缓存的Cache
