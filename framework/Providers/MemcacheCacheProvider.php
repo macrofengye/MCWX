@@ -11,7 +11,7 @@ use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 use Doctrine\Common\Cache\MemcacheCache;
 
-class MemcacheCacheDriverProvider implements ServiceProviderInterface
+class MemcacheCacheProvider implements ServiceProviderInterface
 {
     /**
      * Registers services on the given container.

@@ -11,7 +11,7 @@ namespace Polymer\Providers;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 
-class MemcachedCacheDriverProvider implements ServiceProviderInterface
+class MemcachedCacheProvider implements ServiceProviderInterface
 {
     /**
      * Registers services on the given container.

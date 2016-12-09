@@ -11,7 +11,7 @@ use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 use Doctrine\Common\Cache\RedisCache;
 
-class RedisCacheDriverProvider implements ServiceProviderInterface
+class RedisCacheProvider implements ServiceProviderInterface
 {
     /**
      * Registers services on the given container.
