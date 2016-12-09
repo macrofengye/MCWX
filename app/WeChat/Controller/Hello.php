@@ -2,6 +2,7 @@
 namespace WeChat\Controller;
 
 
+use MComponent\WX\SWA\Test;
 use Polymer\Controller\Controller;
 use Polymer\Utils\CoreUtils;
 use Slim\Http\Request;
@@ -88,7 +89,8 @@ class Hello extends Controller
 
     public function test1(Request $request, Response $response, $args)
     {
-        return $response->withJson(['aaa' => CoreUtils::getContainer('session')->get('name'), $request->getCookieParams()]);
+        $obj = $this->app->component('ABC');
+        print_r($obj);
     }
 
 

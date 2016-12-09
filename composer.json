@@ -47,9 +47,9 @@
   "autoload": {
     "psr-4": {
       "Polymer\\": "framework\\",
+      "MComponent\\": "component\\",
       "Entity\\": "entity\\",
       "Task\\": "task\\",
-      "Wap\\": "app\\Wap\\",
       "WeChat\\": "app\\WeChat\\"
     },
     "files": [
