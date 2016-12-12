@@ -75,5 +75,15 @@ class InitAppProvider implements ServiceProviderInterface
         $pimple['app'] = function (Container $container) {
             return new App($container);
         };
+
+        $pimple['access_token'] = function (Container $container) {
+            $cache = new FilesystemCache(ROOT_PATH . '/component/WX/' . WX_TYPE . '/cache');
+            $container['cache'] = $cache;
+            return new AccessToken(
+                $container['config']['wechat']['app_id'],
+                $container['config']['wechat']['secret'],
+                $cache
+            );
+        };
     }
 }

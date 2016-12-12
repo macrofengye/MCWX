@@ -95,7 +95,7 @@ abstract class AbstractProvider implements ProviderInterface
      * @param string $clientSecret
      * @param string|null $redirectUrl
      */
-    public function __construct(Request $request, $config , $clientId, $clientSecret, $redirectUrl = null)
+    public function __construct(Request $request, $config, $clientId, $clientSecret, $redirectUrl = null)
     {
         $this->request = $request;
         $this->config = $config;
@@ -420,7 +420,7 @@ abstract class AbstractProvider implements ProviderInterface
      */
     protected function getHttpClient()
     {
-        return new Client();
+        return new Client(['verify' => false]);
     }
 
     /**
