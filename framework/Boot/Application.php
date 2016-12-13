@@ -96,6 +96,7 @@ final class Application
         register_shutdown_function('handleShutdown');
         $this->container = new Container();
         $this->container->register(new InitAppProvider());
+        $this->component('config');
         $this->container['application'] = $this;
         static::setInstance($this);
     }
