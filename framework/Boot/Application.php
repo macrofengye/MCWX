@@ -1,13 +1,13 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: Administrator
+ * User: macro chen <macro_fengye@163.com>
  * Date: 2016/9/21
  * Time: 18:02
  */
 
 namespace Polymer\Boot;
 
+use Doctrine\ORM\ORMException;
 use Polymer\Providers\InitAppProvider;
 use Polymer\Utils\Constants;
 use Doctrine\Common\Cache\ArrayCache;
@@ -35,7 +35,7 @@ final class Application
     private $container = NULL;
 
     /**
-     * 引导WEB应用
+     * 启动WEB应用
      *
      * @author macro chen <macro_fengye@163.com>
      */
@@ -50,9 +50,9 @@ final class Application
             return false;
         }
         if ($this->config('customer.show_use_memory')) {
-            echo "分配内存量 : " . convert(memory_get_usage(true));
-            echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
-            echo "内存的峰值 : " . convert(memory_get_peak_usage(true));
+            echo '分配内存量 : ' . convert(memory_get_usage(true));
+            echo '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+            echo '内存的峰值 : ' . convert(memory_get_peak_usage(true));
         }
     }
 
@@ -70,9 +70,9 @@ final class Application
             return false;
         }
         if ($this->config('customer.show_use_memory')) {
-            echo "分配内存量 : " . convert(memory_get_usage(true));
-            echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
-            echo "内存的峰值 : " . convert(memory_get_peak_usage(true));
+            echo '分配内存量 : ' . convert(memory_get_usage(true));
+            echo '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+            echo '内存的峰值 : ' . convert(memory_get_peak_usage(true));
         }
     }
 
@@ -96,7 +96,6 @@ final class Application
         register_shutdown_function('handleShutdown');
         $this->container = new Container();
         $this->container->register(new InitAppProvider());
-        $this->component('config');
         $this->container['application'] = $this;
         static::setInstance($this);
     }
@@ -105,7 +104,7 @@ final class Application
      * 根据不同的数据库链接类型，实例化不同的数据库链接对象
      *
      * @param $dbName string
-     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\ORMException | \InvalidArgumentException
      * @return EntityManager
      */
     public function db($dbName)
@@ -117,7 +116,7 @@ final class Application
                 $connConfig = $dbConfig[$dbName] ? $dbConfig[$dbName] : [];
                 $useSimpleAnnotationReader = $connConfig['useSimpleAnnotationReader'];
                 unset($connConfig['useSimpleAnnotationReader']);
-                if (APPLICATION_ENV == "development") {
+                if (APPLICATION_ENV == 'development') {
                     $cache = new ArrayCache();
                 } else {
                     $cacheName = $this->config('doctrine.metadata_cache.cache_name');
@@ -127,12 +126,16 @@ final class Application
                 $configuration = Setup::createAnnotationMetadataConfiguration([
                     ROOT_PATH . '/entity/Models',
                 ], APPLICATION_ENV == 'development', ROOT_PATH . '/entity/Proxies/', $cache, $useSimpleAnnotationReader);
-                $entityManager = EntityManager::create($connConfig, $configuration, $this->component("eventManager"));
+                try {
+                    $entityManager = EntityManager::create($connConfig, $configuration, $this->component('eventManager'));
+                } catch (\InvalidArgumentException $e) {
+                    throw $e;
+                }
             }
             $this->container['database_name'] = $dbName;
-            $this->container["entityManager-" . $dbName] = $entityManager;
+            $this->container['entityManager-' . $dbName] = $entityManager;
         }
-        return $this->container["entityManager-" . $dbName];
+        return $this->container['entityManager-' . $dbName];
     }
 
     /**
@@ -156,37 +159,18 @@ final class Application
      *
      * @author macro chen <macro_fengye@163.com>
      * @param array $params
-     * @throws \Exception
+     * @throws \InvalidArgumentException | ORMException
      * @return EventManager
      */
     public function addEvent(array $params = [])
     {
-        $eventManager = $this->component('doctrineEventManager');
-        $reflect = null;
-        foreach ($params as $key => $value) {
-            if (!isset($value['class_name'])) {
-                throw new \Exception("class_name必须设置");
-            }
-            $class_name = $value['class_name'];
-            $data = isset($value['data']) ? $value['data'] : [];
-            if ($reflect == null) {
-                $reflect = new \ReflectionClass(Events::class);
-            }
-            if ($reflect->getConstant($key)) {
-                if (!isset($value['type'])) {
-                    throw new \Exception("type必须设置");
-                }
-                if (!isset($value['dbName'])) {
-                    throw new \Exception("dbName必须设置");
-                }
-                $db_eventManager = $this->db($value['dbName'])->getEventManager();
-                $db_eventManager->addEventListener($key, new $class_name($data));
-                continue;
-            }
-            $eventManager->addEventListener($key, new $class_name($data));
+        try {
+            return $this->addEventOrSubscribe($params, 1);
+        } catch (\InvalidArgumentException $e) {
+            throw $e;
         }
-        return $eventManager;
     }
+
 
     /**
      * 添加自定义订阅器
@@ -198,31 +182,51 @@ final class Application
      */
     public function addSubscriber(array $params = [])
     {
-        $eventManager = $this->component('doctrineEventManager');
+        try {
+            return $this->addEventOrSubscribe($params, 0);
+        } catch (\InvalidArgumentException $e) {
+            throw $e;
+        }
+    }
+
+    /**
+     * 添加事件监听器或者订阅器
+     *
+     * @param array $params
+     * @param int $listener 0 添加事件订阅器 1 添加事件监听器
+     * @return mixed|null
+     * @throws ORMException | \InvalidArgumentException
+     */
+    private function addEventOrSubscribe(array $params, $listener)
+    {
+        $method = $listener ? 'addEventListener' : 'addEventSubscriber';
         $reflect = null;
         foreach ($params as $key => $value) {
             if (!isset($value['class_name'])) {
-                throw new \Exception("class_name必须设置");
+                throw new \InvalidArgumentException('class_name必须设置');
             }
-            $className = $value['class_name'];
-            $data = $value['data'];
-            if ($reflect == null) {
+            $class_name = $value['class_name'];
+            $data = isset($value['data']) ? $value['data'] : [];
+            if ($reflect === null) {
                 $reflect = new \ReflectionClass(Events::class);
             }
             if ($reflect->getConstant($key)) {
                 if (!isset($value['type'])) {
-                    throw new \Exception("type必须设置");
+                    throw new \InvalidArgumentException('type必须设置');
                 }
-                if (!isset($value['dbName'])) {
-                    throw new \Exception("dbName必须设置");
+                if (!isset($value['db_name'])) {
+                    throw new \InvalidArgumentException('db_name必须设置');
                 }
-                $dbEventManager = $this->db($value['dbName'])->getEventManager();
-                $dbEventManager->addEventSubscriber(new $className($data));
-                continue;
+                try {
+                    $listener === 1 ? $this->db($value['db_name'])->getEventManager()->$method($key, new $class_name($data)) : $this->db($value['db_name'])->getEventManager()->$method(new $class_name($data));
+                } catch (ORMException $e) {
+                    throw $e;
+                }
+            } else {
+                $listener === 1 ? $this->component('eventManager')->{$method}($key, new $class_name($data)) : $this->component('eventManager')->{$method}(new $class_name($data));
             }
-            $eventManager->addEventSubscriber(new $className($data));
         }
-        return $eventManager;
+        return $this->component('eventManager');
     }
 
     /**
@@ -237,7 +241,7 @@ final class Application
     public function getCacheInstanceHaveNamespace($cacheType, array $params = [])
     {
         if (!isset($params['resource_id'])) {
-            throw new \Exception('资源ID必须设置', 400);
+            throw new \InvalidArgumentException('资源ID必须设置', 400);
         }
         $resourceId = $params['resource_id'];
         unset($params['resource_id']);
@@ -257,12 +261,10 @@ final class Application
         if (!$this->container->has($componentName)) {
             if (!defined('PROVIDERS_NAMESPACE')) define('PROVIDERS_NAMESPACE', APP_NAME);
             $className = ucfirst(str_replace(' ', '', lcfirst(ucwords(str_replace('_', ' ', $componentName)))));
-            if (class_exists(PROVIDERS_NAMESPACE . '\\Providers\\' . $className . "Provider")) {
-                $className = PROVIDERS_NAMESPACE . '\\Providers\\' . $className . "Provider";
-            } elseif (defined('WX_TYPE') && class_exists('MComponent\\WX\\' . WX_TYPE . '\\Providers\\' . $className . 'Provider')) {
-                $className = 'MComponent\\WX\\' . WX_TYPE . '\\Providers\\' . $className . 'Provider';
-            } else if (class_exists('Polymer\\Providers\\' . $className . "Provider")) {
-                $className = 'Polymer\\Providers\\' . $className . "Provider";
+            if (class_exists(PROVIDERS_NAMESPACE . '\\Providers\\' . $className . 'Provider')) {
+                $className = PROVIDERS_NAMESPACE . '\\Providers\\' . $className . 'Provider';
+            } else if (class_exists('Polymer\\Providers\\' . $className . 'Provider')) {
+                $className = 'Polymer\\Providers\\' . $className . 'Provider';
             }
             if (class_exists($className)) {
                 $this->container->register(new $className(), $param);
@@ -285,7 +287,7 @@ final class Application
      */
     public static function getInstance()
     {
-        if (is_null(static::$instance)) {
+        if (null === static::$instance) {
             static::$instance = new static;
         }
         return static::$instance;
