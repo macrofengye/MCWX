@@ -1,7 +1,6 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: macro
+ * User: macro chen <macro_fengye@163.com>
  * Date: 16-8-26
  * Time: 上午9:24
  */
@@ -13,7 +12,7 @@ use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 use Doctrine\Common\EventManager;
 
-class DoctrineEventManagerProvider implements ServiceProviderInterface
+class EventManagerProvider implements ServiceProviderInterface
 {
     /**
      * Registers services on the given container.
@@ -25,7 +24,7 @@ class DoctrineEventManagerProvider implements ServiceProviderInterface
      */
     public function register(Container $pimple)
     {
-        $pimple["doctrineEventManager"] = function (Container $container) {
+        $pimple["eventManager"] = function (Container $container) {
             return new EventManager();
         };
     }
