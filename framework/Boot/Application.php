@@ -383,7 +383,7 @@ final class Application
      *
      * @param string $serviceName
      * @param array|null $params
-     * @return null | O
+     * @return null | Object
      */
     public function service($serviceName, array $params = null)
     {
