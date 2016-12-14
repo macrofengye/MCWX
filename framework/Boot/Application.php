@@ -17,6 +17,8 @@ use Doctrine\ORM\Events;
 use Monolog\Logger;
 use Doctrine\Common\EventManager;
 use Doctrine\ORM\Tools\Setup;
+use Interop\Container\Exception\ContainerException;
+use Slim\Exception\ContainerValueNotFoundException;
 
 final class Application
 {
@@ -30,14 +32,15 @@ final class Application
     /**
      * 应用的服务容器
      *
-     * @var null
+     * @var Container
      */
-    private $container = NULL;
+    private $container;
 
     /**
      * 启动WEB应用
      *
      * @author macro chen <macro_fengye@163.com>
+     * @return boolean
      */
     public function start()
     {
@@ -54,12 +57,14 @@ final class Application
             echo '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
             echo '内存的峰值 : ' . convert(memory_get_peak_usage(true));
         }
+        return true;
     }
 
     /**
      * 启动控制台，包括单元测试及其他的控制台程序(定时任务等...)
      *
      * @author macro chen <macro_fengye@163.com>
+     * @return boolean
      */
     public function startConsole()
     {
@@ -74,6 +79,7 @@ final class Application
             echo '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
             echo '内存的峰值 : ' . convert(memory_get_peak_usage(true));
         }
+        return true;
     }
 
 
@@ -84,7 +90,7 @@ final class Application
      */
     private function initEnvironment()
     {
-        if (APPLICATION_ENV == 'production') {
+        if (APPLICATION_ENV === 'production') {
             ini_set('display_errors', 'off');
             error_reporting(0);
         } else {
@@ -111,13 +117,13 @@ final class Application
     public function db($dbName)
     {
         if (!$this->component('entityManager-' . $dbName)) {
-            $dbConfig = $this->config('db')[APPLICATION_ENV];
+            $dbConfig = $this->config('db' . APPLICATION_ENV);
             $entityManager = NULL;
             if (isset($dbConfig[$dbName]) && $dbConfig[$dbName]) {
-                $connConfig = $dbConfig[$dbName] ? $dbConfig[$dbName] : [];
+                $connConfig = $dbConfig[$dbName] ?: [];
                 $useSimpleAnnotationReader = $connConfig['useSimpleAnnotationReader'];
                 unset($connConfig['useSimpleAnnotationReader']);
-                if (APPLICATION_ENV == 'development') {
+                if (APPLICATION_ENV === 'development') {
                     $cache = new ArrayCache();
                 } else {
                     $cacheName = $this->config('doctrine.metadata_cache.cache_name');
@@ -126,7 +132,7 @@ final class Application
                 }
                 $configuration = Setup::createAnnotationMetadataConfiguration([
                     ROOT_PATH . '/entity/Models',
-                ], APPLICATION_ENV == 'development', ROOT_PATH . '/entity/Proxies/', $cache, $useSimpleAnnotationReader);
+                ], APPLICATION_ENV === 'development', ROOT_PATH . '/entity/Proxies/', $cache, $useSimpleAnnotationReader);
                 try {
                     $entityManager = EntityManager::create($connConfig, $configuration, $this->component('eventManager'));
                 } catch (\InvalidArgumentException $e) {
@@ -257,10 +263,10 @@ final class Application
      * @param array $param
      * @return mixed|null
      */
-    public function component($componentName, $param = [])
+    public function component($componentName, array $param = [])
     {
         if (!$this->container->has($componentName)) {
-            if (!defined('PROVIDERS_NAMESPACE')) define('PROVIDERS_NAMESPACE', APP_NAME);
+            !defined('PROVIDERS_NAMESPACE') && define('PROVIDERS_NAMESPACE', APP_NAME);
             $className = ucfirst(str_replace(' ', '', lcfirst(ucwords(str_replace('_', ' ', $componentName)))));
             if (class_exists(PROVIDERS_NAMESPACE . '\\Providers\\' . $className . 'Provider')) {
                 $className = PROVIDERS_NAMESPACE . '\\Providers\\' . $className . 'Provider';
@@ -275,12 +281,18 @@ final class Application
                 return null;
             }
         }
-        $cacheObj = $this->container->get($componentName);
-        if ($componentName === Constants::REDIS) {
-            $database = (isset($param['database']) && $param['database']) ? $param['database'] : 0;
-            $cacheObj->select($database);
+        try {
+            $cacheObj = $this->container->get($componentName);
+            if ($componentName === Constants::REDIS) {
+                $database = (isset($param['database']) && $param['database']) ? $param['database'] : 0;
+                $cacheObj->select($database);
+            }
+            return $cacheObj;
+        } catch (ContainerValueNotFoundException $e) {
+            return null;
+        } catch (ContainerException $e) {
+            return null;
         }
-        return $cacheObj;
     }
 
     /**
@@ -310,14 +322,14 @@ final class Application
 
     /**
      * 获取业务模型实例
-     * @param $modelName  模型的名字
+     * @param string $modelName 模型名字
      * @param array $parameters 实例化时需要的参数
      * @param string $path 附加路径
      * @return mixed
      */
     public function model($modelName, array $parameters = [], $path = '')
     {
-        if (!defined('BUSINESS_MODEL_NAMESPACE')) define('BUSINESS_MODEL_NAMESPACE', APP_NAME);
+        !defined('BUSINESS_MODEL_NAMESPACE') && define('BUSINESS_MODEL_NAMESPACE', APP_NAME);
         $className = ucfirst(str_replace(' ', '', lcfirst(ucwords(str_replace('_', ' ', $modelName)))));
         $className = BUSINESS_MODEL_NAMESPACE . '\\Models\\' . ($path ? ucfirst($path) . '\\' : '') . ucfirst($className) . 'Model';
         if (class_exists($className)) {
@@ -333,7 +345,7 @@ final class Application
      */
     public function entity($tableName)
     {
-        if (!defined('ENTITY_NAMESPACE')) define('ENTITY_NAMESPACE', 'Entity\\Models');
+        !defined('ENTITY_NAMESPACE') && define('ENTITY_NAMESPACE', 'Entity\\Models');
         $className = ucfirst(str_replace(' ', '', lcfirst(ucwords(str_replace('_', ' ', $tableName)))));
         $className = ENTITY_NAMESPACE . '\\' . ucfirst($className);
         if (class_exists($className)) {
@@ -351,12 +363,18 @@ final class Application
      */
     public function repository($entityName, $db)
     {
-        if (!defined('REPOSITORIES_NAMESPACE')) define('REPOSITORIES_NAMESPACE', 'Entity\\Repositories');
-        if (!defined('ENTITY_NAMESPACE')) define('ENTITY_NAMESPACE', 'Entity\\Models');
+        !defined('REPOSITORIES_NAMESPACE') && define('REPOSITORIES_NAMESPACE', 'Entity\\Repositories');
+        !defined('ENTITY_NAMESPACE') && define('ENTITY_NAMESPACE', 'Entity\\Models');
         $className = ucfirst(str_replace(' ', '', lcfirst(ucwords(str_replace('_', ' ', $entityName)))));
         $repositoryClassName = REPOSITORIES_NAMESPACE . '\\' . ucfirst($className) . 'Repository';
         if (class_exists($repositoryClassName)) {
-            return $this->db($db)->getRepository(ENTITY_NAMESPACE . '\\' . ucfirst($className));
+            try {
+                return $this->db($db)->getRepository(ENTITY_NAMESPACE . '\\' . ucfirst($className));
+            } catch (ORMException $e) {
+                return null;
+            } catch (\InvalidArgumentException $e) {
+                return null;
+            }
         }
         return null;
     }
@@ -366,11 +384,11 @@ final class Application
      *
      * @param string $serviceName
      * @param array|null $params
-     * @return null | object
+     * @return null | O
      */
     public function service($serviceName, array $params = null)
     {
-        if (!defined('SERVICES_NAMESPACE')) define('SERVICES_NAMESPACE', APP_NAME . '\\Services');
+        !defined('SERVICES_NAMESPACE') && define('SERVICES_NAMESPACE', APP_NAME . '\\Services');
         $className = ucfirst(str_replace(' ', '', lcfirst(ucwords(str_replace('_', ' ', $serviceName)))));
         $className = SERVICES_NAMESPACE . '\\' . ucfirst($className) . 'Service';
         if (class_exists($className)) {
