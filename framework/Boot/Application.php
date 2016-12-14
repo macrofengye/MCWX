@@ -117,8 +117,7 @@ final class Application
     public function db($dbName)
     {
         if (!$this->component('entityManager-' . $dbName)) {
-            $dbConfig = $this->config('db' . APPLICATION_ENV);
-            $entityManager = NULL;
+            $dbConfig = $this->config('db.' . APPLICATION_ENV);
             if (isset($dbConfig[$dbName]) && $dbConfig[$dbName]) {
                 $connConfig = $dbConfig[$dbName] ?: [];
                 $useSimpleAnnotationReader = $connConfig['useSimpleAnnotationReader'];
@@ -135,12 +134,12 @@ final class Application
                 ], APPLICATION_ENV === 'development', ROOT_PATH . '/entity/Proxies/', $cache, $useSimpleAnnotationReader);
                 try {
                     $entityManager = EntityManager::create($connConfig, $configuration, $this->component('eventManager'));
+                    $this->container['database_name'] = $dbName;
+                    $this->container['entityManager-' . $dbName] = $entityManager;
                 } catch (\InvalidArgumentException $e) {
-                    throw $e;
+                    return null;
                 }
             }
-            $this->container['database_name'] = $dbName;
-            $this->container['entityManager-' . $dbName] = $entityManager;
         }
         return $this->container['entityManager-' . $dbName];
     }
