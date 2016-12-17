@@ -90,17 +90,18 @@ class Http
      *
      * @param string $url
      * @param string|array $options
+     * @param array $queries
      * @param int $encodeOption
      *
      * @return ResponseInterface
      *
      * @throws HttpException
      */
-    public function json($url, $options = [], $encodeOption = JSON_UNESCAPED_UNICODE)
+    public function json($url, $options = [], $encodeOption = JSON_UNESCAPED_UNICODE, $queries = [])
     {
         is_array($options) && $options = json_encode($options, $encodeOption);
 
-        return $this->request($url, 'POST', ['verify' => false, 'body' => $options, 'headers' => ['content-type' => 'application/json']]);
+        return $this->request($url, 'POST', ['query' => $queries, 'verify' => false, 'body' => $options, 'headers' => ['content-type' => 'application/json']]);
     }
 
     /**

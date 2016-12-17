@@ -11,7 +11,7 @@ use JsonSerializable;
  */
 class AccessToken implements AccessTokenInterface, ArrayAccess, JsonSerializable
 {
-    use AttributeTrait;
+    use HasAttributes;
 
     /**
      * AccessToken constructor.

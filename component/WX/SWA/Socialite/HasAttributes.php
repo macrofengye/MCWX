@@ -4,12 +4,12 @@ namespace MComponent\WX\SWA\Socialite;
 /**
  * Trait AttributeTrait.
  */
-trait AttributeTrait
+trait HasAttributes
 {
     /**
      * @var array
      */
-    protected $attributes;
+    protected $attributes = [];
 
     /**
      * Return the attributes.
