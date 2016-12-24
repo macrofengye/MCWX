@@ -110,7 +110,7 @@ class Http
      * @param string $url
      * @param array $files
      * @param array $form
-     *
+     * @param array $queries
      * @return ResponseInterface
      *
      * @throws HttpException
