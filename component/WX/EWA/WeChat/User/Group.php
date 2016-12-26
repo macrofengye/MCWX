@@ -28,9 +28,9 @@ class Group
      * @param string $appId
      * @param string $appSecret
      */
-    public function __construct($appId, $appSecret)
+    public function __construct()
     {
-        $this->http = new Http(new AccessToken($appId, $appSecret));
+        $this->http = new Http();
     }
 
     /**

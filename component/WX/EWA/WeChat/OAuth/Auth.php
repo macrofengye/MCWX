@@ -57,7 +57,7 @@ class Auth
         $this->appId = $appId;
         $this->appSecret = $appSecret;
         $this->http = new Http(new AccessToken($appId, $appSecret));
-        $this->input = new Input();
+        $this->input = new Bag(app()->component('request')->getParams());
     }
 
     /**
@@ -72,7 +72,6 @@ class Auth
     public function url($to = null, $scope = 'snsapi_base', $state = 'STATE')
     {
         $to !== null || $to = Url::current();
-
         $params = [
             'appid' => $this->appId,
             'redirect_uri' => $to,
@@ -80,7 +79,6 @@ class Auth
             'scope' => $scope,
             'state' => $state,
         ];
-
         return self::API_URL . '?' . http_build_query($params) . '#wechat_redirect';
     }
 
@@ -95,7 +93,6 @@ class Auth
     {
         $state = $state ? $state : md5(time());
         header('Location:' . $this->url($to, $scope, $state));
-
         exit;
     }
 
@@ -122,7 +119,6 @@ class Auth
         if (!$this->input->get('state') && !$this->input->get('code')) {
             $this->redirect($to, $scope, $state);
         }
-
         return $this->user();
     }
 
@@ -138,7 +134,6 @@ class Auth
             'userid' => $userId,
             'agentid' => $agentId,
         ];
-
         return $this->http->jsonPost(self::API_TO_OPENID, $params);
     }
 }

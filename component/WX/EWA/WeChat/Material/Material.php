@@ -66,13 +66,10 @@ class Material
 
     /**
      * constructor.
-     *
-     * @param string $appId
-     * @param string $appSecret
      */
-    public function __construct($appId, $appSecret)
+    public function __construct()
     {
-        $this->http = new Http(new AccessToken($appId, $appSecret));
+        $this->http = new Http();
     }
 
     /**
@@ -83,9 +80,7 @@ class Material
     public function forever($agentId)
     {
         $this->forever = true;
-
         $this->agentId = $agentId;
-
         return $this;
     }
 
@@ -104,29 +99,20 @@ class Material
         if (!file_exists($path) || !is_readable($path)) {
             throw new Exception("文件不存在或不可读 '$path'");
         }
-
         if (!in_array($type, $this->allowTypes, true)) {
             throw new Exception("错误的媒体类型 '{$type}'");
         }
-
         $queries = ['type' => $type, 'agentid' => $agentId];
-
         $options = [
             'files' => ['media' => $path],
         ];
-
         $url = $this->getUrl($type, $queries);
-
         $response = $this->http->post($url, $params, $options);
-
         $this->forever = false;
-
         if ($type == 'image') {
             return $response;
         }
-
         $response = Arr::only($response, ['media_id', 'thumb_media_id']);
-
         return array_pop($response);
     }
 
@@ -140,9 +126,7 @@ class Material
     public function news($agentId, array $articles)
     {
         $params = array('agentid' => $agentId, 'mpnews' => array('articles' => $articles));
-
         $response = $this->http->jsonPost(self::API_FOREVER_NEWS_UPLOAD, $params);
-
         return $response['media_id'];
     }
 
@@ -162,7 +146,6 @@ class Material
             'agentid' => $agentId,
             'mpnews' => array('articles' => $articles),
         );
-
         return $this->http->jsonPost(self::API_FOREVER_NEWS_UPDATE, $params);
     }
 
@@ -171,7 +154,7 @@ class Material
      *
      * @param string $mediaId
      *
-     * @return bool
+     * @return mixed
      */
     public function delete($mediaId)
     {
@@ -189,9 +172,7 @@ class Material
     public function stats($type = null, $agentId)
     {
         $response = $this->http->get(self::API_FOREVER_COUNT . '?agentid=' . $agentId);
-
         $response = new Bag($response);
-
         return $type ? $response->get($type) : $response;
     }
 
@@ -226,7 +207,6 @@ class Material
             'count' => min(20, $count),
             'agentid' => $agentId,
         );
-
         return $this->http->jsonPost(self::API_FOREVER_LIST, $params);
     }
 
@@ -240,9 +220,7 @@ class Material
         $options = array(
             'files' => array('media' => $filename),
         );
-
         $response = $this->http->jsonPost(self::API_UPLOAD_IMG, $params = array(), $options);
-
         return $response['url'];
     }
 
@@ -287,7 +265,6 @@ class Material
             $method,
             array_shift($args),
         );
-
         return call_user_func_array(array(__CLASS__, 'upload'), $args);
     }
 
@@ -306,7 +283,6 @@ class Material
         } else {
             $api = $this->forever ? self::API_FOREVER_UPLOAD : self::API_TEMPORARY_UPLOAD;
         }
-
         return $api . '?' . http_build_query($queries);
     }
 }

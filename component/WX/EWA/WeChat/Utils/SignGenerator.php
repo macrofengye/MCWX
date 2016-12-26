@@ -5,7 +5,7 @@ namespace MComponent\WX\EWA\WeChat\Utils;
 /**
  * 签名生成器（专门用于生成微信各种签名）
  */
-class SignGenerator extends MagicAttributes
+class SignGenerator extends Attributes
 {
     /**
      * 加密类型.

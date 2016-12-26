@@ -35,7 +35,6 @@ class Video extends AbstractMessage
     public function media($mediaId)
     {
         $this->setAttribute('media_id', $mediaId);
-
         return $this;
     }
 
@@ -49,7 +48,6 @@ class Video extends AbstractMessage
     public function thumb($mediaId)
     {
         $this->setAttribute('thumb_media_id', $mediaId);
-
         return $this;
     }
 
@@ -84,7 +82,6 @@ class Video extends AbstractMessage
                 'Description' => $this->description,
             ],
         ];
-
         return $response;
     }
 }

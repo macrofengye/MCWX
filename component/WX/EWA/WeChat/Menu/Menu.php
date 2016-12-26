@@ -4,6 +4,7 @@ namespace MComponent\WX\EWA\WeChat\Menu;
 
 use Closure;
 use MComponent\WX\EWA\WeChat\Core\AccessToken;
+use MComponent\WX\EWA\WeChat\Core\Exception;
 use MComponent\WX\EWA\WeChat\Core\Http;
 
 /**
@@ -26,14 +27,11 @@ class Menu
     protected $http;
 
     /**
-     * constructor
-     *
-     * @param string $appId
-     * @param string $appSecret
+     * constructor.
      */
-    public function __construct($appId, $appSecret)
+    public function __construct()
     {
-        $this->http = new Http(new AccessToken($appId, $appSecret));
+        $this->http = new Http();
     }
 
     /**
@@ -46,9 +44,7 @@ class Menu
     public function set($agentId, $menus)
     {
         $menus = $this->extractMenus($menus);
-
         $this->http->jsonPost(self::API_CREATE . '?agentid=' . $agentId, array('button' => $menus));
-
         return true;
     }
 
@@ -60,7 +56,6 @@ class Menu
     public function get($agentId)
     {
         $menus = $this->http->get(self::API_GET . '?agentid=' . $agentId);
-
         return empty($menus['menu']['button']) ? array() : $menus['menu']['button'];
     }
 
@@ -72,7 +67,6 @@ class Menu
     public function delete($agentId)
     {
         $this->http->get(self::API_DELETE . '?agentid=' . $agentId);
-
         return true;
     }
 
@@ -80,6 +74,7 @@ class Menu
      * 转menu为数组
      *
      * @param mixed $menus
+     * @throws Exception
      * @return array
      */
     protected function extractMenus($menus)
@@ -87,19 +82,15 @@ class Menu
         if ($menus instanceof Closure) {
             $menus = $menus($this);
         }
-
         if (!is_array($menus)) {
             throw new Exception('子菜单必须是数组或者匿名函数返回数组', 1);
         }
-
         foreach ($menus as $key => $menu) {
             $menus[$key] = $menu->toArray();
-
             if ($menu->sub_button) {
                 $menus[$key]['sub_button'] = $this->extractMenus($menu->sub_button);
             }
         }
-
         return $menus;
     }
 }

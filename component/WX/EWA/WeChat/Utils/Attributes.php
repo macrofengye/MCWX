@@ -2,12 +2,10 @@
 
 namespace MComponent\WX\EWA\WeChat\Utils;
 
-use InvalidArgumentException;
-
 /**
  * 用于操作通用数组式属性的工具类.
  */
-abstract class MagicAttributes
+abstract class Attributes
 {
     /**
      * 允许设置的属性名称.
@@ -28,6 +26,7 @@ abstract class MagicAttributes
      *
      * @param string $attribute
      * @param string $value
+     * @return mixed
      */
     public function setAttribute($attribute, $value)
     {
@@ -40,7 +39,7 @@ abstract class MagicAttributes
      * @param string $attribute
      * @param mixed $value
      *
-     * @return MagicAttributes
+     * @return Attributes
      */
     public function with($attribute, $value)
     {
@@ -51,7 +50,6 @@ abstract class MagicAttributes
          }*/
 
         $this->attributes[$attribute] = $value;
-
         return $this;
     }
 
@@ -84,7 +82,7 @@ abstract class MagicAttributes
      * @param string $method
      * @param array $args
      *
-     * @return MagicAttributes
+     * @return Attributes
      */
     public function __call($method, $args)
     {
@@ -99,6 +97,7 @@ abstract class MagicAttributes
      * 魔术读取.
      *
      * @param string $property
+     * @return mixed
      */
     public function __get($property)
     {
@@ -110,6 +109,7 @@ abstract class MagicAttributes
      *
      * @param string $property
      * @param mixed $value
+     * @return mixed
      */
     public function __set($property, $value)
     {
@@ -127,15 +127,12 @@ abstract class MagicAttributes
     protected function snake($value, $delimiter = '_')
     {
         $key = $value . $delimiter;
-
         if (isset(static::$snakeCache[$key])) {
             return static::$snakeCache[$key];
         }
-
         if (!ctype_lower($value)) {
             $value = strtolower(preg_replace('/(.)(?=[A-Z])/', '$1' . $delimiter, $value));
         }
-
         return static::$snakeCache[$key] = $value;
     }
 }

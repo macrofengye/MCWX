@@ -11,12 +11,7 @@ use Serializable;
 /**
  * 工具类，实现一些便捷访问接口如：数组式访问.
  */
-class Bag implements
-    ArrayAccess,
-    Countable,
-    IteratorAggregate,
-    Serializable
-    // , JsonSerializable
+class Bag implements ArrayAccess, Countable, IteratorAggregate, Serializable // , JsonSerializable
 {
     /**
      * Data.
@@ -57,7 +52,6 @@ class Bag implements
         foreach ($data as $key => $value) {
             $this->set($key, $value);
         }
-
         return $this->all();
     }
 
@@ -91,9 +85,7 @@ class Bag implements
     public function last()
     {
         $end = end($this->data);
-
         reset($this->data);
-
         return $end;
     }
 

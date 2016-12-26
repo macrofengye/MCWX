@@ -26,7 +26,6 @@ class News extends AbstractMessage
     public function item(NewsItem $item)
     {
         array_push($this->items, $item);
-
         return $this;
     }
 
@@ -42,9 +41,7 @@ class News extends AbstractMessage
         if ($items instanceof Closure) {
             $items = $items();
         }
-
         array_map(array($this, 'item'), (array)$items);
-
         return $this;
     }
 
@@ -54,7 +51,6 @@ class News extends AbstractMessage
     public function toStaff()
     {
         $articles = array();
-
         foreach ($this->items as $item) {
             $articles[] = [
                 'title' => $item->title,
@@ -63,7 +59,6 @@ class News extends AbstractMessage
                 'picurl' => $item->pic_url,
             ];
         }
-
         return array('news' => array('articles' => $articles));
     }
 
@@ -73,7 +68,6 @@ class News extends AbstractMessage
     public function toReply()
     {
         $articles = [];
-
         foreach ($this->items as $item) {
             $articles[] = [
                 'Title' => $item->title,
@@ -82,7 +76,6 @@ class News extends AbstractMessage
                 'PicUrl' => $item->pic_url,
             ];
         }
-
         return [
             'ArticleCount' => count($articles),
             'Articles' => $articles,

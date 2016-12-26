@@ -31,14 +31,12 @@ class Http extends HttpClient
     protected $cache;
 
     /**
-     * constructor
-     *
-     * @param AccessToken $token
+     * constructor.
      */
-    public function __construct(AccessToken $token = null)
+    public function __construct()
     {
-        $this->token = $token;
-        parent::__construct();
+        $this->token = app()->component('access_token');
+        $this->curl = curl_init();
     }
 
     /**

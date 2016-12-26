@@ -2,7 +2,8 @@
 
 namespace MComponent\WX\EWA\WeChat\Messages;
 
-use MComponent\WX\EWA\WeChat\Utils\MagicAttributes;
+use MComponent\WX\EWA\WeChat\Core\Exception;
+use MComponent\WX\EWA\WeChat\Utils\Attributes;
 use MComponent\WX\EWA\WeChat\Utils\XML;
 
 /**
@@ -19,9 +20,8 @@ use MComponent\WX\EWA\WeChat\Utils\XML;
  * @method array       toReply()
  * @method array       toBroadcast()
  */
-abstract class AbstractMessage extends MagicAttributes
+abstract class AbstractMessage extends Attributes
 {
-
     /**
      * 允许的属性
      *
@@ -52,7 +52,6 @@ abstract class AbstractMessage extends MagicAttributes
         if (!method_exists($this, 'toStaff')) {
             throw new \Exception(__CLASS__ . '未实现此方法：toStaff()');
         }
-
         $base = [
             'touser' => $this->to,
             'msgtype' => $this->getDefaultMessageType(),
@@ -65,15 +64,14 @@ abstract class AbstractMessage extends MagicAttributes
 
     /**
      * 生成用于回复的数据
-     * @throws
+     * @throws Exception
      * @return mixed
      */
     public function buildForReply()
     {
         if (!method_exists($this, 'toReply')) {
-            throw new \Exception(__CLASS__ . '未实现此方法：toReply()');
+            throw new Exception(__CLASS__ . '未实现此方法：toReply()');
         }
-
         $base = [
             'ToUserName' => $this->to,
             'FromUserName' => $this->from,
@@ -86,13 +84,13 @@ abstract class AbstractMessage extends MagicAttributes
 
     /**
      * 生成通过群发的数据
-     * @throws
+     * @throws Exception
      * @return array
      */
     public function buildForBroadcast()
     {
         if (!method_exists($this, 'toStaff')) {
-            throw new \Exception(__CLASS__ . '未实现此方法：toStaff()');
+            throw new Exception(__CLASS__ . '未实现此方法：toStaff()');
         }
         $group = [
             'touser' => $this->touser,
@@ -104,7 +102,6 @@ abstract class AbstractMessage extends MagicAttributes
             'safe' => 0,
             'msgtype' => $this->getDefaultMessageType(),
         ];
-
         return array_merge($group, $this->toStaff(), $base);
     }
 
@@ -112,22 +109,18 @@ abstract class AbstractMessage extends MagicAttributes
      * 生成通过群发预览的数据
      *
      * @param $type
-     *
+     * @throws Exception
      * @return array
-     *
-     * @throws \Exception
      */
     public function buildForBroadcastPreview($type)
     {
         if (!method_exists($this, 'toStaff')) {
-            throw new \Exception(__CLASS__ . '未实现此方法：toStaff()');
+            throw new Exception(__CLASS__ . '未实现此方法：toStaff()');
         }
-
         $base = [
             $type => $this->to,
             'msgtype' => $this->getDefaultMessageType(),
         ];
-
         return array_merge($base, $this->toStaff());
     }
 
@@ -139,7 +132,6 @@ abstract class AbstractMessage extends MagicAttributes
     public function getDefaultMessageType()
     {
         $class = explode('\\', get_class($this));
-
         return strtolower(array_pop($class));
     }
 
@@ -154,7 +146,6 @@ abstract class AbstractMessage extends MagicAttributes
     protected function validate($attribute, $value)
     {
         $properties = array_merge($this->baseProperties, $this->properties);
-
         return in_array($attribute, $properties, true);
     }
 }

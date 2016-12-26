@@ -26,8 +26,7 @@ class MaterialProvider implements ServiceProviderInterface
     public function register(Container $pimple)
     {
         $pimple['material'] = function ($pimple) {
-            $cfg = $pimple['config']['wechat'];
-            return new Material($cfg['app_id'], $cfg['app_secret']);
+            return new Material();
         };
 
         /*$temporary = function ($pimple) {

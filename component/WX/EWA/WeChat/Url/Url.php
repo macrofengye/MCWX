@@ -1,6 +1,7 @@
 <?php
 
 namespace MComponent\WX\EWA\WeChat\Url;
+
 use MComponent\WX\EWA\WeChat\Core\AccessToken;
 use MComponent\WX\EWA\WeChat\Core\Http;
 
@@ -42,9 +43,7 @@ class Url
             'action' => 'long2short',
             'long_url' => $url,
         );
-
         $response = $this->http->jsonPost(self::API_SHORT_URL, $params);
-
         return $response['short_url'];
     }
 
@@ -55,16 +54,13 @@ class Url
      */
     public static function current()
     {
-        $protocol = (!empty($_SERVER['HTTPS'])
-            && $_SERVER['HTTPS'] !== 'off'
-            || $_SERVER['SERVER_PORT'] === 443) ? 'https://' : 'http://';
-
-        if (isset($_SERVER['HTTP_X_FORWARDED_HOST'])) {
-            $host = $_SERVER['HTTP_X_FORWARDED_HOST'];
+        $request = app()->component('request');
+        $protocol = (!empty($request->getServerParam('HTTPS')) && $request->getServerParam('HTTPS') !== 'off' || $request->getServerParam('SERVER_PORT') === 443) ? 'https://' : 'http://';
+        if ($request->getServerParam('HTTP_X_FORWARDED_HOST')) {
+            $host = $request->getServerParam('HTTP_X_FORWARDED_HOST');
         } else {
-            $host = $_SERVER['HTTP_HOST'];
+            $host = $request->getServerParam('HTTP_HOST');
         }
-
-        return $protocol . $host . $_SERVER['REQUEST_URI'];
+        return $protocol . $host . $request->getServerParam('REQUEST_URI');
     }
 }

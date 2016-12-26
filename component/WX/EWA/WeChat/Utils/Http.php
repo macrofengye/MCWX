@@ -26,14 +26,6 @@ class Http
     protected $curl;
 
     /**
-     * Create the cURL resource.
-     */
-    public function __construct()
-    {
-        $this->curl = curl_init();
-    }
-
-    /**
      * Clean up the cURL handle.
      */
     public function __destruct()
@@ -64,6 +56,7 @@ class Http
      */
     public function get($url, $params = array(), $options = array())
     {
+        logger(__FUNCTION__ , [$url] , APP_PATH.'/log/yyyyyyy.log');
         return $this->request($url, self::GET, $params, $options);
     }
 

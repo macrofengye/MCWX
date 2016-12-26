@@ -29,11 +29,9 @@ class Message
     public static function make($type = self::TEXT)
     {
         if (!defined(__CLASS__ . '::' . strtoupper($type))) {
-            throw new InvalidArgumentException("Error Message Type '{$type}'");
+            throw new \InvalidArgumentException("Error Message Type '{$type}'");
         }
-
         $message = "MComponent\\WX\\EWA\\WeChat\\Messages\\" . str_replace(' ', '', ucwords(str_replace(array('-', '_'), ' ', $type)));
-
         return new $message();
     }
 

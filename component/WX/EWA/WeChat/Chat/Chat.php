@@ -2,6 +2,8 @@
 
 namespace MComponent\WX\EWA\WeChat\Chat;
 
+use MComponent\WX\EWA\WeChat\Core\Http;
+
 /**
  * 会话
  */
@@ -24,13 +26,10 @@ class Chat
 
     /**
      * constructor
-     *
-     * @param string $appId
-     * @param string $appSecret
      */
-    public function __construct($appId, $appSecret)
+    public function __construct()
     {
-        $this->http = new Http(new AccessToken($appId, $appSecret));
+        $this->http = new Http();
     }
 
     /**
@@ -49,21 +48,18 @@ class Chat
             'owner' => $owner,
             'userlist' => $userlist
         );
-
         $response = $this->http->jsonPost(self::API_CREATE, $params);
-
         return $response;
     }
 
     /**
      * 获取会话
-     * @param  string $chatid 会话id
+     * @param  string $chatId 会话id
      * @return array
      */
-    public function get($chatid)
+    public function get($chatId)
     {
-        $response = $this->http->get(self::API_GET . '?chatid=' . $chatid);
-
+        $response = $this->http->get(self::API_GET . '?chatid=' . $chatId);
         return $response['chat_info'];
     }
 
@@ -92,14 +88,14 @@ class Chat
     /**
      * 退出会话
      *
-     * @param int $id
+     * @param int $chatId
      *
      * @return array
      */
-    public function quit($chatid, $op_user)
+    public function quit($chatId, $op_user)
     {
         $params = array(
-            'chatid' => $chatid,
+            'chatid' => $chatId,
             'op_user' => $op_user
         );
 
@@ -109,14 +105,14 @@ class Chat
     /**
      * 清除会话未读状态
      *
-     * @param  int $id 会话所有者的userid
+     * @param  int $chatId 会话所有者的userid
      * @param  array $chat 会话
      * @return array
      */
-    public function clearnotify($chatid, $chat)
+    public function clearnotify($chatId, $chat)
     {
         $params = array(
-            'chatid' => $chatid,
+            'chatid' => $chatId,
             'chat' => $chat
         );
 
@@ -154,12 +150,11 @@ class Chat
      * @param  array $user_mute_list 成员新消息免打扰参数，数组，最大支持10000个成员
      * @return array
      */
-    public function setmute($user_mute_list)
+    public function setMute($user_mute_list)
     {
         $params = array(
             'user_mute_list' => $user_mute_list,
         );
-
         return $this->http->jsonPost(self::API_SETMUTE, $params);
     }
 }

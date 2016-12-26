@@ -2,6 +2,8 @@
 
 namespace MComponent\WX\EWA\WeChat\Messages;
 
+use MComponent\WX\EWA\WeChat\Core\Exception;
+
 /**
  * 多图文消息
  *
@@ -21,12 +23,11 @@ class MpNews extends AbstractMessage
      *
      * @param string $mediaId
      *
-     * @return Image
+     * @return MpNews
      */
     public function media($mediaId)
     {
         $this->setAttribute('media_id', $mediaId);
-
         return $this;
     }
 
@@ -51,7 +52,7 @@ class MpNews extends AbstractMessage
      */
     public function toReply()
     {
-        throw new \Exception(__CLASS__ . '未实现此方法：toReply()');
+        throw new Exception(__CLASS__ . '未实现此方法：toReply()');
         /*return array(
                 'Image' => array(
                             'MediaId' => $this->media_id,

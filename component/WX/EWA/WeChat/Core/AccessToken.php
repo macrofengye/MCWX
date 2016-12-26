@@ -60,12 +60,13 @@ class AccessToken
      * @param string $appId
      * @param string $appSecret
      */
-    public function __construct($appId, $appSecret)
+    public function __construct($appId, $appSecret, $cache = null)
     {
         $this->appId = $appId;
         $this->appSecret = $appSecret;
         $this->cacheKey = $this->cacheKey . '.' . $appId;
-        $this->cache = new FilesystemCache(ROOT_PATH . '/component/WX/' . WX_TYPE . '/cache');
+        // $this->cache = new FilesystemCache(ROOT_PATH . '/component/WX/' . WX_TYPE . '/cache');
+        $this->cache = $cache;
     }
 
     /**
@@ -79,7 +80,6 @@ class AccessToken
     public function setToken($token, $expires = 7200)
     {
         $this->getCache()->save($this->getCacheKey(), $token, $expires - 1500);
-
         return $this;
     }
 
@@ -114,16 +114,13 @@ class AccessToken
     {
         $cacheKey = $this->getCacheKey();
         $cached = $this->getCache()->fetch($cacheKey);
-
+        logger(__FUNCTION__ , ['cached'=>$cached] , APP_PATH.'/log/accessToken.log');
         if ($forceRefresh || empty($cached)) {
             $token = $this->getTokenFromServer();
-
-            // XXX: T_T... 7200 - 1500
             $this->getCache()->save($cacheKey, $token[$this->tokenJsonKey], $token['expires_in'] - 1500);
-
+            logger(__FUNCTION__ , ['token'=>$token] , APP_PATH.'/log/accessToken.log');
             return $token[$this->tokenJsonKey];
         }
-
         return $cached;
     }
 

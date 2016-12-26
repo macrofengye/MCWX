@@ -2,7 +2,8 @@
 
 namespace MComponent\WX\EWA\WeChat\Menu;
 
-use MComponent\WX\EWA\WeChat\Utils\MagicAttributes;
+use MComponent\WX\EWA\WeChat\Core\Exception;
+use MComponent\WX\EWA\WeChat\Utils\Attributes;
 use Closure;
 
 /**
@@ -10,7 +11,7 @@ use Closure;
  *
  * @property array $sub_button
  */
-class MenuItem extends MagicAttributes
+class MenuItem extends Attributes
 {
     /**
      * 实例化菜单
@@ -22,9 +23,7 @@ class MenuItem extends MagicAttributes
     public function __construct($name, $type = null, $property = null)
     {
         $this->with('name', $name);
-
         $type !== null && $this->with('type', $type);
-
         if ($property !== null) {
             switch ($type) {
                 case 'view':
@@ -46,7 +45,7 @@ class MenuItem extends MagicAttributes
      * 设置子菜单
      *
      * @param array $buttons
-     *
+     * @throws Exception
      * @return MenuItem
      */
     public function buttons($buttons)
@@ -54,13 +53,10 @@ class MenuItem extends MagicAttributes
         if ($buttons instanceof Closure) {
             $buttons = $buttons($this);
         }
-
         if (!is_array($buttons)) {
             throw new Exception('子菜单必须是数组或者匿名函数返回数组', 1);
         }
-
         $this->with('sub_button', $buttons);
-
         return $this;
     }
 
@@ -72,9 +68,7 @@ class MenuItem extends MagicAttributes
     public function button(MenuItem $button)
     {
         $subButtons = $this->sub_button;
-
         $subButtons[] = $button;
-
         $this->with('sub_button', $subButtons);
     }
 }

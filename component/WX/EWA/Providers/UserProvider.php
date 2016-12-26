@@ -20,18 +20,15 @@ class UserProvider implements ServiceProviderInterface
     public function register(Container $pimple)
     {
         $pimple['user'] = function ($pimple) {
-            $cfg = $pimple['config']['wechat'];
-            return new User($cfg['app_id'], $cfg['app_secret']);
+            return new User();
         };
 
         $group = function ($pimple) {
-            $cfg = $pimple['config']['wechat'];
-            return new Group($cfg['app_id'], $cfg['app_secret']);
+            return new Group();
         };
 
         $tag = function ($pimple) {
-            $cfg = $pimple['config']['wechat'];
-            return new Tag($cfg['app_id'], $cfg['app_secret']);
+            return new Tag();
         };
 
         $pimple['user_group'] = $group;

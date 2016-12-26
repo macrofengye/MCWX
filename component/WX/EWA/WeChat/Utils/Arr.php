@@ -23,7 +23,6 @@ class Arr
         if (is_null(static::get($array, $key))) {
             static::set($array, $key, $value);
         }
-
         return $array;
     }
 
@@ -38,12 +37,10 @@ class Arr
     public static function build($array, Closure $callback)
     {
         $results = array();
-
         foreach ($array as $key => $value) {
             list($innerKey, $innerValue) = call_user_func($callback, $key, $value);
             $results[$innerKey] = $innerValue;
         }
-
         return $results;
     }
 
@@ -73,7 +70,6 @@ class Arr
     public static function dot($array, $prepend = '')
     {
         $results = array();
-
         foreach ($array as $key => $value) {
             if (is_array($value)) {
                 $results = array_merge($results, static::dot($value, $prepend . $key . '.'));
@@ -81,7 +77,6 @@ class Arr
                 $results[$prepend . $key] = $value;
             }
         }
-
         return $results;
     }
 
@@ -109,7 +104,6 @@ class Arr
     public static function fetch($array, $key)
     {
         $results = array();
-
         foreach (explode('.', $key) as $segment) {
             $results = array();
             foreach ($array as $value) {
@@ -118,7 +112,6 @@ class Arr
             }
             $array = array_values($results);
         }
-
         return array_values($results);
     }
 
@@ -138,7 +131,6 @@ class Arr
                 return $value;
             }
         }
-
         return $default;
     }
 
@@ -172,7 +164,6 @@ class Arr
                 $return[] = $x;
             }
         );
-
         return $return;
     }
 
@@ -185,7 +176,6 @@ class Arr
     public static function forget(&$array, $keys)
     {
         $original = &$array;
-
         foreach ((array)$keys as $key) {
             $parts = explode('.', $key);
             while (count($parts) > 1) {
@@ -214,18 +204,15 @@ class Arr
         if (is_null($key)) {
             return $array;
         }
-
         if (isset($array[$key])) {
             return $array[$key];
         }
-
         foreach (explode('.', $key) as $segment) {
             if (!is_array($array) || !array_key_exists($segment, $array)) {
                 return $default;
             }
             $array = $array[$segment];
         }
-
         return $array;
     }
 
@@ -254,7 +241,6 @@ class Arr
     public static function pluck($array, $value, $key = null)
     {
         $results = array();
-
         foreach ($array as $item) {
             $itemValue = is_object($item) ? $item->{$value} : $item[$value];
             // If the key is "null", we will just append the value to the array and keep
@@ -267,7 +253,6 @@ class Arr
                 $results[$itemKey] = $itemValue;
             }
         }
-
         return $results;
     }
 
@@ -284,7 +269,6 @@ class Arr
     {
         $value = static::get($array, $key, $default);
         static::forget($array, $key);
-
         return $value;
     }
 
@@ -304,9 +288,7 @@ class Arr
         if (is_null($key)) {
             return $array = $value;
         }
-
         $keys = explode('.', $key);
-
         while (count($keys) > 1) {
             $key = array_shift($keys);
             // If the key doesn't exist at this depth, we will just create an empty array
@@ -318,7 +300,6 @@ class Arr
             $array = &$array[$key];
         }
         $array[array_shift($keys)] = $value;
-
         return $array;
     }
 
@@ -333,11 +314,9 @@ class Arr
     public static function sort($array, Closure $callback)
     {
         $results = array();
-
         foreach ($array as $key => $value) {
             $results[$key] = $callback($value);
         }
-
         return $results;
     }
 
@@ -352,13 +331,11 @@ class Arr
     public static function where($array, Closure $callback)
     {
         $filtered = array();
-
         foreach ($array as $key => $value) {
             if (call_user_func($callback, $key, $value)) {
                 $filtered[$key] = $value;
             }
         }
-
         return $filtered;
     }
 }

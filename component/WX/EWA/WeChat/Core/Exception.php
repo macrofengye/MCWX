@@ -6,7 +6,6 @@ use Exception as BaseException;
 
 class Exception extends BaseException
 {
-
     protected $errors = [
         '-1' => '系统繁忙',
         '0' => '请求成功',
@@ -278,9 +277,7 @@ class Exception extends BaseException
     public function __construct($message, $code = -1)
     {
         $message = empty($this->errors[$code]) ? $message : $this->errors[$code];
-
         $message = "[WeChat]{$message}{$code}";
-
         parent::__construct($message, $code);
     }
 }

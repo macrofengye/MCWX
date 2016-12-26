@@ -28,7 +28,6 @@ class MpVideo extends AbstractMessage
     public function media($mediaId)
     {
         $this->setAttribute('media_id', $mediaId);
-
         return $this;
     }
 

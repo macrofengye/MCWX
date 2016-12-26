@@ -2,7 +2,7 @@
 
 namespace MComponent\WX\EWA\WeChat\Messages;
 
-use MComponent\WX\EWA\WeChat\Exception;
+use MComponent\WX\EWA\WeChat\Core\Exception;
 
 /**
  * 坐标消息

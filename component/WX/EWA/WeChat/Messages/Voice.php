@@ -27,13 +27,13 @@ class Voice extends AbstractMessage
     /**
      * 设置语音
      *
-     * @param string $mediaId
+     * @param $mediaId
      *
      * @return Voice
      */
-    public function media($mediaid)
+    public function media($mediaId)
     {
-        $this->setAttribute('media_id', $mediaid);
+        $this->setAttribute('media_id', $mediaId);
 
         return $this;
     }
