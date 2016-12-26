@@ -2,10 +2,12 @@
 
 namespace MComponent\WX\EWA\WeChat\Server;
 
+use MComponent\WX\EWA\WeChat\Core\Exception;
+use MComponent\WX\EWA\WeChat\Messages\AbstractMessage;
 use MComponent\WX\EWA\WeChat\Utils\Bag;
 use MComponent\WX\EWA\WeChat\Utils\XML;
 use MComponent\WX\EWA\WeChat\Encryption\Crypt;
-use MComponent\WX\EWA\WeChat\Messages\BaseMessage;
+use Slim\Http\Request;
 
 class Server
 {
@@ -54,6 +56,11 @@ class Server
     protected $listeners;
 
     /**
+     * @var Request
+     */
+    protected $request;
+
+    /**
      * 允许的事件
      *
      * @var array
@@ -74,6 +81,7 @@ class Server
         $this->appSecret = isset($options['app_secret']) ? $options['app_secret'] : '';
         $this->agentId = isset($options['agent_id']) ? $options['agent_id'] : '';
 
+        $this->request = app()->component('request');
         $this->listeners = new Bag();
     }
 
@@ -83,7 +91,7 @@ class Server
      * @param string $target
      * @param string|callable $type
      * @param callable $callback
-     *
+     * @throws Exception
      * @return Server
      */
     public function on($target, $type, $callback = null)
@@ -136,14 +144,14 @@ class Server
 
     /**
      * handle服务端并返回字符串内容
-     *
+     * @throws  Exception
      * @return mixed
      */
     public function server()
     {
         $this->prepareInput();
 
-        $encryptStr = !empty($_GET['echostr']) ? $_GET['echostr'] : $this->encryptStr;
+        $encryptStr = !empty($this->request->getParam('echostr')) ? $this->request->getParam('echostr') : $this->encryptStr;
 
         $input = array(
             $encryptStr,
@@ -177,12 +185,12 @@ class Server
     protected function prepareInput()
     {
         if ($this->input instanceof Bag) {
-            return;
+            return null;
         }
 
         $input = array();
 
-        if ($_SERVER['REQUEST_METHOD'] == "POST") {
+        if ($this->request->isPost()) {
 
             $xmlInput = file_get_contents('php://input');
 
@@ -193,21 +201,21 @@ class Server
             }
 
             $input = $this->getCrypt()->decryptMsg(
-                $_REQUEST['msg_signature'],
-                $_REQUEST['nonce'],
-                $_REQUEST['timestamp'],
+                $this->request->getParam('msg_signature'),
+                $this->request->getParam('nonce'),
+                $this->request->getParam('timestamp'),
                 $xmlInput
             );
         }
 
-        $this->input = new Bag(array_merge($_REQUEST, (array)$input));
+        $this->input = new Bag(array_merge($this->request->getParams(), (array)$input));
 
     }
 
 
     /**
      * 获取Crypt服务
-     *
+     * @throws Exception
      * @return Crypt
      */
     protected function getCrypt()
@@ -252,7 +260,7 @@ class Server
 
         $return = "";
 
-        if ($response instanceof BaseMessage) {
+        if ($response instanceof AbstractMessage) {
             $response->from($this->input->get('ToUserName'))->to($this->input->get('FromUserName'));
 
             $this->call('responseCreated', array($response));

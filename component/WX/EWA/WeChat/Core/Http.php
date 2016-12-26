@@ -38,7 +38,7 @@ class Http extends HttpClient
     public function __construct(AccessToken $token = null)
     {
         $this->token = $token;
-        parent::__construct();
+        $this->curl = curl_init();
     }
 
     /**

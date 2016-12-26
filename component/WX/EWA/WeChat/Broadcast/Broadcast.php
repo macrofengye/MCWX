@@ -35,12 +35,11 @@ class Broadcast
     /**
      * constructor
      *
-     * @param string $appId
-     * @param string $appSecret
+     * @param AccessToken $token
      */
-    public function __construct($appId, $appSecret)
+    public function __construct(AccessToken $token)
     {
-        $this->http = new Http(new AccessToken($appId, $appSecret));
+        $this->http = new Http($token);
     }
 
     /**

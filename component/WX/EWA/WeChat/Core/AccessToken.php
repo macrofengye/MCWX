@@ -60,12 +60,12 @@ class AccessToken
      * @param string $appId
      * @param string $appSecret
      */
-    public function __construct($appId, $appSecret)
+    public function __construct($appId, $appSecret, $cache = null)
     {
         $this->appId = $appId;
         $this->appSecret = $appSecret;
         $this->cacheKey = $this->cacheKey . '.' . $appId;
-        $this->cache = new FilesystemCache(ROOT_PATH . '/component/WX/' . WX_TYPE . '/cache');
+        $this->cache = $cache;
     }
 
     /**

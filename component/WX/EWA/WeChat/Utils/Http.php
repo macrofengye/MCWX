@@ -26,14 +26,6 @@ class Http
     protected $curl;
 
     /**
-     * Create the cURL resource.
-     */
-    public function __construct()
-    {
-        $this->curl = curl_init();
-    }
-
-    /**
      * Clean up the cURL handle.
      */
     public function __destruct()

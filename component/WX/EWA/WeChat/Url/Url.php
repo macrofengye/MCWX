@@ -19,14 +19,13 @@ class Url
     const API_SHORT_URL = 'https://api.weixin.qq.com/cgi-bin/shorturl';
 
     /**
-     * constructor.
+     * constructor
      *
-     * @param string $appId
-     * @param string $appSecret
+     * @param AccessToken $token
      */
-    public function __construct($appId, $appSecret)
+    public function __construct(AccessToken $token)
     {
-        $this->http = new Http(new AccessToken($appId, $appSecret));
+        $this->http = new Http($token);
     }
 
     /**
