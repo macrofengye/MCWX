@@ -23,7 +23,7 @@ class Message
      * 创建消息实例
      *
      * @param string $type
-     *
+     * @throws \InvalidArgumentException
      * @return mixed
      */
     public static function make($type = self::TEXT)

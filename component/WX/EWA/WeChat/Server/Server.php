@@ -73,7 +73,11 @@ class Server
 
     protected $encryptStr;
 
-    public function __construct($options)
+    /**
+     * Server constructor.
+     * @param array $options
+     */
+    public function __construct(array $options)
     {
         $this->token = isset($options['token']) ? $options['token'] : '';
         $this->encodingAESKey = isset($options['aes_key']) ? $options['aes_key'] : '';
@@ -253,12 +257,12 @@ class Server
     {
 
         if (empty($response)) {
-            return "";
+            return '';
         }
 
         is_string($response) && $response = Message::make('text')->with('content', $response);
 
-        $return = "";
+        $return = '';
 
         if ($response instanceof AbstractMessage) {
             $response->from($this->input->get('ToUserName'))->to($this->input->get('FromUserName'));
@@ -333,10 +337,10 @@ class Server
 
     /**
      * 检查微信签名有效性
-     *
      * @param array $input
+     * @return string
      */
-    protected function signature($input)
+    protected function signature(array $input)
     {
         sort($input, SORT_STRING);
 
@@ -398,7 +402,10 @@ class Server
      */
     public function __toString()
     {
-        return '' . $this->serve();
+        try {
+            return '' . $this->server();
+        } catch (Exception $e) {
+            return $e->getMessage();
+        }
     }
-
 }

@@ -24,8 +24,7 @@ class ServerProvider implements ServiceProviderInterface
                 'app_secret' => $cfg['secret'], //填写高级调用功能的密钥
                 'agent_id' => $cfg['agent_id'] //应用的id
             );
-            $server = new Server($options);
-            return $server;
+            return new Server($options);
         };
     }
 }

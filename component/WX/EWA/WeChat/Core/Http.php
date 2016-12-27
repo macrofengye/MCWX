@@ -132,8 +132,6 @@ class Http extends HttpClient
             $this->json = true;
         }
 
-        $result = call_user_func_array(array($this, $method), $args);
-
-        return $result;
+        return call_user_func_array(array($this, $method), $args);
     }
 }

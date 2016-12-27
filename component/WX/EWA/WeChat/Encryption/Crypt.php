@@ -2,6 +2,7 @@
 
 namespace MComponent\WX\EWA\WeChat\Encryption;
 
+use MComponent\WX\EWA\WeChat\Core\Exception;
 use MComponent\WX\EWA\WeChat\Utils\XML;
 
 /**
@@ -187,7 +188,7 @@ class Crypt
      *
      * @param string $encrypted 需要解密的密文
      * @param string $appId app id
-     *
+     * @throws Exception
      * @return string 解密得到的明文
      */
     public function decrypt($encrypted, $appId)
@@ -245,7 +246,7 @@ class Crypt
 
     /**
      * 生成SHA1签名
-     *
+     * @throws Exception
      * @return string
      */
     public function getSHA1()

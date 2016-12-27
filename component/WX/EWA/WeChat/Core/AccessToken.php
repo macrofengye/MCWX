@@ -45,11 +45,18 @@ class AccessToken
     protected $tokenJsonKey = 'access_token';
 
     /**
-     * 缓存前缀
+     * 缓存Key
      *
      * @var string
      */
     protected $cacheKey = 'macrofengye.wechat.access_token';
+
+    /**
+     * 缓存前缀
+     *
+     * @var string
+     */
+    protected $prefix = '';
 
     // API
     const API_TOKEN_GET = 'https://qyapi.weixin.qq.com/cgi-bin/gettoken';
@@ -100,7 +107,11 @@ class AccessToken
      */
     public function getCache()
     {
-        return $this->cache ?: $this->cache = new FilesystemCache(sys_get_temp_dir());
+        try {
+            return $this->cache ?: $this->cache = new FilesystemCache(sys_get_temp_dir());
+        } catch (\InvalidArgumentException $e) {
+            return null;
+        }
     }
 
     /**
@@ -139,8 +150,7 @@ class AccessToken
             'corpid' => $this->appId,
             'corpsecret' => $this->appSecret,
         );
-        $token = $http->get(self::API_TOKEN_GET, $params);
-        return $token;
+        return $http->get(self::API_TOKEN_GET, $params);
     }
 
     /**
