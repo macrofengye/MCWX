@@ -6,6 +6,6 @@ define('APP_NAME', 'task');
 define('APP_PATH', ROOT_PATH . '/' . APP_NAME . '/');
 define('CONFIG_PATH', ROOT_PATH . '/' . APP_NAME . '/');
 require ROOT_PATH . '/vendor/autoload.php';
-$app = new \Core\Boot\Application();
+$app = new \Polymer\Boot\Application();
 $app->startConsole();
-return \Doctrine\ORM\Tools\Console\ConsoleRunner::createHelperSet(app()->component('db1'));
+return \Doctrine\ORM\Tools\Console\ConsoleRunner::createHelperSet(app()->component('db1', 'Mapping'));

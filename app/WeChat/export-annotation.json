@@ -1,7 +1,7 @@
 {
   "export": "doctrine2-annotation",
   "zip": false,
-  "dir": "./entity/Models/",
+  "dir": "./entity/Mapping/",
   "params": {
     "logToConsole": false,
     "logFile": "myqsql_test.log",

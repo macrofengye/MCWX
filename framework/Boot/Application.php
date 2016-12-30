@@ -108,13 +108,14 @@ final class Application
     }
 
     /**
-     * 根据不同的数据库链接类型，实例化不同的数据库链接对象
+     * 实例化数据库链接对象
      *
-     * @param $dbName string
+     * @param string $dbName
+     * @param string $folder 实体文件夹的名字
      * @throws \Doctrine\ORM\ORMException | \InvalidArgumentException
      * @return EntityManager
      */
-    public function db($dbName)
+    public function db($dbName, $folder = 'Models')
     {
         if (!$this->component('entityManager-' . $dbName)) {
             $dbConfig = $this->config('db.' . APPLICATION_ENV);
@@ -130,7 +131,7 @@ final class Application
                     $cache = $this->component($cacheName, ['database' => $database]);
                 }
                 $configuration = Setup::createAnnotationMetadataConfiguration([
-                    ROOT_PATH . '/entity/Models',
+                    ROOT_PATH . '/entity/' . $folder,
                 ], APPLICATION_ENV === 'development', ROOT_PATH . '/entity/Proxies/', $cache, $useSimpleAnnotationReader);
                 try {
                     $entityManager = EntityManager::create($connConfig, $configuration, $this->component('eventManager'));
@@ -269,8 +270,6 @@ final class Application
             $className = ucfirst(str_replace(' ', '', lcfirst(ucwords(str_replace('_', ' ', $componentName)))));
             if (class_exists(PROVIDERS_NAMESPACE . '\\Providers\\' . $className . 'Provider')) {
                 $className = PROVIDERS_NAMESPACE . '\\Providers\\' . $className . 'Provider';
-            } elseif (defined('WX_TYPE') && class_exists('MComponent\\WX\\' . WX_TYPE . '\\Providers\\' . $className . 'Provider')) {
-                $className = 'MComponent\\WX\\' . WX_TYPE . '\\Providers\\' . $className . 'Provider';
             } else if (class_exists('Polymer\\Providers\\' . $className . 'Provider')) {
                 $className = 'Polymer\\Providers\\' . $className . 'Provider';
             }
@@ -321,7 +320,7 @@ final class Application
 
     /**
      * 获取业务模型实例
-     * @param string $modelName 模型名字
+     * @param string $modelName 模型的名字
      * @param array $parameters 实例化时需要的参数
      * @param string $path 附加路径
      * @return mixed
