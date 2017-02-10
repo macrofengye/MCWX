@@ -8,9 +8,8 @@
 
 namespace Polymer\Providers;
 
-
+use Doctrine\Common\Annotations\AnnotationRegistry;
 use Doctrine\Common\Cache\FilesystemCache;
-use MComponent\WX\SWA\WeChat\Core\AccessToken;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 use Slim\App;
@@ -95,21 +94,27 @@ class InitAppProvider implements ServiceProviderInterface
                     ->withHeader('Content-Type', 'text/html')->write($e->getMessage());
             }
         };
+        if (APPLICATION_ENV === 'production') {
+            $pimple['access_token'] = function (Container $container) {
+                try {
+                    $cache = new FilesystemCache(ROOT_PATH . '/component/WX/' . WX_TYPE . '/cache');
+                    $container['cache'] = $cache;
+                    $cls = 'MComponent\WX\\' . WX_TYPE . '\WeChat\Core\AccessToken';
+                    return new $cls(
+                        $container['config']['wechat']['app_id'],
+                        $container['config']['wechat']['secret'],
+                        $cache
+                    );
+                } catch (\InvalidArgumentException $e) {
+                    return $container['response']
+                        ->withStatus(500)
+                        ->withHeader('Content-Type', 'text/html')->write($e->getMessage());
+                }
+            };
+        }
 
-        $pimple['access_token'] = function (Container $container) {
-            try {
-                $cache = new FilesystemCache(ROOT_PATH . '/component/WX/' . WX_TYPE . '/cache');
-                $container['cache'] = $cache;
-                return new AccessToken(
-                    $container['config']['wechat']['app_id'],
-                    $container['config']['wechat']['secret'],
-                    $cache
-                );
-            } catch (\InvalidArgumentException $e) {
-                return $container['response']
-                    ->withStatus(500)
-                    ->withHeader('Content-Type', 'text/html')->write($e->getMessage());
-            }
+        $pimple['twig_profile'] = function (Container $container) {
+            return new \Twig_Profiler_Profile();
         };
     }
 }

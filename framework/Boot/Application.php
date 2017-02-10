@@ -8,13 +8,15 @@
 namespace Polymer\Boot;
 
 use Doctrine\ORM\ORMException;
+use Noodlehaus\Config;
+use Noodlehaus\Exception\EmptyDirectoryException;
 use Polymer\Providers\InitAppProvider;
 use Polymer\Utils\Constants;
 use Doctrine\Common\Cache\ArrayCache;
+use Polymer\Utils\DoctrineExtConfigLoader;
 use Slim\Container;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Events;
-use Monolog\Logger;
 use Doctrine\Common\EventManager;
 use Doctrine\ORM\Tools\Setup;
 use Interop\Container\Exception\ContainerException;
@@ -35,6 +37,13 @@ final class Application
      * @var Container
      */
     private $container;
+
+    /**
+     * 配置文件对象
+     *
+     * @var Config $configObject
+     */
+    private $configObject = null;
 
     /**
      * 启动WEB应用
@@ -100,9 +109,8 @@ final class Application
         set_error_handler('handleError');
         set_exception_handler('handleException');
         register_shutdown_function('handleShutdown');
-        $this->container = new Container();
+        $this->container = new Container($this->config('slim'));
         $this->container->register(new InitAppProvider());
-        $this->component('config');
         $this->container['application'] = $this;
         static::setInstance($this);
     }
@@ -133,6 +141,8 @@ final class Application
                 $configuration = Setup::createAnnotationMetadataConfiguration([
                     ROOT_PATH . '/entity/' . $folder,
                 ], APPLICATION_ENV === 'development', ROOT_PATH . '/entity/Proxies/', $cache, $useSimpleAnnotationReader);
+                DoctrineExtConfigLoader::loadFunctionNode($configuration, DoctrineExtConfigLoader::MYSQL);
+                DoctrineExtConfigLoader::load();
                 try {
                     $entityManager = EntityManager::create($connConfig, $configuration, $this->component('eventManager'));
                     $this->container['database_name'] = $dbName;
@@ -150,15 +160,28 @@ final class Application
      *
      * @author macro chen <macro_fengye@163.com>
      * @param string $key
+     * @param mixed | array $default
      * @return mixed
      */
-    public function config($key)
+    public function config($key, $default = null)
     {
-        if (!$this->component('config')->get($key)) {
-            logger('获取', [$key . '--不存在!'], APP_PATH . '/log/config.log', Logger::ERROR);
-            return NULL;
+        $configPaths = [ROOT_PATH . '/framework/Config'];
+        if (file_exists(ROOT_PATH . '/config') && is_dir(ROOT_PATH . '/config')) {
+            $configPaths[] = ROOT_PATH . '/config';
         }
-        return $this->component('config')->get($key);
+        if (file_exists(APP_PATH . '/Config') && is_dir(APP_PATH . '/Config')) {
+            $configPaths[] = APP_PATH . '/Config';
+        }
+        try {
+            if (null === $this->configObject) {
+                $this->configObject = new Config($configPaths);
+            }
+            return $this->configObject->get($key, $default);
+        } catch (EmptyDirectoryException $e) {
+            return null;
+        } catch (\Exception $e) {
+            return $default;
+        }
     }
 
     /**
@@ -218,9 +241,6 @@ final class Application
                 $reflect = new \ReflectionClass(Events::class);
             }
             if ($reflect->getConstant($key)) {
-                if (!isset($value['type'])) {
-                    throw new \InvalidArgumentException('type必须设置');
-                }
                 if (!isset($value['db_name'])) {
                     throw new \InvalidArgumentException('db_name必须设置');
                 }
@@ -270,6 +290,8 @@ final class Application
             $className = ucfirst(str_replace(' ', '', lcfirst(ucwords(str_replace('_', ' ', $componentName)))));
             if (class_exists(PROVIDERS_NAMESPACE . '\\Providers\\' . $className . 'Provider')) {
                 $className = PROVIDERS_NAMESPACE . '\\Providers\\' . $className . 'Provider';
+            } else if (defined('WX_TYPE') && class_exists('MComponent\\WX\\' . WX_TYPE . '\\Providers\\' . $className . 'Provider')) {
+                $className = 'MComponent\\WX\\' . WX_TYPE . '\\Providers\\' . $className . 'Provider';
             } else if (class_exists('Polymer\\Providers\\' . $className . 'Provider')) {
                 $className = 'Polymer\\Providers\\' . $className . 'Provider';
             }

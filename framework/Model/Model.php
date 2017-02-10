@@ -9,23 +9,10 @@ namespace Polymer\Model;
 
 use Doctrine\DBAL\Sharding\PoolingShardManager;
 use Polymer\Utils\Constants;
+use Symfony\Component\Validator\Validator\RecursiveValidator;
 
 class Model
 {
-    /**
-     * 数据库表名
-     *
-     * @var string
-     */
-    protected $table = '';
-
-    /**
-     * 验证规则
-     *
-     * @var array
-     */
-    protected $rules = [];
-
     /**
      * 应用APP
      *
@@ -36,7 +23,7 @@ class Model
     /**
      * 验证组件
      *
-     * @var null
+     * @var RecursiveValidator
      */
     protected $validator = null;
 
@@ -48,18 +35,11 @@ class Model
     protected $EntityObject = null;
 
     /**
-     * 表单字段映射
+     * 验证器的规则
      *
      * @var array
      */
-    protected $mappingField = [];
-
-    /**
-     * 验证器的分组
-     *
-     * @var array
-     */
-    protected $validateGroups = [];
+    protected $validateRules = [];
 
     /**
      * EntityManager实例
@@ -86,14 +66,15 @@ class Model
      *
      * @param int $target
      * @param array $data
+     * @param array $validateRules
      *
      * @throws \Exception
      * @return array
      */
-    protected function make($target = Constants::MODEL_FIELD, array $data = [])
+    protected function make($target = Constants::MODEL_FIELD, array $data = [], array $validateRules = [])
     {
         try {
-            return $this->validate($target, $data);
+            return $this->validate($target, $data, $validateRules);
         } catch (\Exception $e) {
             throw $e;
         }
@@ -131,7 +112,7 @@ class Model
     private function mergeParams(array $data = [])
     {
         $data = array_merge($this->app->component('request')->getParams(), $data);
-        if ($this->mappingField) {
+        if (property_exists($this, 'mappingField')) {
             $combineData = [];
             foreach ($data as $key => $value) {
                 isset($this->mappingField[$key]) ? $combineData[$this->mappingField[$key]] = $value : $combineData[$key] = $value;
@@ -146,19 +127,21 @@ class Model
      *
      * @param int $target
      * @param array $data
+     * @param array $validateRules
+     *
      * @throws \Exception
      * @return array
      */
-    private function validate($target = Constants::MODEL_FIELD, array $data = [])
+    private function validate($target = Constants::MODEL_FIELD, array $data = [], array $validateRules = [])
     {
         $data = $this->mergeParams($data);
         $returnData = [];
         switch ($target) {
             case Constants::MODEL_FIELD:
-                $returnData = $this->validateFields($data);
+                $returnData = $this->validateFields($data, $validateRules);
                 break;
             case Constants::MODEL_OBJECT:
-                $returnData = $this->validateObject($data);
+                $returnData = $this->validateObject($data, $validateRules);
                 break;
             default:
                 break;
@@ -170,18 +153,20 @@ class Model
      * 根据自定义的规则验证数据字段
      *
      * @param array $data
+     * @param array $rules
      * @return array
      */
-    private function validateFields(array $data = [])
+    private function validateFields(array $data = [], array $rules = [])
     {
         $returnData = [];
-        if (!empty($this->rules)) {
+        $this->validateRules = empty($rules) ? $this->rules : $rules;
+        if (!empty($this->validateRules)) {
             foreach ($data as $property => $val) {
-                if (isset($this->rules[$property])) {
+                if (isset($this->validateRules[$property])) {
                     $constraints = $this->propertyConstraints($property);
-                    $error = $this->validator->validate($val, $constraints);
-                    if (count($error)) {
-                        foreach ($error as $error) {
+                    $errors = $this->validator->validate($val, $constraints);
+                    if (count($errors)) {
+                        foreach ($errors as $error) {
                             $returnData[$property] = $error->getMessage();
                         }
                     }
@@ -195,31 +180,42 @@ class Model
      * 给对象赋值并且验证对象的值是否合法
      *
      * @param array $data
+     * @param array $rules
      * @return array
      */
-    private function validateObject(array $data = [])
+    private function validateObject(array $data = [], array $rules = [])
     {
         $returnData = [];
+        $this->validateRules = empty($rules) ? $this->rules : $rules;
         foreach ($data as $k => $v) {
             $setMethod = 'set' . ucfirst(str_replace(' ', '', lcfirst(ucwords(str_replace('_', ' ', $k)))));
             if (method_exists($this->EntityObject, $setMethod)) {
                 $this->EntityObject->$setMethod($v);
             }
         }
-        $classMetadata = $this->validator->getMetadataFor($this->EntityObject);
-        if (!empty($this->rules)) {
-            foreach ($data as $property => $val) {
-                if (isset($this->rules[$property])) {
-                    $constraints = $this->propertyConstraints($property);
-                    $classMetadata->addPropertyConstraints($property, $constraints);
+        try {
+            $classMetadata = $this->validator->getMetadataFor($this->EntityObject);
+            foreach ($classMetadata->getReflectionClass()->getProperties() as $val) {
+                if (!isset($data[$val->getName()])) {
+                    $data[$val->getName()] = '';
                 }
             }
-        }
-        $errors = $this->validator->validate($this->EntityObject);
-        if (count($errors)) {
-            foreach ($errors as $error) {
-                $returnData[$error->getPropertyPath()] = $error->getMessage();
+            if (!empty($this->validateRules)) {
+                foreach ($data as $property => $val) {
+                    if (isset($this->validateRules[$property])) {
+                        $constraints = $this->propertyConstraints($property);
+                        $classMetadata->addPropertyConstraints($property, $constraints);
+                    }
+                }
             }
+            $errors = $this->validator->validate($this->EntityObject);
+            if (count($errors)) {
+                foreach ($errors as $error) {
+                    $returnData[$error->getPropertyPath()] = $error->getMessage();
+                }
+            }
+        } catch (\Exception $e) {
+            return null;
         }
         return $returnData;
     }
@@ -233,7 +229,7 @@ class Model
     private function propertyConstraints($property)
     {
         $constraints = [];
-        foreach ($this->rules[$property] as $cls => $params) {
+        foreach ($this->validateRules[$property] as $cls => $params) {
             if (is_numeric($cls)) {
                 $cls = $params;
                 $params = null;
@@ -256,7 +252,7 @@ class Model
     protected function switchConnect($shardId)
     {
         try {
-            return $this->em->getConnection()->connect(intval($shardId));
+            return $this->em->getConnection()->connect((int)$shardId);
         } catch (\Exception $e) {
             throw $e;
         }

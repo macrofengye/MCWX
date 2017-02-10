@@ -7,11 +7,11 @@ if (!function_exists('app')) {
      * @author <macro_fengye@163.com> macro chen
      * @param null $make 是否返回对象实例
      * @param array $parameters
-     * @return mixed|null
+     * @return Application
      */
     function app($make = null, $parameters = [])
     {
-        if (is_null($make)) {
+        if (null === $make) {
             return Application::getInstance();
         }
 
@@ -58,7 +58,7 @@ if (!function_exists('handleShutdown')) {
     function handleShutdown()
     {
         $error = error_get_last();
-        if ($error["type"] == E_ERROR) {
+        if ($error['type'] == E_ERROR) {
             if (app()->config('logger')) {
                 $msg = 'Type : ' . $error["type"] . '\nMessage : ' . $error["message"] . '\nFile : ' . $error["file"] . '\nLine : ' . $error["line"];
                 app()->config('logger')->error($msg);
@@ -106,5 +106,27 @@ if (!function_exists('handleException')) {
     function handleException(Exception $e)
     {
         throw $e;
+    }
+}
+
+
+if (!function_exists('debugger')) {
+    /**
+     * 调试应用的各种性能
+     *
+     * @param int $level 开发模式
+     * @param null $dbName 如果需要开启数据库的记录,则需要传递数据库名字
+     * @param string $logPath 记录日志的路径
+     */
+    function debugger($level = 0, $dbName = null, $logPath = APP_PATH . '/log')
+    {
+        if ($dbName) {
+            $em = app()->db($dbName);
+            $doctrineConfig = $em->getConfiguration();
+            $doctrineConfig->setSQLLogger(new \Doctrine\DBAL\Logging\DebugStack());
+            app()->component('app')->getContainer()->offsetSet('doctrineConfig', $doctrineConfig);
+        }
+        \RunTracy\Helpers\Profiler\Profiler::enable(true);
+        \Tracy\Debugger::enable($level ? \Tracy\Debugger::PRODUCTION : \Tracy\Debugger::DEVELOPMENT, $logPath);
     }
 }

@@ -28,6 +28,8 @@ class ViewProvider implements ServiceProviderInterface
             $twig_config = $container['application']->config('twig') ? $container['application']->config('twig') : [];
             $view = new Twig(TEMPLATE_PATH, $twig_config);
             $view->addExtension(new TwigExtension($container['router'], $container['request']->getUri()));
+            $view->addExtension(new \Twig_Extension_Profiler($container['twig_profile']));
+            $view->addExtension(new \Twig_Extension_Debug());
             $view->getEnvironment()->addFunction(new \Twig_SimpleFunction('app', 'app'));
             return $view;
         };
