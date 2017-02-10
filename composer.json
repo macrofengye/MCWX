@@ -24,7 +24,9 @@
     "vlucas/phpdotenv": "*",
     "ext-pdo": "*",
     "ext-simplexml": "*",
-    "ext-exif": "*"
+    "ext-exif": "*",
+    "peppeocchi/php-cron-scheduler": "~1.0",
+    "runcmf/runtracy": "~0.2"
   },
   "require-dev": {
     "stoneworld/wechat": "dev-master",
