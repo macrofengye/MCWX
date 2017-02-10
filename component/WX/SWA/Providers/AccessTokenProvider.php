@@ -26,13 +26,17 @@ class AccessTokenProvider implements ServiceProviderInterface
     public function register(Container $pimple)
     {
         $pimple['access_token'] = function (Container $container) {
-            $cache = new FilesystemCache(APP_PATH . '/log/cache');
-            $container['cache'] = $cache;
-            return new AccessToken(
-                $container['config']['wechat']['app_id'],
-                $container['config']['wechat']['secret'],
-                $cache
-            );
+            try {
+                $cache = new FilesystemCache(APP_PATH . '/log/cache');
+                $container['cache'] = $cache;
+                return new AccessToken(
+                    app()->config('wechat.app_id'),
+                    app()->config('wechat.secret'),
+                    $cache
+                );
+            } catch (\Exception $e) {
+                return null;
+            }
         };
     }
 }

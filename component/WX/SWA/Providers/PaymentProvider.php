@@ -26,8 +26,8 @@ class PaymentProvider implements ServiceProviderInterface
     {
         $pimple['merchant'] = function ($pimple) {
             $config = array_merge(
-                ['app_id' => $pimple['config']['app_id']],
-                $pimple['config']->get('payment', [])
+                ['app_id' => app()->config('wechat.app_id')],
+                app()->config('wechat.payment', [])
             );
 
             return new Merchant($config);

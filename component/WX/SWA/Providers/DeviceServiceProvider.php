@@ -21,7 +21,7 @@ class DeviceServiceProvider implements ServiceProviderInterface
     public function register(Container $pimple)
     {
         $pimple['device'] = function ($pimple) {
-            return new Device($pimple['access_token'], $pimple['config']->get('device', []));
+            return new Device($pimple['access_token'], app()->config('wechat.device', []));
         };
     }
 }

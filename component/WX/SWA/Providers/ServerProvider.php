@@ -22,16 +22,20 @@ class ServerProvider implements ServiceProviderInterface
     public function register(Container $pimple)
     {
         $pimple['encryptor'] = function ($pimple) {
-            return new Encryptor(
-                $pimple['config']['wechat']['app_id'],
-                $pimple['config']['wechat']['token'],
-                $pimple['config']['wechat']['aes_key']
-            );
+            try {
+                return new Encryptor(
+                    app()->config('wechat.app_id'),
+                    app()->config('wechat.token'),
+                    app()->config('wechat.aes_key')
+                );
+            } catch (\Exception $e) {
+                return null;
+            }
         };
 
         $pimple['server'] = function ($pimple) {
-            $server = new Guard($pimple['config']['wechat']['token'], $pimple['request'], $pimple['response']);
-            $server->debug($pimple['config']['wechat']['debug']);
+            $server = new Guard(app()->config('wechat.token'), $pimple['request'], $pimple['response']);
+            $server->debug(app()->config('wechat.debug'));
             $server->setEncryptor($pimple['encryptor']);
 
             return $server;
