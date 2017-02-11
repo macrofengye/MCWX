@@ -10,6 +10,7 @@ use MComponent\WX\SWA\WeChat\Message\Raw as RawMessage;
 use MComponent\WX\SWA\WeChat\Message\Text;
 use MComponent\WX\SWA\WeChat\Support\Collection;
 use MComponent\WX\SWA\WeChat\Support\Log;
+use MComponent\WX\SWA\WeChat\Support\Str;
 use MComponent\WX\SWA\WeChat\Support\XML;
 use Slim\Http\Request;
 use Slim\Http\Response;
@@ -466,6 +467,10 @@ class Guard
     protected function parseMessageFromRequest($content)
     {
         $content = strval($content);
+
+        if (Str::isJson($content)) {
+            return Str::json2Array($content);
+        }
 
         if ($this->isSafeMode()) {
             if (!$this->encryptor) {
