@@ -34,7 +34,7 @@ class Authorizer extends AbstractComponent
      *
      * @param $authorizationCode
      *
-     * @return \EasyWeChat\Support\Collection
+     * @return \MComponent\WX\SWA\WeChat\Support\Collection
      */
     public function getAuthInfo($authorizationCode = null)
     {
@@ -52,7 +52,7 @@ class Authorizer extends AbstractComponent
      * @param $appId
      * @param $refreshToken
      *
-     * @return \EasyWeChat\Support\Collection
+     * @return \MComponent\WX\SWA\WeChat\Support\Collection
      */
     public function getAuthorizationToken($appId, $refreshToken)
     {
@@ -70,7 +70,7 @@ class Authorizer extends AbstractComponent
      *
      * @param $authorizerAppId
      *
-     * @return \EasyWeChat\Support\Collection
+     * @return \MComponent\WX\SWA\WeChat\Support\Collection
      */
     public function getAuthorizerInfo($authorizerAppId)
     {
@@ -88,7 +88,7 @@ class Authorizer extends AbstractComponent
      * @param $authorizerAppId
      * @param $optionName
      *
-     * @return \EasyWeChat\Support\Collection
+     * @return \MComponent\WX\SWA\WeChat\Support\Collection
      */
     public function getAuthorizerOption($authorizerAppId, $optionName)
     {
@@ -108,7 +108,7 @@ class Authorizer extends AbstractComponent
      * @param $optionName
      * @param $optionValue
      *
-     * @return \EasyWeChat\Support\Collection
+     * @return \MComponent\WX\SWA\WeChat\Support\Collection
      */
     public function setAuthorizerOption($authorizerAppId, $optionName, $optionValue)
     {

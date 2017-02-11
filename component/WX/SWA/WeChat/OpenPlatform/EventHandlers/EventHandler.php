@@ -10,7 +10,7 @@ abstract class EventHandler
     /**
      * Component verify ticket instance.
      *
-     * @var \EasyWeChat\OpenPlatform\VerifyTicket
+     * @var \MComponent\WX\SWA\WeChat\OpenPlatform\VerifyTicket
      */
     protected $verifyTicket;
 

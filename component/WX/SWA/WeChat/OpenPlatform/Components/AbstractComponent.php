@@ -3,7 +3,6 @@
 namespace MComponent\WX\SWA\WeChat\OpenPlatform\Components;
 
 use MComponent\WX\SWA\WeChat\Core\AbstractAPI;
-use Symfony\Component\HttpFoundation\Request;
 
 abstract class AbstractComponent extends AbstractAPI
 {
@@ -17,21 +16,21 @@ abstract class AbstractComponent extends AbstractAPI
     /**
      * Request.
      *
-     * @var Symfony\Component\HttpFoundation\Request
+     * @var \Slim\Http\Request
      */
     protected $request;
 
     /**
      * AbstractComponent constructor.
      *
-     * @param \EasyWeChat\Core\AccessToken $accessToken
-     * @param array                        $config
+     * @param \MComponent\WX\SWA\WeChat\Core\AccessToken $accessToken
+     * @param array $config
      * @param $request
      */
-    public function __construct($accessToken, array $config, $request = null)
+    public function __construct($accessToken, array $config, $request)
     {
         parent::__construct($accessToken);
         $this->config = $config;
-        $this->request = $request ?: Request::createFromGlobals();
+        $this->request = $request;
     }
 }

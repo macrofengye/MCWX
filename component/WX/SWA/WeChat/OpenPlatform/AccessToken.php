@@ -29,7 +29,7 @@ class AccessToken extends WechatAccessToken
     /**
      * {@inheritdoc}.
      */
-    protected $prefix = 'easywechat.common.component_access_token.';
+    protected $prefix = 'macrowechat.common.component_access_token.';
 
     /**
      * AccessToken constructor.
