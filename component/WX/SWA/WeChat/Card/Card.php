@@ -44,8 +44,8 @@ class Card extends AbstractAPI
     const API_UPDATE_CODE = 'https://api.weixin.qq.com/card/code/update';
     const API_DELETE_CARD = 'https://api.weixin.qq.com/card/delete';
     const API_DISABLE_CARD = 'https://api.weixin.qq.com/card/code/unavailable';
-    const API_ACTIVATE_CARD = 'https://api.weixin.qq.com/card/membercard/activate';
-    const API_ACTIVATE_USER_FORM = 'https://api.weixin.qq.com/card/membercard/activateuserform/set';
+    const API_ACTIVATE_MEMBER_CARD = 'https://api.weixin.qq.com/card/membercard/activate';
+    const API_ACTIVATE_MEMBER_USER_FORM = 'https://api.weixin.qq.com/card/membercard/activateuserform/set';
     const API_GET_MEMBER_USER_INFO = 'https://api.weixin.qq.com/card/membercard/userinfo/get';
     const API_UPDATE_MEMBER_CARD_USER = 'https://api.weixin.qq.com/card/membercard/updateuser';
     const API_CREATE_SUB_MERCHANT = 'https://api.weixin.qq.com/card/submerchant/submit';
@@ -53,6 +53,8 @@ class Card extends AbstractAPI
     const API_GET_SUB_MERCHANT = 'https://api.weixin.qq.com/card/submerchant/get';
     const API_LIST_SUB_MERCHANT = 'https://api.weixin.qq.com/card/submerchant/batchget';
     const API_GET_CATEGORIES = 'https://api.weixin.qq.com/card/getapplyprotocol';
+    const API_ACTIVATE_GENERAL_CARD = 'https://api.weixin.qq.com/card/generalcard/activate';
+    const API_UPDATE_GENERAL_CARD_USER = 'https://api.weixin.qq.com/card/generalcard/updateuser';
 
     /**
      * 获取卡券颜色.
@@ -610,12 +612,17 @@ class Card extends AbstractAPI
      * 会员卡接口激活.
      *
      * @param array $info
+     * @param string $cardType
      *
      * @return \MComponent\WX\SWA\WeChat\Support\Collection
      */
-    public function activate($info = [])
+    public function activate($info = [], $cardType = 'member_card')
     {
-        return $this->parseJSON('json', [self::API_ACTIVATE_CARD, $info]);
+        if ($cardType === 'general_card') {
+            return $this->parseJSON('json', [self::API_ACTIVATE_GENERAL_CARD, $info]);
+        }
+
+        return $this->parseJSON('json', [self::API_ACTIVATE_MEMBER_CARD, $info]);
     }
 
     /**
@@ -631,7 +638,7 @@ class Card extends AbstractAPI
     {
         $params = array_merge(['card_id' => $cardId], $requiredForm, $optionalForm);
 
-        return $this->parseJSON('json', [self::API_ACTIVATE_USER_FORM, $params]);
+        return $this->parseJSON('json', [self::API_ACTIVATE_MEMBER_USER_FORM, $params]);
     }
 
     /**
@@ -662,6 +669,18 @@ class Card extends AbstractAPI
     public function updateMemberCardUser(array $params = [])
     {
         return $this->parseJSON('json', [self::API_UPDATE_MEMBER_CARD_USER, $params]);
+    }
+
+    /**
+     * 更新通用员信息.
+     *
+     * @param array $params
+     *
+     * @return \EasyWeChat\Support\Collection
+     */
+    public function updateGeneralCardUser(array $params = [])
+    {
+        return $this->parseJSON('json', [self::API_UPDATE_GENERAL_CARD_USER, $params]);
     }
 
     /**
