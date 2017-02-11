@@ -107,7 +107,6 @@ class WeChatProvider extends AbstractProvider implements ProviderInterface
             'query' => [
                 'access_token' => $token->getToken(),
                 'openid' => $token['openid'],
-                'lang' => 'zh_CN',
             ],
         ]);
 
