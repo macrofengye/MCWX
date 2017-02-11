@@ -60,8 +60,8 @@ class MiniProgram
      * MiniProgram constructor.
      *
      * @param \MComponent\WX\SWA\WeChat\MiniProgram\Server\Guard $server
-     * @param \MComponent\WX\SWA\WeChat\MiniProgram\AccessToken  $accessToken
-     * @param array                                $config
+     * @param \MComponent\WX\SWA\WeChat\MiniProgram\AccessToken $accessToken
+     * @param array $config
      */
     public function __construct($server, $accessToken, $config)
     {
