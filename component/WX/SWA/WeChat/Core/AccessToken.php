@@ -96,12 +96,17 @@ class AccessToken
         $cached = $this->getCache()->fetch($cacheKey);
 
         if ($forceRefresh || empty($cached)) {
-            $token = $this->getTokenFromServer();
+            try {
+                $token = $this->getTokenFromServer();
 
-            // XXX: T_T... 7200 - 1500
-            $this->getCache()->save($cacheKey, $token[$this->tokenJsonKey], $token['expires_in'] - 1500);
+                // XXX: T_T... 7200 - 1500
+                $this->getCache()->save($cacheKey, $token[$this->tokenJsonKey], $token['expires_in'] - 1500);
 
-            return $token[$this->tokenJsonKey];
+                return $token[$this->tokenJsonKey];
+            } catch (\Exception $e) {
+                logger(__FUNCTION__, [$e->getMessage()], APP_PATH . '/log/accessToken.log');
+                return null;
+            }
         }
 
         return $cached;
@@ -164,7 +169,12 @@ class AccessToken
      */
     public function getCache()
     {
-        return $this->cache ?: $this->cache = new FilesystemCache(sys_get_temp_dir());
+        try {
+            return $this->cache ?: $this->cache = new FilesystemCache(sys_get_temp_dir());
+        } catch (\Exception $e) {
+            logger(__FUNCTION__, [$e->getMessage()], APP_PATH . '/log/accessToken.log');
+            return null;
+        }
     }
 
     /**
