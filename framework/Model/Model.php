@@ -115,7 +115,7 @@ class Model
         if (property_exists($this, 'mappingField')) {
             $combineData = [];
             foreach ($data as $key => $value) {
-                isset($this->mappingField[$key]) ? $combineData[$this->mappingField[$key]] = $value : $combineData[$key] = $value;
+                (property_exists($this, 'mappingField') && is_array($this->mappingField) && !empty($this->mappingField)) ? $combineData[$this->mappingField[$key]] = $value : $combineData[$key] = $value;
             }
             return $combineData;
         }
