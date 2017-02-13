@@ -129,15 +129,28 @@ $common_config = [
 
     //微信配置
     'wechat' => [
-        'debug' => 0,//是否开启调试模式
-        'app_id' => 'wx7cba84e8e7343a5c',
-        'secret' => '67242b76b760ca40442375817304bb29',
-        'token' => 'macrowxtoken01',
-        'oauth' => [
-            'scopes' => ['snsapi_userinfo'],
-            'callback' => '/home/hello',
+        'default' => [
+            'debug' => 1,//是否开启调试模式
+            'app_id' => 'wx7cba84e8e7343a5c',
+            'secret' => '67242b76b760ca40442375817304bb29',
+            'token' => 'macrowxtoken',
+            'oauth' => [
+                'scopes' => ['snsapi_userinfo'],
+                'callback' => '/home/hello',
+            ],
+            'aes_key' => '52z36K5M4Nd1CDA9doCCSjL8AYIAgUzubx2spt8kxpn' //微信后台设置的EncodingAESKey
         ],
-        'aes_key' => 'aaapp00' //微信后台设置的EncodingAESKey
+        'luke' => [
+            'debug' => 1,//是否开启调试模式
+            'app_id' => 'wx7cba84e8e7343a5c',
+            'secret' => '67242b76b760ca40442375817304bb29',
+            'token' => 'macrowxtoken',
+            'oauth' => [
+                'scopes' => ['snsapi_userinfo'],
+                'callback' => '/home/hello',
+            ],
+            'aes_key' => '52z36K5M4Nd1CDA9doCCSjL8AYIAgUzubx2spt8kxpn' //微信后台设置的EncodingAESKey
+        ]
     ],
 
     //定义数据缓存的Cache

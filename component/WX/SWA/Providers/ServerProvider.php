@@ -23,10 +23,11 @@ class ServerProvider implements ServiceProviderInterface
     {
         $pimple['encryptor'] = function ($pimple) {
             try {
+                $weChatName = $weChatName = $pimple['request']->getParam('wechat_name') ?: 'default';
                 return new Encryptor(
-                    app()->config('wechat.app_id'),
-                    app()->config('wechat.token'),
-                    app()->config('wechat.aes_key')
+                    app()->config('wechat.' . $weChatName . '.app_id'),
+                    app()->config('wechat.' . $weChatName . '.token'),
+                    app()->config('wechat.' . $weChatName . '.aes_key')
                 );
             } catch (\Exception $e) {
                 return null;
@@ -34,8 +35,10 @@ class ServerProvider implements ServiceProviderInterface
         };
 
         $pimple['server'] = function ($pimple) {
-            $server = new Guard(app()->config('wechat.token'), $pimple['request'], $pimple['response']);
-            $server->debug(app()->config('wechat.debug'));
+            $weChatName = $pimple['request']->getParam('wechat_name') ?: 'default';
+            logger(__FUNCTION__, [$pimple['request']->getParams(), $weChatName], APP_PATH . '/log/aaab.log');
+            $server = new Guard(app()->config('wechat.' . $weChatName . '.token'), $pimple['request'], $pimple['response']);
+            $server->debug(app()->config('wechat.' . $weChatName . '.debug'));
             $server->setEncryptor($pimple['encryptor']);
 
             return $server;

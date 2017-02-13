@@ -97,12 +97,13 @@ class InitAppProvider implements ServiceProviderInterface
 
         $pimple['access_token'] = function (Container $container) {
             try {
-                $cache = new FilesystemCache(ROOT_PATH . '/component/WX/' . WX_TYPE . '/cache');
+                $weChatName = $container['request']->getParam('wechat_name') ?: 'default';
+                $cache = new FilesystemCache(ROOT_PATH . '/component/WX/' . WX_TYPE . '/cache/' . $weChatName);
                 $container['cache'] = $cache;
                 $cls = 'MComponent\WX\\' . WX_TYPE . '\WeChat\Core\AccessToken';
                 return new $cls(
-                    app()->config('wechat.app_id'),
-                    app()->config('wechat.secret'),
+                    app()->config('wechat.' . $weChatName . '.app_id'),
+                    app()->config('wechat.' . $weChatName . '.secret'),
                     $cache
                 );
             } catch (\InvalidArgumentException $e) {
