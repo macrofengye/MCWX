@@ -286,7 +286,7 @@ class AccessToken
      */
     public function getCacheKey()
     {
-        if (is_null($this->cacheKey)) {
+        if (null === $this->cacheKey) {
             return $this->prefix . $this->appId;
         }
 
