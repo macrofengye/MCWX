@@ -4,7 +4,7 @@
  * Date: 16-4-29
  * Time: 上午10:35
  */
-include_once 'Boot/bootstrap.task.php';
+include_once __DIR__ . '/Boot/bootstrap.task.php';
 
 class Test extends \Task\Boot\BootTask
 {

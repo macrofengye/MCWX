@@ -8,14 +8,14 @@
 
 namespace Task\Boot;
 
-use Core\Boot\Application;
-use Core\Utils\Constants;
+use Polymer\Boot\Application;
+use Polymer\Utils\Constants;
 
 class BootTask
 {
     /**
      * 整个框架的应用
-     * @var \Core\Boot\Application
+     * @var \Polymer\Boot\Application
      */
     protected $app;
 
