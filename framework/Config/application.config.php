@@ -153,6 +153,12 @@ $common_config = [
         ]
     ],
 
+    //APP_ID映射为微信配置
+    'wx_app_id' => [
+        'default',
+        'luke'
+    ],
+
     //定义数据缓存的Cache
     'data_cache' => [
         'redis_cache' => [

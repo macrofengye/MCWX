@@ -129,4 +129,23 @@ if (!function_exists('debugger')) {
         \RunTracy\Helpers\Profiler\Profiler::enable(true);
         \Tracy\Debugger::enable($level ? \Tracy\Debugger::PRODUCTION : \Tracy\Debugger::DEVELOPMENT, $logPath);
     }
+
+    if (!function_exists('weChatConfig')) {
+        /**
+         * 获取微信的配置信息
+         *
+         * @return mixed
+         */
+        function weChatConfig()
+        {
+            $request = app()->component('request');
+            if (PHP_SAPI === 'cli') {
+                $appId = $request->getServerParam('argc') >= 2 ? $request->getServerParam('argv')[1] : 0;
+            } else {
+                $appId = $request->getParam('app_id') ?: 0;
+            }
+            $weChatName = app()->config('wx_app_id')[$appId];
+            return $weChatName;
+        }
+    }
 }

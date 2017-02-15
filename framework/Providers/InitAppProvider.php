@@ -97,7 +97,7 @@ class InitAppProvider implements ServiceProviderInterface
 
         $pimple['access_token'] = function (Container $container) {
             try {
-                $weChatName = $container['request']->getParam('wechat_name') ?: 'default';
+                $weChatName = weChatConfig();
                 $cache = new FilesystemCache(ROOT_PATH . '/component/WX/' . WX_TYPE . '/cache/' . $weChatName);
                 $container['cache'] = $cache;
                 $cls = 'MComponent\WX\\' . WX_TYPE . '\WeChat\Core\AccessToken';
