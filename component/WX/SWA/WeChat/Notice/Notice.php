@@ -26,21 +26,6 @@ class Notice extends AbstractAPI
         'touser' => '',
         'template_id' => '',
         'url' => '',
-        'topcolor' => '#FF0000',
-        'data' => [],
-    ];
-
-
-    /**
-     * Default attributes.
-     *
-     * @var array
-     */
-    protected $defaults = [
-        'touser' => '',
-        'template_id' => '',
-        'url' => '',
-        'topcolor' => '',
         'data' => [],
     ];
 
@@ -155,7 +140,7 @@ class Notice extends AbstractAPI
      */
     public function send($data = [])
     {
-        $params = array_merge($this->defaults, $data);
+        $params = array_merge($this->message, $data);
 
         foreach ($params as $key => $value) {
             if (in_array($key, $this->required, true) && empty($value) && empty($this->message[$key])) {
@@ -188,8 +173,6 @@ class Notice extends AbstractAPI
             'uses' => 'template_id',
             'to' => 'touser',
             'receiver' => 'touser',
-            'color' => 'topcolor',
-            'topColor' => 'topcolor',
             'url' => 'url',
             'link' => 'url',
             'data' => 'data',
