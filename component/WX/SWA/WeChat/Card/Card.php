@@ -17,9 +17,18 @@ class Card extends AbstractAPI
     protected $cache;
 
     /**
-     * Ticket cache prefix.
+     * Ticket cache key.
+     *
+     * @var string
      */
-    const TICKET_CACHE_PREFIX = 'MacroWechat.wechat.card_api_ticket.';
+    protected $ticketCacheKey;
+
+    /**
+     * Ticket cache prefix.
+     *
+     * @var string
+     */
+    protected $ticketCachePrefix = 'MacroWechat.wechat.card_api_ticket.';
 
     const API_GET_COLORS = 'https://api.weixin.qq.com/card/getcolors';
     const API_CREATE_CARD = 'https://api.weixin.qq.com/card/create';
@@ -148,7 +157,7 @@ class Card extends AbstractAPI
      */
     public function getAPITicket($refresh = false)
     {
-        $key = self::TICKET_CACHE_PREFIX . $this->getAccessToken()->getAppId();
+        $key = $this->getTicketCacheKey();
 
         $ticket = $this->getCache()->fetch($key);
 
@@ -676,7 +685,7 @@ class Card extends AbstractAPI
      *
      * @param array $params
      *
-     * @return \EasyWeChat\Support\Collection
+     * @return \MComponent\WX\SWA\WeChat\Support\Collection
      */
     public function updateGeneralCardUser(array $params = [])
     {
@@ -801,6 +810,48 @@ class Card extends AbstractAPI
     public function getCache()
     {
         return $this->cache ?: $this->cache = new FilesystemCache(sys_get_temp_dir());
+    }
+
+    /**
+     * Set Api_ticket cache prifix.
+     *
+     * @param string $prefix
+     *
+     * @return $this
+     */
+    public function setTicketCachePrefix($prefix)
+    {
+        $this->ticketCachePrefix = $prefix;
+
+        return $this;
+    }
+
+    /**
+     * Set Api_ticket cache key.
+     *
+     * @param string $cacheKey
+     *
+     * @return $this
+     */
+    public function setTicketCacheKey($cacheKey)
+    {
+        $this->ticketCacheKey = $cacheKey;
+
+        return $this;
+    }
+
+    /**
+     * Get Api_ticket token cache key.
+     *
+     * @return string $this->ticketCacheKey
+     */
+    public function getTicketCacheKey()
+    {
+        if (is_null($this->ticketCacheKey)) {
+            return $this->ticketCachePrefix . $this->appId;
+        }
+
+        return $this->ticketCacheKey;
     }
 
     /**
