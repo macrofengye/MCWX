@@ -7,11 +7,11 @@ if (!function_exists('app')) {
      * @author <macro_fengye@163.com> macro chen
      * @param null $make 是否返回对象实例
      * @param array $parameters
-     * @return Application
+     * @return mixed|null
      */
     function app($make = null, $parameters = [])
     {
-        if (null === $make) {
+        if (is_null($make)) {
             return Application::getInstance();
         }
 
@@ -58,7 +58,7 @@ if (!function_exists('handleShutdown')) {
     function handleShutdown()
     {
         $error = error_get_last();
-        if ($error['type'] == E_ERROR) {
+        if ($error["type"] == E_ERROR) {
             if (app()->config('logger')) {
                 $msg = 'Type : ' . $error["type"] . '\nMessage : ' . $error["message"] . '\nFile : ' . $error["file"] . '\nLine : ' . $error["line"];
                 app()->config('logger')->error($msg);
@@ -109,7 +109,6 @@ if (!function_exists('handleException')) {
     }
 }
 
-
 if (!function_exists('debugger')) {
     /**
      * 调试应用的各种性能
@@ -128,24 +127,5 @@ if (!function_exists('debugger')) {
         }
         \RunTracy\Helpers\Profiler\Profiler::enable(true);
         \Tracy\Debugger::enable($level ? \Tracy\Debugger::PRODUCTION : \Tracy\Debugger::DEVELOPMENT, $logPath);
-    }
-
-    if (!function_exists('weChatConfig')) {
-        /**
-         * 获取微信的配置信息
-         *
-         * @return mixed
-         */
-        function weChatConfig()
-        {
-            $request = app()->component('request');
-            if (PHP_SAPI === 'cli') {
-                $appId = $request->getServerParam('argc') >= 2 ? $request->getServerParam('argv')[1] : 0;
-            } else {
-                $appId = $request->getParam('app_id') ?: 0;
-            }
-            $weChatName = app()->config('wx_app_id')[$appId];
-            return $weChatName;
-        }
     }
 }

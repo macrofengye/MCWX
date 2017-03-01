@@ -7,15 +7,16 @@ $common_config = [
             'httpVersion' => '1.1',
             'responseChunkSize' => 4096,
             'outputBuffering' => 'append',
-            'addContentLengthHeader' => 1,
+            'addContentLengthHeader' => false,
             'routerCacheFile' => APP_PATH . 'Routers/routerCacheFile.router',
-            'determineRouteBeforeAppMiddleware' => false,
+            'determineRouteBeforeAppMiddleware' => true,
             'displayErrorDetails' => true,
             'logger' => [
                 'name' => 'macro_php',
                 'level' => Monolog\Logger::DEBUG,
                 'path' => APP_PATH . 'log/error.log',
             ],
+
             'tracy' => [
                 'showPhpInfoPanel' => 0,
                 'showSlimRouterPanel' => 0,
@@ -52,6 +53,7 @@ $common_config = [
                     'ConsoleTerminalJs' => '/js/jquery.terminal.min.js',
                     // terminal.css full URI
                     'ConsoleTerminalCss' => '/css/jquery.terminal.min.css',
+
                     'ProfilerPanel' => [
                         // Memory usage 'primaryValue' set as Profiler::enable() or Profiler::enable(1)
 //                    'primaryValue' =>                   'effective',    // or 'absolute'
@@ -71,17 +73,17 @@ $common_config = [
         'query_cache' => [
             'is_open' => true,
             'cache_name' => 'redisCacheDriver',
-            'database' => 15,
+            'database' => 15
         ],
         'result_cache' => [
             'is_open' => true,
             'cache_name' => 'redisCacheDriver',
-            'database' => 15,
+            'database' => 15
         ],
         'metadata_cache' => [
             'is_open' => true,
             'cache_name' => 'redisCacheDriver',
-            'database' => 15,
+            'database' => 15
         ],
     ],
 
@@ -131,11 +133,11 @@ $common_config = [
     'data_cache' => [
         'redis_cache' => [
             'is_open' => true,
-            'cache_name' => 'redisCache',
+            'cache_name' => 'redisCache'
         ],
         'memcache_cache' => [
             'is_open' => true,
-            'cache_name' => 'memcacheCache',
+            'cache_name' => 'memcacheCache'
         ],
     ],
 

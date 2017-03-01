@@ -8,8 +8,7 @@
 
 namespace Polymer\Providers;
 
-use Doctrine\Common\Annotations\AnnotationRegistry;
-use Doctrine\Common\Cache\FilesystemCache;
+
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 use Slim\App;
@@ -88,24 +87,6 @@ class InitAppProvider implements ServiceProviderInterface
         $pimple['app'] = function (Container $container) {
             try {
                 return new App($container);
-            } catch (\InvalidArgumentException $e) {
-                return $container['response']
-                    ->withStatus(500)
-                    ->withHeader('Content-Type', 'text/html')->write($e->getMessage());
-            }
-        };
-
-        $pimple['access_token'] = function (Container $container) {
-            try {
-                $weChatName = weChatConfig();
-                $cache = new FilesystemCache(ROOT_PATH . '/component/WX/' . WX_TYPE . '/cache/' . $weChatName);
-                $container['cache'] = $cache;
-                $cls = 'MComponent\WX\\' . WX_TYPE . '\WeChat\Core\AccessToken';
-                return new $cls(
-                    app()->config('wechat.' . $weChatName . '.app_id'),
-                    app()->config('wechat.' . $weChatName . '.secret'),
-                    $cache
-                );
             } catch (\InvalidArgumentException $e) {
                 return $container['response']
                     ->withStatus(500)

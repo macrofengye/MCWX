@@ -53,7 +53,7 @@ class DoctrineExtConfigLoader
     }
 
     /**
-     * 导出Doctrine的扩展组件
+     * 导入Doctrine的扩展组件
      */
     public static function load()
     {

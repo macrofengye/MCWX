@@ -21,7 +21,7 @@ class Home extends Controller
         $user_tag = $this->app->component('user_tag');
         $group = $this->app->component('user_group');
 
-        /*writeLog(__FUNCTION__, [$user->lists()], APP_PATH . '/log/users.log');*/
+        logger(__FUNCTION__, [$user->lists()], APP_PATH . '/log/users.log');
         //writeLog(__FUNCTION__, [$user_tag->lists()], APP_PATH . '/log/users_tag.log');
         //writeLog(__FUNCTION__, [$group->lists()], APP_PATH . '/log/groups.log');
         $server->setMessageHandler(function ($message) {

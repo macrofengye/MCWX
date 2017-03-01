@@ -119,37 +119,34 @@ final class Application
      * 实例化数据库链接对象
      *
      * @param string $dbName
-     * @param string $folder 实体文件夹的名字
+     * @param mixed $entityFolder 实体文件夹的名字
      * @throws \Doctrine\ORM\ORMException | \InvalidArgumentException
      * @return EntityManager
      */
-    public function db($dbName, $folder = 'Models')
+    public function db($dbName = '', $entityFolder = null)
     {
-        if (!$this->component('entityManager-' . $dbName)) {
-            $dbConfig = $this->config('db.' . APPLICATION_ENV);
-            if (isset($dbConfig[$dbName]) && $dbConfig[$dbName]) {
-                $connConfig = $dbConfig[$dbName] ?: [];
-                $useSimpleAnnotationReader = $connConfig['useSimpleAnnotationReader'];
-                unset($connConfig['useSimpleAnnotationReader']);
-                if (APPLICATION_ENV === 'development') {
-                    $cache = new ArrayCache();
-                } else {
-                    $cacheName = $this->config('doctrine.metadata_cache.cache_name');
-                    $database = $this->config('doctrine.metadata_cache.database');
-                    $cache = $this->component($cacheName, ['database' => $database]);
-                }
-                $configuration = Setup::createAnnotationMetadataConfiguration([
-                    ROOT_PATH . '/entity/' . $folder,
-                ], APPLICATION_ENV === 'development', ROOT_PATH . '/entity/Proxies/', $cache, $useSimpleAnnotationReader);
-                DoctrineExtConfigLoader::loadFunctionNode($configuration, DoctrineExtConfigLoader::MYSQL);
-                DoctrineExtConfigLoader::load();
-                try {
-                    $entityManager = EntityManager::create($connConfig, $configuration, $this->component('eventManager'));
-                    $this->container['database_name'] = $dbName;
-                    $this->container['entityManager-' . $dbName] = $entityManager;
-                } catch (\InvalidArgumentException $e) {
-                    return null;
-                }
+        $dbConfig = $this->config('db.' . APPLICATION_ENV);
+        $dbName = $dbName ?: current(array_keys($dbConfig));
+        if (isset($dbConfig[$dbName]) && $dbConfig[$dbName] && !$this->component('entityManager-' . $dbName)) {
+            if (APPLICATION_ENV === 'development') {
+                $cache = new ArrayCache();
+            } else {
+                $cacheName = $this->config('doctrine.metadata_cache.cache_name');
+                $database = $this->config('doctrine.metadata_cache.database');
+                $cache = $this->component($cacheName, ['database' => $database]);
+            }
+            $entityFolder = (null !== $entityFolder) ?: $entityFolder = ROOT_PATH . '/entity/Models';
+            $configuration = Setup::createAnnotationMetadataConfiguration([
+                $entityFolder,
+            ], APPLICATION_ENV === 'development', ROOT_PATH . '/entity/Proxies/', $cache, $dbConfig[$dbName]['useSimpleAnnotationReader']);
+            DoctrineExtConfigLoader::loadFunctionNode($configuration, DoctrineExtConfigLoader::MYSQL);
+            DoctrineExtConfigLoader::load();
+            try {
+                $entityManager = EntityManager::create($dbConfig[$dbName], $configuration, $this->component('eventManager'));
+                $this->container['database_name'] = $dbName;
+                $this->container['entityManager-' . $dbName] = $entityManager;
+            } catch (\InvalidArgumentException $e) {
+                return null;
             }
         }
         return $this->container['entityManager-' . $dbName];
@@ -257,26 +254,6 @@ final class Application
     }
 
     /**
-     * 获取拥有命名明空间的缓存实例
-     *
-     * @param $cacheType
-     * @param array $params
-     * @deprecated
-     * @throws \Exception
-     * @return mixed
-     */
-    public function getCacheInstanceHaveNamespace($cacheType, array $params = [])
-    {
-        if (!isset($params['resource_id'])) {
-            throw new \InvalidArgumentException('资源ID必须设置', 400);
-        }
-        $resourceId = $params['resource_id'];
-        unset($params['resource_id']);
-        $cache = $this->component($cacheType . 'Cache', $params)->getOptions()->getResourceManager()->getResource($resourceId);
-        return $cache;
-    }
-
-    /**
      * 获取指定组件名字的对象
      *
      * @param $componentName
@@ -290,8 +267,6 @@ final class Application
             $className = ucfirst(str_replace(' ', '', lcfirst(ucwords(str_replace('_', ' ', $componentName)))));
             if (class_exists(PROVIDERS_NAMESPACE . '\\Providers\\' . $className . 'Provider')) {
                 $className = PROVIDERS_NAMESPACE . '\\Providers\\' . $className . 'Provider';
-            } else if (defined('WX_TYPE') && class_exists('MComponent\\WX\\' . WX_TYPE . '\\Providers\\' . $className . 'Provider')) {
-                $className = 'MComponent\\WX\\' . WX_TYPE . '\\Providers\\' . $className . 'Provider';
             } else if (class_exists('Polymer\\Providers\\' . $className . 'Provider')) {
                 $className = 'Polymer\\Providers\\' . $className . 'Provider';
             }
@@ -342,16 +317,17 @@ final class Application
 
     /**
      * 获取业务模型实例
+     *
      * @param string $modelName 模型的名字
      * @param array $parameters 实例化时需要的参数
-     * @param string $path 附加路径
+     * @param mixed $modelNamespace 模型命名空间
      * @return mixed
      */
-    public function model($modelName, array $parameters = [], $path = '')
+    public function model($modelName, array $parameters = [], $modelNamespace = null)
     {
-        !defined('BUSINESS_MODEL_NAMESPACE') && define('BUSINESS_MODEL_NAMESPACE', APP_NAME);
+        $modelNamespace = (null !== $modelNamespace) ?: $modelNamespace = APP_NAME . '\\Models';
         $className = ucfirst(str_replace(' ', '', lcfirst(ucwords(str_replace('_', ' ', $modelName)))));
-        $className = BUSINESS_MODEL_NAMESPACE . '\\Models\\' . ($path ? ucfirst($path) . '\\' : '') . ucfirst($className) . 'Model';
+        $className = $modelNamespace . '\\' . ucfirst($className) . 'Model';
         if (class_exists($className)) {
             return new $className($parameters);
         }
@@ -361,13 +337,14 @@ final class Application
     /**
      * 获取实体模型实例
      * @param $tableName
+     * @param mixed $entityNamespace 实体的命名空间
      * @return bool
      */
-    public function entity($tableName)
+    public function entity($tableName, $entityNamespace = null)
     {
-        !defined('ENTITY_NAMESPACE') && define('ENTITY_NAMESPACE', 'Entity\\Models');
+        $entityNamespace = (null !== $entityNamespace) ?: $entityNamespace = 'Entity\\Models';
         $className = ucfirst(str_replace(' ', '', lcfirst(ucwords(str_replace('_', ' ', $tableName)))));
-        $className = ENTITY_NAMESPACE . '\\' . ucfirst($className);
+        $className = $entityNamespace . '\\' . ucfirst($className);
         if (class_exists($className)) {
             return new $className;
         }
@@ -375,21 +352,26 @@ final class Application
     }
 
     /**
-     *
      * 获取EntityRepository
-     * @param $entityName
-     * @param $db
+     *
+     * @param string $entityName 实体的名字
+     * @param string $dbName 数据库的名字
+     * @param null $entityFolder 实体文件的路径
+     * @param mixed $entityNamespace 实体的命名空间
+     * @param mixed $repositoryNamespace Repository的命名空间
      * @return \Doctrine\ORM\EntityRepository | null
      */
-    public function repository($entityName, $db)
+    public function repository($entityName, $dbName = '', $entityFolder = null, $entityNamespace = null, $repositoryNamespace = null)
     {
-        !defined('REPOSITORIES_NAMESPACE') && define('REPOSITORIES_NAMESPACE', 'Entity\\Repositories');
-        !defined('ENTITY_NAMESPACE') && define('ENTITY_NAMESPACE', 'Entity\\Models');
+        $repositoryNamespace = (null !== $repositoryNamespace) ?: $repositoryNamespace = 'Entity\\Repositories';
+        $entityNamespace = (null !== $entityNamespace) ?: $entityNamespace = 'Entity\\Models';
         $className = ucfirst(str_replace(' ', '', lcfirst(ucwords(str_replace('_', ' ', $entityName)))));
-        $repositoryClassName = REPOSITORIES_NAMESPACE . '\\' . ucfirst($className) . 'Repository';
+        $repositoryClassName = $repositoryNamespace . '\\' . ucfirst($className) . 'Repository';
         if (class_exists($repositoryClassName)) {
             try {
-                return $this->db($db)->getRepository(ENTITY_NAMESPACE . '\\' . ucfirst($className));
+                $dbConfig = $this->config('db.' . APPLICATION_ENV);
+                $dbName = $dbName ?: current(array_keys($dbConfig));
+                return $this->db($dbName, $entityFolder)->getRepository($entityNamespace . '\\' . ucfirst($className));
             } catch (ORMException $e) {
                 return null;
             } catch (\InvalidArgumentException $e) {
@@ -403,14 +385,15 @@ final class Application
      * 获取服务组件
      *
      * @param string $serviceName
+     * @param mixed $serviceNamespace
      * @param array|null $params
      * @return null | Object
      */
-    public function service($serviceName, array $params = null)
+    public function service($serviceName, $serviceNamespace = null, array $params = null)
     {
-        !defined('SERVICES_NAMESPACE') && define('SERVICES_NAMESPACE', APP_NAME . '\\Services');
+        $serviceNamespace = (null !== $serviceNamespace) ?: $serviceNamespace = APP_NAME . '\\Services';
         $className = ucfirst(str_replace(' ', '', lcfirst(ucwords(str_replace('_', ' ', $serviceName)))));
-        $className = SERVICES_NAMESPACE . '\\' . ucfirst($className) . 'Service';
+        $className = $serviceNamespace . '\\' . ucfirst($className) . 'Service';
         if (class_exists($className)) {
             return new $className($params);
         }

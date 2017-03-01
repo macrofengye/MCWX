@@ -8,6 +8,7 @@
 
 namespace Polymer\Providers;
 
+use Doctrine\Common\Cache\MemcachedCache;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 
@@ -28,9 +29,9 @@ class MemcachedCacheProvider implements ServiceProviderInterface
             if ($container['application']->component('namespace')) {
                 $namespace = $container['application']->component('namespace');
             }
-            $memcachedCacheDriver = new MemcacheCached();
+            $memcachedCacheDriver = new MemcachedCache();
             $memcachedCacheDriver->setNamespace($namespace);
-            $memcachedCacheDriver->setMemcache($container['application']->component('memcached'));
+            $memcachedCacheDriver->setMemcached($container['application']->component('memcached'));
             return $memcachedCacheDriver;
         };
     }

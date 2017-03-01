@@ -8,7 +8,11 @@
 namespace Polymer\Model;
 
 use Doctrine\DBAL\Sharding\PoolingShardManager;
+use Doctrine\ORM\EntityManager;
+use Polymer\Boot\Application;
+use Polymer\Exceptions\EntityValidateErrorException;
 use Polymer\Utils\Constants;
+use Symfony\Component\Validator\Exception\NoSuchMetadataException;
 use Symfony\Component\Validator\Validator\RecursiveValidator;
 
 class Model
@@ -16,7 +20,7 @@ class Model
     /**
      * 应用APP
      *
-     * @var null
+     * @var Application
      */
     protected $app = null;
 
@@ -32,7 +36,7 @@ class Model
      *
      * @var null
      */
-    protected $EntityObject = null;
+    private $EntityObject = null;
 
     /**
      * 验证器的规则
@@ -44,10 +48,9 @@ class Model
     /**
      * EntityManager实例
      *
-     * @var NULL
+     * @var EntityManager
      */
     protected $em = null;
-
 
     /**
      * 模型构造函数
@@ -58,7 +61,6 @@ class Model
     {
         $this->app = app();
         $this->validator = $this->app->component('validator');
-        $this->EntityObject = $this->app->entity($this->table);
     }
 
     /**
@@ -66,15 +68,28 @@ class Model
      *
      * @param int $target
      * @param array $data
+     * @param null $entityFolder
      * @param array $validateRules
      *
      * @throws \Exception
-     * @return array
+     * @return Object
      */
-    protected function make($target = Constants::MODEL_FIELD, array $data = [], array $validateRules = [])
+    protected function make($target = Constants::MODEL_FIELD, array $data = [], $entityFolder = null, array $validateRules = [])
     {
         try {
-            return $this->validate($target, $data, $validateRules);
+            if (Constants::MODEL_OBJECT) {
+                if (null === $entityFolder) {
+                    $entityFolder = property_exists($this, 'entityFolder') ? $this->entityFolder : null;
+                }
+                if (!$this->EntityObject) {
+                    $this->EntityObject = $this->app->entity($this->table, $entityFolder);
+                }
+            }
+            $this->validate($target, $data, $validateRules);
+            if ($this->app->component('error_collection')->get($this->table)) {
+                throw new EntityValidateErrorException('实体验证错误!');
+            }
+            return $this->EntityObject;
         } catch (\Exception $e) {
             throw $e;
         }
@@ -130,23 +145,11 @@ class Model
      * @param array $validateRules
      *
      * @throws \Exception
-     * @return array
      */
     private function validate($target = Constants::MODEL_FIELD, array $data = [], array $validateRules = [])
     {
         $data = $this->mergeParams($data);
-        $returnData = [];
-        switch ($target) {
-            case Constants::MODEL_FIELD:
-                $returnData = $this->validateFields($data, $validateRules);
-                break;
-            case Constants::MODEL_OBJECT:
-                $returnData = $this->validateObject($data, $validateRules);
-                break;
-            default:
-                break;
-        }
-        return $returnData;
+        $target === Constants::MODEL_FIELD ? $this->validateFields($data, $validateRules) : $this->validateObject($data, $validateRules);
     }
 
     /**
@@ -173,7 +176,7 @@ class Model
                 }
             }
         }
-        return $returnData;
+        $returnData === [] ?: $this->app->component('error_collection')->set($this->table, $returnData);
     }
 
     /**
@@ -181,11 +184,11 @@ class Model
      *
      * @param array $data
      * @param array $rules
+     * @throws NoSuchMetadataException
      * @return array
      */
     private function validateObject(array $data = [], array $rules = [])
     {
-        $returnData = [];
         $this->validateRules = empty($rules) ? $this->rules : $rules;
         foreach ($data as $k => $v) {
             $setMethod = 'set' . ucfirst(str_replace(' ', '', lcfirst(ucwords(str_replace('_', ' ', $k)))));
@@ -213,11 +216,11 @@ class Model
                 foreach ($errors as $error) {
                     $returnData[$error->getPropertyPath()] = $error->getMessage();
                 }
+                $this->app->component('error_collection')->set($this->table, $returnData);
             }
-        } catch (\Exception $e) {
-            return null;
+        } catch (NoSuchMetadataException $e) {
+            throw $e;
         }
-        return $returnData;
     }
 
     /**
@@ -269,5 +272,71 @@ class Model
             return new PoolingShardManager($this->em->getConnection());
         }
         return null;
+    }
+
+    /**
+     * 给对象新增属性
+     *
+     * @param $propertyName
+     * @param $value
+     * @return $this
+     */
+    protected function setProperty($propertyName, $value)
+    {
+        if (!isset($this->$propertyName)) {
+            $this->$propertyName = $value;
+        }
+        return $this;
+    }
+
+    /**
+     * 获取对象属性
+     *
+     * @param $propertyName
+     * @return mixed
+     */
+    protected function getProperty($propertyName)
+    {
+        if (!isset($this->$propertyName)) {
+            return $this->$propertyName;
+        }
+        return null;
+    }
+
+    /**
+     * is utilized for reading data from inaccessible members.
+     *
+     * @param $name string
+     * @return mixed
+     * @link http://php.net/manual/en/language.oop5.overloading.php#language.oop5.overloading.members
+     */
+    public function __get($name)
+    {
+        return isset($this->$name) ? $this->$name : null;
+    }
+
+    /**
+     * run when writing data to inaccessible members.
+     *
+     * @param $name string
+     * @param $value mixed
+     * @return $this
+     * @link http://php.net/manual/en/language.oop5.overloading.php#language.oop5.overloading.members
+     */
+    public function __set($name, $value)
+    {
+        $this->$name = $value;
+    }
+
+    /**
+     * is triggered by calling isset() or empty() on inaccessible members.
+     *
+     * @param $name string
+     * @return bool
+     * @link http://php.net/manual/en/language.oop5.overloading.php#language.oop5.overloading.members
+     */
+    public function __isset($name)
+    {
+        return isset($this->$name);
     }
 }
