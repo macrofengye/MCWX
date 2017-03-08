@@ -267,6 +267,8 @@ final class Application
             $className = ucfirst(str_replace(' ', '', lcfirst(ucwords(str_replace('_', ' ', $componentName)))));
             if (class_exists(PROVIDERS_NAMESPACE . '\\Providers\\' . $className . 'Provider')) {
                 $className = PROVIDERS_NAMESPACE . '\\Providers\\' . $className . 'Provider';
+            } elseif (defined('WX_TYPE') && class_exists('MComponent\\WX\\' . WX_TYPE . '\\Providers\\' . $className . 'Provider')) {
+                $className = 'MComponent\\WX\\' . WX_TYPE . '\\Providers\\' . $className . 'Provider';
             } else if (class_exists('Polymer\\Providers\\' . $className . 'Provider')) {
                 $className = 'Polymer\\Providers\\' . $className . 'Provider';
             }

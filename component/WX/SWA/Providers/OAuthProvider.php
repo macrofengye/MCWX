@@ -22,14 +22,15 @@ class OAuthProvider implements ServiceProviderInterface
     {
         $pimple['oAuth'] = function ($pimple) {
             $callback = $this->prepareCallbackUrl($pimple);
-            $scopes = app()->config('wechat.oauth.scopes');
+            $weChatName = weChatConfig();
+            $scopes = app()->config('wechat.' . $weChatName . '.oauth.scopes');
             $socialite = (
             new Socialite(
                 [
                     'wechat' => [
-                        'open_platform' => app()->config('wechat.open_platform'),
-                        'client_id' => app()->config('wechat.app_id'),
-                        'client_secret' => app()->config('wechat.secret'),
+                        'open_platform' => app()->config('wechat.' . $weChatName . '.open_platform'),
+                        'client_id' => app()->config('wechat.' . $weChatName . '.app_id'),
+                        'client_secret' => app()->config('wechat.' . $weChatName . '.secret'),
                         'redirect' => $callback,
                     ],
                 ], $pimple['request']
@@ -53,13 +54,12 @@ class OAuthProvider implements ServiceProviderInterface
      */
     private function prepareCallbackUrl($pimple)
     {
-        $callback = app()->config('wechat.oauth.callback');
+        $weChatName = weChatConfig();
+        $callback = app()->config('wechat.' . $weChatName . '.oauth.callback');
         if (0 === stripos($callback, 'http')) {
             return $callback;
         }
         $baseUrl = $pimple['request']->getUri()->getScheme() . '://' . $pimple['request']->getUri()->getHost();
-        echo $baseUrl;
-
         return $baseUrl . '/' . ltrim($callback, '/');
     }
 }
