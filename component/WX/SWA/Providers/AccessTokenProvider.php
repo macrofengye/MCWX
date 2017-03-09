@@ -27,15 +27,11 @@ class AccessTokenProvider implements ServiceProviderInterface
     {
         $pimple['access_token'] = function (Container $container) {
             try {
-                $weChatName = weChatConfig();
-                $cache = new FilesystemCache(ROOT_PATH . '/component/WX/' . WX_TYPE . '/cache/' . $weChatName);
+                $weChatConfig = weChatConfig();
+                $cache = new FilesystemCache(ROOT_PATH . '/component/WX/' . WX_TYPE . '/cache/' . $weChatConfig['name']);
                 $container['cache'] = $cache;
                 $cls = 'MComponent\WX\\' . WX_TYPE . '\WeChat\Core\AccessToken';
-                return new $cls(
-                    app()->config('wechat.' . $weChatName . '.app_id'),
-                    app()->config('wechat.' . $weChatName . '.secret'),
-                    $cache
-                );
+                return new $cls($weChatConfig['app_id'], $weChatConfig['secret'], $cache);
             } catch (\InvalidArgumentException $e) {
                 return $container['response']
                     ->withStatus(500)

@@ -11,7 +11,8 @@ $weChatConfig = [
                 'scopes' => ['snsapi_userinfo'],
                 'callback' => '/home/hello',
             ],
-            'aes_key' => '52z36K5M4Nd1CDA9doCCSjL8AYIAgUzubx2spt8kxpn' //微信后台设置的EncodingAESKey
+            'aes_key' => '52z36K5M4Nd1CDA9doCCSjL8AYIAgUzubx2spt8kxpn', //微信后台设置的EncodingAESKey
+            'name' => 'default',
         ],
         'luke' => [
             'debug' => 1,//是否开启调试模式
@@ -22,7 +23,8 @@ $weChatConfig = [
                 'scopes' => ['snsapi_userinfo'],
                 'callback' => '/home/hello',
             ],
-            'aes_key' => '52z36K5M4Nd1CDA9doCCSjL8AYIAgUzubx2spt8kxpn' //微信后台设置的EncodingAESKey
+            'aes_key' => '52z36K5M4Nd1CDA9doCCSjL8AYIAgUzubx2spt8kxpn', //微信后台设置的EncodingAESKey
+            'name' => 'luke',
         ]
     ],
 

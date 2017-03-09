@@ -22,13 +22,13 @@ class OAuthProvider implements ServiceProviderInterface
     {
         $pimple['oAuth'] = function ($pimple) {
             $callback = $this->prepareCallbackUrl($pimple);
-            $weChatName = weChatConfig();
-            $scopes = app()->config('wechat.' . $weChatName . '.oauth.scopes');
+            $weChatConfig = weChatConfig();
+            $scopes = $weChatConfig['oauth']['scopes'];
             $config = [
                 'wechat' => [
-                    'open_platform' => app()->config('wechat.' . $weChatName . '.open_platform'),
-                    'client_id' => app()->config('wechat.' . $weChatName . '.app_id'),
-                    'client_secret' => app()->config('wechat.' . $weChatName . '.secret'),
+                    'open_platform' => $weChatConfig['open_platform'],
+                    'client_id' => $weChatConfig['app_id'],
+                    'client_secret' => $weChatConfig['secret'],
                     'redirect' => $callback,
                 ],
             ];
@@ -49,8 +49,8 @@ class OAuthProvider implements ServiceProviderInterface
      */
     private function prepareCallbackUrl($pimple)
     {
-        $weChatName = weChatConfig();
-        $callback = app()->config('wechat.' . $weChatName . '.oauth.callback');
+        $weChatConfig = weChatConfig();
+        $callback = $weChatConfig['oauth']['callback'];
         if (0 === stripos($callback, 'http')) {
             return $callback;
         }

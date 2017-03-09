@@ -145,6 +145,6 @@ if (!function_exists('weChatConfig')) {
             $appId = $request->getParam('app_id') ?: 0;
         }
         $weChatName = app()->config('wx_app_id')[$appId];
-        return $weChatName;
+        return app()->config('wechat.' . $weChatName);
     }
 }

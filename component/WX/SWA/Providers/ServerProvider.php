@@ -23,24 +23,18 @@ class ServerProvider implements ServiceProviderInterface
     {
         $pimple['encryptor'] = function ($pimple) {
             try {
-                $weChatName = weChatConfig();
-                return new Encryptor(
-                    app()->config('wechat.' . $weChatName . '.app_id'),
-                    app()->config('wechat.' . $weChatName . '.token'),
-                    app()->config('wechat.' . $weChatName . '.aes_key')
-                );
+                $weChatConfig = weChatConfig();
+                return new Encryptor($weChatConfig['app_id'], $weChatConfig['token'], $weChatConfig['aes_key']);
             } catch (\Exception $e) {
                 return null;
             }
         };
 
         $pimple['server'] = function ($pimple) {
-            $weChatName = weChatConfig();
-            logger(__FUNCTION__, [$pimple['request']->getParams(), $weChatName], APP_PATH . '/log/aaab.log');
-            $server = new Guard(app()->config('wechat.' . $weChatName . '.token'), $pimple['request'], $pimple['response']);
-            $server->debug(app()->config('wechat.' . $weChatName . '.debug'));
+            $weChatConfig = weChatConfig();
+            $server = new Guard($weChatConfig['token'], $pimple['request'], $pimple['response']);
+            $server->debug($weChatConfig['debug']);
             $server->setEncryptor($pimple['encryptor']);
-
             return $server;
         };
     }
