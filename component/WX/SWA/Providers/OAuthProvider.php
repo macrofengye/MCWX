@@ -24,23 +24,18 @@ class OAuthProvider implements ServiceProviderInterface
             $callback = $this->prepareCallbackUrl($pimple);
             $weChatName = weChatConfig();
             $scopes = app()->config('wechat.' . $weChatName . '.oauth.scopes');
-            $socialite = (
-            new Socialite(
-                [
-                    'wechat' => [
-                        'open_platform' => app()->config('wechat.' . $weChatName . '.open_platform'),
-                        'client_id' => app()->config('wechat.' . $weChatName . '.app_id'),
-                        'client_secret' => app()->config('wechat.' . $weChatName . '.secret'),
-                        'redirect' => $callback,
-                    ],
-                ], $pimple['request']
-            )
-            )->driver('wechat');
-
+            $config = [
+                'wechat' => [
+                    'open_platform' => app()->config('wechat.' . $weChatName . '.open_platform'),
+                    'client_id' => app()->config('wechat.' . $weChatName . '.app_id'),
+                    'client_secret' => app()->config('wechat.' . $weChatName . '.secret'),
+                    'redirect' => $callback,
+                ],
+            ];
+            $socialite = (new Socialite($config, $pimple['request']))->driver('wechat');
             if (!empty($scopes)) {
                 $socialite->scopes($scopes);
             }
-
             return $socialite;
         };
     }
