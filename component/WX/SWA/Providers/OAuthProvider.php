@@ -26,7 +26,7 @@ class OAuthProvider implements ServiceProviderInterface
             $scopes = $weChatConfig['oauth']['scopes'];
             $config = [
                 'wechat' => [
-                    'open_platform' => $weChatConfig['open_platform'],
+                    'open_platform' => isset($weChatConfig['open_platform']) ? $weChatConfig['open_platform'] : 0,
                     'client_id' => $weChatConfig['app_id'],
                     'client_secret' => $weChatConfig['secret'],
                     'redirect' => $callback,
