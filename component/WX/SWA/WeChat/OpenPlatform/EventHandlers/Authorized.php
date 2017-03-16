@@ -18,6 +18,7 @@ class Authorized implements EventHandler
 
     /**
      * {@inheritdoc}.
+     * @throws \Exception
      */
     public function handle(Collection $message)
     {
