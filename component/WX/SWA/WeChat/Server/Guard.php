@@ -93,6 +93,7 @@ class Guard
      *
      * @param string $token
      * @param Request $request
+     * @param Response $response
      */
     public function __construct($token, Request $request = null, Response $response = null)
     {
@@ -399,7 +400,7 @@ class Guard
         if (!is_callable($handler)) {
             Log::debug('No handler enabled.');
 
-            return;
+            return null;
         }
 
         Log::debug('Message detail:', $message);
