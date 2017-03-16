@@ -1,16 +1,7 @@
 <?php
-
 namespace MComponent\WX\SWA\WeChat\OpenPlatform\EventHandlers;
 
-use MComponent\WX\SWA\WeChat\Support\Collection;
-
-class UpdateAuthorized extends EventHandler
+class UpdateAuthorized extends Authorized
 {
-    /**
-     * {@inheritdoc}.
-     */
-    public function handle(Collection $message)
-    {
-        //
-    }
+    // Is this necessary to handle differently from Authorized?
 }

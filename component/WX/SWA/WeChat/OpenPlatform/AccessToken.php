@@ -1,5 +1,4 @@
 <?php
-
 namespace MComponent\WX\SWA\WeChat\OpenPlatform;
 
 use Doctrine\Common\Cache\Cache;
@@ -29,14 +28,14 @@ class AccessToken extends WechatAccessToken
     /**
      * {@inheritdoc}.
      */
-    protected $prefix = 'macrowechat.common.component_access_token.';
+    protected $prefix = 'wechat.open_platform.component_access_token.';
 
     /**
      * AccessToken constructor.
      *
-     * @param string       $appId
-     * @param string       $secret
-     * @param Cache        $cache
+     * @param string $appId
+     * @param string $secret
+     * @param Cache $cache
      * @param VerifyTicket $verifyTicket
      */
     public function __construct($appId, $secret, VerifyTicket $verifyTicket, Cache $cache = null)
@@ -48,6 +47,7 @@ class AccessToken extends WechatAccessToken
 
     /**
      * {@inheritdoc}.
+     * @throws \Exception | \MComponent\WX\SWA\WeChat\Core\Exceptions\RuntimeException
      */
     public function getTokenFromServer()
     {
@@ -56,15 +56,11 @@ class AccessToken extends WechatAccessToken
             'component_appsecret' => $this->secret,
             'component_verify_ticket' => $this->verifyTicket->getTicket(),
         ];
-
         $http = $this->getHttp();
-
         $token = $http->parseJSON($http->json(self::API_TOKEN_GET, $data));
-
         if (empty($token[$this->tokenJsonKey])) {
-            throw new HttpException('Request ComponentAccessToken fail. response: '.json_encode($token, JSON_UNESCAPED_UNICODE));
+            throw new HttpException('Request ComponentAccessToken fail. response: ' . json_encode($token, JSON_UNESCAPED_UNICODE));
         }
-
         return $token;
     }
 }

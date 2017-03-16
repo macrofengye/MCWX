@@ -1,5 +1,4 @@
 <?php
-
 namespace MComponent\WX\SWA\WeChat\OpenPlatform\Components;
 
 use MComponent\WX\SWA\WeChat\Core\Exceptions\InvalidArgumentException;
@@ -19,52 +18,18 @@ class PreAuthCode extends AbstractComponent
     const PRE_AUTH_LINK = 'https://mp.weixin.qq.com/cgi-bin/componentloginpage?component_appid=%s&pre_auth_code=%s&redirect_uri=%s';
 
     /**
-     * AppId.
-     *
-     * @var string
-     */
-    private $appId;
-
-    /**
      * Redirect Uri.
      *
      * @var string
      */
     protected $redirectUri;
 
-    /**
-     * Get AppId.
-     *
-     * @return string
-     */
-    public function getAppId()
-    {
-        if (is_null($this->appId)) {
-            $this->appId = $this->config['app_id'];
-        }
-
-        return $this->appId;
-    }
-
-    /**
-     * Set AppId.
-     *
-     * @param string $appId
-     *
-     * @return $this
-     */
-    public function setAppId($appId)
-    {
-        $this->appId = $appId;
-
-        return $this;
-    }
 
     /**
      * Get pre auth code.
      *
      * @throws InvalidArgumentException
-     *
+     * @throws \MComponent\WX\SWA\WeChat\Core\Exception
      * @return string
      */
     public function getCode()
@@ -72,13 +37,10 @@ class PreAuthCode extends AbstractComponent
         $data = [
             'component_appid' => $this->getAppId(),
         ];
-
         $result = $this->parseJSON('json', [self::CREATE_PRE_AUTH_CODE, $data]);
-
         if (empty($result['pre_auth_code'])) {
             throw new InvalidArgumentException('Invalid response.');
         }
-
         return $result['pre_auth_code'];
     }
 
@@ -94,7 +56,6 @@ class PreAuthCode extends AbstractComponent
         if (!$this->redirectUri) {
             throw new RuntimeException('You need to provided a redirect uri.');
         }
-
         return $this->redirectUri;
     }
 
@@ -108,19 +69,18 @@ class PreAuthCode extends AbstractComponent
     public function setRedirectUri($uri)
     {
         $this->redirectUri = $uri;
-
         return $this;
     }
 
     /**
      * Get auth page link.
-     *
+     * @throws \Exception
      * @return string
      */
     public function getAuthLink()
     {
         return sprintf(self::PRE_AUTH_LINK,
-            $this->config['app_id'],
+            $this->getAppId(),
             $this->getCode(),
             Url::encode($this->getRedirectUri())
         );

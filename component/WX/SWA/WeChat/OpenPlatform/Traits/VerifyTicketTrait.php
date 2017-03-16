@@ -1,5 +1,4 @@
 <?php
-
 namespace MComponent\WX\SWA\WeChat\OpenPlatform\Traits;
 
 use MComponent\WX\SWA\WeChat\OpenPlatform\VerifyTicket;
@@ -23,7 +22,6 @@ trait VerifyTicketTrait
     public function setVerifyTicket(VerifyTicket $verifyTicket)
     {
         $this->verifyTicket = $verifyTicket;
-
         return $this;
     }
 
